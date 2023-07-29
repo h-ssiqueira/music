@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd"
+        logicalFilePath="../db/changelog/data/enumTables/roles.xml">
+
+    <changeSet id="role_vocalist" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM role AS r WHERE r.name = "Vocalist"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="role">
+            <column name="name" value="Vocalist"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM role AS r WHERE r.name = "Vocalist"
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="role_guitarrist" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM role AS r WHERE r.name = "Guitarrist"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="role">
+            <column name="name" value="Guitarrist"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM role AS r WHERE r.name = "Guitarrist"
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="role_drummer" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM role AS r WHERE r.name = "Drummer"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="role">
+            <column name="name" value="Drummer"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM role AS r WHERE r.name = "Drummer"
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="role_bassist" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM role AS r WHERE r.name = "Bassist"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="role">
+            <column name="name" value="Bassist"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM role AS r WHERE r.name = "Bassist"
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

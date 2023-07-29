@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd"
+        logicalFilePath="../db/changelog/data/enumTables/genres.xml">
+
+    <changeSet id="genre_alternative_metal" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM genre AS g WHERE g.name = "Alternative Metal"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="genre">
+            <column name="name" value="Alternative Metal"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM genre AS g WHERE g.name = "Alternative Metal"
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="genre_alternative_rock" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM genre AS g WHERE g.name = "Alternative Rock"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="genre">
+            <column name="name" value="Alternative Rock"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM genre AS g WHERE g.name = "Alternative Rock"
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="genre_electronic_rock" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM genre AS g WHERE g.name = "Electronic Rock"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="genre">
+            <column name="name" value="Electronic Rock"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM genre AS g WHERE g.name = "Electronic Rock"
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="genre_glam_metal" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM genre AS g WHERE g.name = "Glam Metal"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="genre">
+            <column name="name" value="Glam Metal"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM genre AS g WHERE g.name = "Glam Metal"
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="genre_hard_rock" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM genre AS g WHERE g.name = "Hard Rock"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="genre">
+            <column name="name" value="Hard Rock"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM genre AS g WHERE g.name = "Hard Rock"
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="genre_heavy_metal" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM genre AS g WHERE g.name = "Heavy Metal"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="genre">
+            <column name="name" value="Heavy Metal"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM genre AS g WHERE g.name = "Heavy Metal"
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="genre_metalcore" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM genre AS g WHERE g.name = "Metalcore"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="genre">
+            <column name="name" value="Metalcore"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM genre AS g WHERE g.name = "Metalcore"
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="genre_nu_metal" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM genre AS g WHERE g.name = "Nu Metal"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="genre">
+            <column name="name" value="Nu Metal"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM genre AS g WHERE g.name = "Nu Metal"
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="genre_pop_rock" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM genre AS g WHERE g.name = "Pop Rock"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="genre">
+            <column name="name" value="Pop Rock"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM genre AS g WHERE g.name = "Pop Rock"
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="genre_progressive_metal" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM genre AS g WHERE g.name = "Progressive Metal"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="genre">
+            <column name="name" value="Progressive Metal"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM genre AS g WHERE g.name = "Progressive Metal"
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="genre_rap_rock" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM genre AS g WHERE g.name = "Rap Rock"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="genre">
+            <column name="name" value="Rap Rock"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM genre AS g WHERE g.name = "Rap Rock"
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="genre_shock_rock" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM genre AS g WHERE g.name = "Shock Rock"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="genre">
+            <column name="name" value="Shock Rock"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM genre AS g WHERE g.name = "Shock Rock"
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="genre_thrash_metal" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM genre AS g WHERE g.name = "Thrash Metal"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="genre">
+            <column name="name" value="Thrash Metal"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM genre AS g WHERE g.name = "Thrash Metal"
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
