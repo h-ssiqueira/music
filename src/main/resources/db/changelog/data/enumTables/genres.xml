@@ -218,4 +218,20 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="genre_speed_metal" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM genre AS g WHERE g.name = "Speed Metal"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="genre">
+            <column name="name" value="Speed Metal"/>
+        </insert>
+        <rollback>
+            <sql>
+                DELETE FROM genre AS g WHERE g.name = "Speed Metal"
+            </sql>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

@@ -22,18 +22,591 @@
         <rollback>DELETE FROM band AS b WHERE b.name = "Metallica"</rollback>
     </changeSet>
 
-    <!-- Albums -->
+    <changeSet id="metallica_genres" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="4">
+                SELECT COUNT(1) FROM band_genre AS bg
+                WHERE bg.band_id = (SELECT b.id FROM band WHERE b.name = "Metallica")
+                AND bg.genre_id IN (SELECT g.id FROM genre WHERE g.name in ("Heavy Metal","Thrash Metal","Speed Metal","Hard Rock"))
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="band_genre">
+            <column name="band_id" valueComputed="SELECT b.id FROM band WHERE b.name = 'Metallica'"></column>
+            <column name="genre_id" valueComputed="SELECT g.id FROM genre WHERE g.name = 'Heavy Metal'"></column>
+        </insert>
+        <insert tableName="band_genre">
+            <column name="band_id" valueComputed="SELECT b.id FROM band WHERE b.name = 'Metallica'"></column>
+            <column name="genre_id" valueComputed="SELECT g.id FROM genre WHERE g.name = 'Thrash Metal'"></column>
+        </insert>
+        <insert tableName="band_genre">
+            <column name="band_id" valueComputed="SELECT b.id FROM band WHERE b.name = 'Metallica'"></column>
+            <column name="genre_id" valueComputed="SELECT g.id FROM genre WHERE g.name = 'Speed Metal'"></column>
+        </insert>
+        <insert tableName="band_genre">
+            <column name="band_id" valueComputed="SELECT b.id FROM band WHERE b.name = 'Metallica'"></column>
+            <column name="genre_id" valueComputed="SELECT g.id FROM genre WHERE g.name = 'Hard Rock'"></column>
+        </insert>
+        <rollback>
+            DELETE FROM band_genre AS bg
+            WHERE bg.band_id = (SELECT b.id FROM band WHERE b.name = "Metallica")
+            AND bg.genre_id IN (SELECT g.id FROM genre WHERE g.name IN ("Heavy Metal","Thrash Metal","Speed Metal","Hard Rock"))
+        </rollback>
+    </changeSet>
+
     <changeSet id="metallica_kill_them_all" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM album AS a WHERE a.name = "Kill 'Em All"</sqlCheck>
         </preConditions>
         <insert tableName="album">
-            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Metallica')"/>
+            <column name="band_id" valueComputed="SELECT b.id FROM band AS b WHERE b.name = 'Metallica'"/>
             <column name="name" value="Kill 'Em All"/>
             <column name="release_date" valueDate="1983-07-25"/>
             <column name="cover" valueBlobFile="../images/MetallicaKillEmAllCover.webp"/>
         </insert>
         <rollback>DELETE FROM album AS a WHERE a.name = "Kill 'Em All"</rollback>
+    </changeSet>
+
+    <changeSet id="metallica_kill_them_all_songs" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="10">
+                SELECT COUNT(1) FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Kill 'Em All")
+            </sqlCheck>
+            <insert tableName="music">
+                <column name="album_id" valueComputed="SELECT a.id FROM album WHERE a.name = 'Kill 'Em ALL'"></column>
+                <column name="name" value="Hit the Lights"></column>
+                <column name="duration" valueDate="00:04:15"></column>
+                <column name="lyrics" value="No life till leather
+We are gonna kick some ass tonight
+We got the metal madness
+When our fans start screaming
+It's right well alright
+When we start to rock
+We never want to stop again
+
+Hit the lights
+Hit the lights
+Hit the lights
+
+You know our fans are insane
+We are gonna blow this place away
+with volume higher
+Than anything today the only way
+When we start to rock
+We never want to stop again
+
+Hit the lights
+Hit the lights
+Hit the lights
+
+With all our screaming
+We are gonna rip right through your brain
+We got the lethal power
+It is causing you sweet pain Oh sweet pain
+When we start to rock
+We never want to stop again
+
+Hit the lights
+Hit the lights
+Hit the lights
+"></column>
+            </insert>
+            <insert tableName="music">
+                <column name="album_id" valueComputed="SELECT a.id FROM album WHERE a.name = 'Kill 'Em ALL'"></column>
+                <column name="name" value="The Four Horsemen"></column>
+                <column name="duration" valueDate="00:07:12"></column>
+                <column name="lyrics" value="By the last breath of the fourth winds blow
+Better raise your ears
+The sound of hooves knocks at your door
+Lock up your wife and children now
+It's time to wield the blade
+For now you have got some company
+
+The Horsemen are drawing nearer
+On the leather steeds they ride
+They have come to take your life
+On through the dead of night
+With the four Horsemen ride
+or choose your fate and die
+
+You have been dying since the day you were born
+You know it has all been planned
+The quartet of deliverance rides
+A sinner once a sinner twice
+No need for confession now
+Cause now you have got the fight of your life
+
+The Horsemen are drawing nearer
+On the leather steeds they ride
+They have come to take your life
+On through the dead of night
+With the four Horsemen ride
+or choose your fate and die
+
+Time
+Has taken its toll on you
+The lines that crack your face
+Famine
+Your body it has torn through
+Withered in every place
+Pestilence
+For what you have had to endure
+And what you have put others through
+Death
+Deliverance for you for sure
+There is nothing you can do
+
+So gather round young warriors now
+and saddle up your steeds
+Killing scores with demon swords
+Now is the death of doers of wrong
+Swing the judgment hammer down
+Safely inside armor blood guts and sweat
+
+The Horsemen are drawing nearer
+On the leather steeds they ride
+They have come to take your life
+On through the dead of night
+With the four Horsemen ride
+or choose your fate and die
+"></column>
+            </insert>
+            <insert tableName="music">
+                <column name="album_id" valueComputed="SELECT a.id FROM album WHERE a.name = 'Kill 'Em ALL'"></column>
+                <column name="name" value="Motorbreath"></column>
+                <column name="duration" valueDate="00:03:07"></column>
+                <column name="lyrics" value="Living and dying laughing and crying
+Once you have seen it you will never be the same
+Life in the fast lane is just how it seems
+Hard and it is heavy and dirty and mean
+
+Motorbreath
+It's how I live my life
+I can't take it any other way
+Motorbreath
+The sign of living fast
+It is going to take
+Your breath away
+
+Don't stop for nothing it's full speed or nothing
+I am taking down you know whatever is in my way
+Getting your kicks as you are shooting the line
+Sending the shivers up and down my spine
+
+Motorbreath
+It's how I live my life
+I can't take it any other way
+Motorbreath
+The sign of living fast
+It is going to take
+Your breath away
+
+Those people who tell you not to take chances
+They are all missing on what life is about
+You only live once so take hold of the chance
+Don't end up like others the same song and dance
+
+Motorbreath
+It's how I live my life
+I can't take it any other way
+Motorbreath
+The sign of living fast
+It is going to take
+Your breath away"></column>
+            </insert>
+            <insert tableName="music">
+                <column name="album_id" valueComputed="SELECT a.id FROM album WHERE a.name = 'Kill 'Em ALL'"></column>
+                <column name="name" value="Jump in the Fire"></column>
+                <column name="duration" valueDate="00:04:41"></column>
+                <column name="lyrics" value="Down in the depths of my fiery home
+The summons bell will chime
+Tempting you and all the earth
+to join our sinful kind
+There is a job to be done and I'm the one
+You people make me do it
+Now it is time for your fate and I won't hesitate
+to pull you down into this pit
+
+So come on
+Jump in the Fire
+So come on
+Jump in the Fire
+
+With hell in my eyes and with death in my veins
+The end is closing in
+Feeding on the minds of man
+and from their souls within
+My disciples all shout to search out
+And they always shall obey
+Follow me now my child not the meek or the mild
+But do just as I say
+
+So come on
+Jump in the Fire
+So come on
+Jump in the Fire
+
+Jump by your will or be taken by force
+I'll get you either way
+Trying to keep the hellfire lit
+I am stalking you as prey
+Living your life as me I am you you see
+There is a part of me in everyone
+So reach down grab my hand walk with me through
+the land
+Come home where you belong
+
+So come on
+Jump in the Fire
+So come on
+Jump in the Fire"></column>
+            </insert>
+            <insert tableName="music">
+                <column name="album_id" valueComputed="SELECT a.id FROM album WHERE a.name = 'Kill 'Em ALL'"></column>
+                <column name="name" value="(anesthesia) Pulling Teeth"></column>
+                <column name="duration" valueDate="00:04:14"></column>
+                <column name="lyrics" value="Bass solo, take one."></column>
+            </insert>
+            <insert tableName="music">
+                <column name="album_id" valueComputed="SELECT a.id FROM album WHERE a.name = 'Kill 'Em ALL'"></column>
+                <column name="name" value="Whiplash"></column>
+                <column name="duration" valueDate="00:04:08"></column>
+                <column name="lyrics" value="Late at night all systems go
+You have come to see the show
+We do our best you're the rest
+You make it real you know
+There is a feeling deep inside
+That drives you fuckin' mad
+A feeling of a hammerhead
+You need it oh so bad
+
+Adrenaline starts to flow
+You're thrashing all around
+Acting like a maniac
+Whiplash
+
+Bang your head against the stage
+Like you never did before
+Make it ring Make it bleed
+Make it really sore
+In a frenzied madness
+with your leather and your spikes
+Heads are bobbing all around
+It is hot as hell tonight
+
+Adrenaline starts to flow
+You're thrashing all around
+Acting like a maniac
+Whiplash
+
+Here on the stage the Marshal noise
+Is piercing through your ears
+It kicks your ass kick your face
+Exploding feeling nears
+Now is the time to let it rip
+To let it fuckin' loose
+We are gathered here to maim and kill
+Cause this is what we choose
+
+Adrenaline starts to flow
+You're thrashing all around
+Acting like a maniac...
+Here we Go!
+
+Whiplash
+
+The show is through the metal is gone
+It is time to hit the road
+Another town another gig
+Again we will explode
+Hotel rooms and motorways
+Life out here is raw
+But we will never stop
+We will never quit
+cause we are METALLICA
+
+Adrenaline starts to flow
+You're thrashing all around
+Acting like a maniac
+Whiplash"></column>
+            </insert>
+            <insert tableName="music">
+                <column name="album_id" valueComputed="SELECT a.id FROM album WHERE a.name = 'Kill 'Em ALL'"></column>
+                <column name="name" value="Phantom Lord"></column>
+                <column name="duration" valueDate="00:05:01"></column>
+                <column name="lyrics" value="Sound is ripping through your ears
+The deafing sound of metal nears
+Your bodies waiting for his whips
+The taste of leather on your lips
+
+Hear the cry of War
+Louder than before
+With his sword in hand
+To control the land
+Crushing metal strikes
+On this frightening night
+Fall onto your knees
+For the Phantom Lord
+
+Victems falling under chains
+You hear them crying death pains
+The fists of terrors breaking through
+Now there's nothing you can do
+
+Hear the cry of War
+Louder than before
+With his sword in ha o
+To control the land
+Crushing metal strikes
+On this frightening night
+Fall onto your knees
+For the Phantom Lord
+
+The leather armies have prevailed
+The Phantom Lord has never failed
+Smoke is lifting from the ground
+The rising volume metal sound
+
+Hear the cry of War
+Louder than before
+With his sword in hand
+To control the land
+Crushing metal strikes
+On this frightening night
+Fall onto your knees
+For the Phantom Lord
+
+Fall to your knees
+and bow to the Phantom Lord"></column>
+            </insert>
+            <insert tableName="music">
+                <column name="album_id" valueComputed="SELECT a.id FROM album WHERE a.name = 'Kill 'Em ALL'"></column>
+                <column name="name" value="No Remorse"></column>
+                <column name="duration" valueDate="00:06:26"></column>
+                <column name="lyrics" value="No mercy for what we are doing
+No thought to even what we have done
+We don't need to feel the sorrow
+No remorse for the helpless one
+
+War without end
+
+No remorse No repent
+We don't care what it meant
+Another day Another death
+Another sorrow Another breath
+No remorse No repent
+We don't care what it meant
+Another day Another death
+Another sorrow Another breath
+
+Blood feeds the war machine
+as it eats its way across the land
+We don't need the feel the sorrow
+No remorse is the one command
+
+War without end
+No remorse No repent
+We don't care what it meant
+Another day Another death
+Another sorrow Another breath
+No remorse No repent
+We don't care what it meant
+Another day Another death
+Another sorrow Another breath
+
+Only the strong survive
+No one to save the weaker race
+We are ready to kill all comers
+Like a loaded gun right at your face
+
+War without end
+No remorse No repent
+We don't care what it meant
+Another day Another death
+Another sorrow Another breath
+No remorse No repent
+We don't care what it meant
+Another day Another death
+Another sorrow Another breath
+
+Attack
+Bullets are flying
+People are dying
+with madness surrounding all hell's breaking loose
+Soldiers are hounding
+Bodies are mounting
+cannons are shouting to take their abuse
+With war machines going
+Blood starts to flowing
+No mercy given to anyone hear
+The furious fighting
+Swords are like lighting
+It all becomes frightening to you
+Know death is near
+No remorse"></column>
+            </insert>
+            <insert tableName="music">
+                <column name="album_id" valueComputed="SELECT a.id FROM album WHERE a.name = 'Kill 'Em ALL'"></column>
+                <column name="name" value="Seek & Destroy"></column>
+                <column name="duration" valueDate="00:06:54"></column>
+                <column name="lyrics" value="We are scanning the scene
+in the city tonight
+We are looking for you
+to start up a fight
+There is an evil feeling
+in our brains
+But it is nothing new
+you know it drives us insane
+
+Running,
+On our way
+Hiding,
+You will pay
+Dying,
+One thousand deaths
+
+Running,
+On our way
+Hiding,
+You will pay
+Dying,
+One thousand deaths
+
+Searching,
+Seek and Destroy
+
+Searching,
+Seek and Destroy
+
+Searching,
+Seek and Destroy
+
+Searching,
+Seek and Destroy
+
+There is no escape
+and that is for sure
+This is the end we won't take any more
+Say goodbye
+to the world you live in
+You've always been taking
+but now you're giving
+
+Running,
+On our way
+Hiding,
+You will pay
+Dying,
+One thousand deaths
+
+Running,
+On our way
+Hiding,
+You will pay
+Dying,
+One thousand deaths
+
+Searching,
+Seek and Destroy
+
+Searching,
+Seek and Destroy
+
+Searching,
+Seek and Destroy
+
+Searching,
+Seek and Destroy
+
+Our brains are on fire
+with the feeling to kill
+And it will not go away
+until our dreams are fulfilled
+There is only one thing
+on our minds
+Don't try running away
+`cause you're the one we will find
+
+Running,
+On our way
+Hiding,
+You will pay
+Dying,
+One thousand deaths
+
+Running,
+On our way
+Hiding,
+You will pay
+Dying,
+One thousand deaths
+
+Searching,
+Seek and Destroy
+
+Searching,
+Seek and Destroy
+
+Searching,
+Seek and Destroy
+
+Searching,
+Seek and Destroy"></column>
+            </insert>
+            <insert tableName="music">
+                <column name="album_id" valueComputed="SELECT a.id FROM album WHERE a.name = 'Kill 'Em ALL'"></column>
+                <column name="name" value="Metal Militia"></column>
+                <column name="duration" valueDate="00:05:11"></column>
+                <column name="lyrics" value="Thunder and lightning the gods take revenge
+Senseless destruction
+Victems of fury are cowardly now
+Running for safety
+Stabbing the harlot to pay for her sins
+Leaving the virgin
+Suicide running as if it were free
+Ripping and tearing
+
+On through the mist and the madness
+We are trying to get the message to you
+Metal Militia
+Metal Militia
+Metal Militia
+
+Chained and shadowed to be left behind
+nine and one thousand
+Metal militia for your sacrifice
+iron clad soldiers
+Join or be conquered the law of the land
+What will befall you
+The metalization of your inner soul
+twisting and turning
+
+On through the mist and the madness
+We are trying to get the message to you
+Metal Militia
+Metal Militia
+Metal Militia
+
+We are as one as we all are the same
+fighting for one cause
+Leather and metal are our uniforms
+protecting what we are
+
+Joining together to take on the world
+with our heavy metal
+Spreading the message to everyone here
+Come let yourself go
+
+On through the mist and the madness
+We are trying to get the message to you
+Metal Militia
+Metal Militia
+Metal Militia"></column>
+            </insert>
+            <rollback>
+                DELETE FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Kill 'Em All")
+            </rollback>
+        </preConditions>
+
     </changeSet>
 
     <changeSet id="metallica_ride_the_lightning" author="${author}">
