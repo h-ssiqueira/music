@@ -1937,7 +1937,7 @@ Living out this hell you always knew")
 
     <changeSet id="metallica_metallica" author="${author}">
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM album AS a WHERE a.name = ""</sqlCheck>
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM album AS a WHERE a.name = "Metallica"</sqlCheck>
         </preConditions>
         <insert tableName="album">
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Metallica')"/>
@@ -3164,33 +3164,33 @@ The man takes another bullet
 He's been fooled again
 Uncross your arms
 Take and throw them to the cure, say
-"I do believe"
+""I do believe""
 Uncross your arms now
 Take 'em to it, say
-"I do believe"
+""I do believe""
 The lies tempt her and she follows
 Again she lets him in
 She must believe to fill the hollow
 She's been fooled again
 Uncross your arms
 Take and throw them to the cure, say
-"I do believe"
+""I do believe""
 Uncross your arms now
 Take 'em to it, say
-"I do believe"
+""I do believe""
 Betting on the cure
 'cause it must get better than this
 Betting on the cure
 Yeah everyone got to have the sickness
 'cause everyone seems to need the cure
 Precious cure.....
-"I do believe"
+""I do believe""
 Betting on the cure
 Yeah, it must be better than this
 Betting on the cure
 Yeah everyone got to have the sickness
 'cause everyone seems to need the cure
-"I do believe""),
+""I do believe"""),
 
             ((SELECT a.id FROM album AS a WHERE a.name = "Load"),
             "Poor Twisted Me", "00:04:00", "Oh poor twisted me
@@ -5089,7 +5089,7 @@ Get 'em out
 Enough's enough"),
 
             ((SELECT a.id FROM album AS a WHERE a.name = "St. Anger"),
-            "Shoot Me Again", "00:0:", "I won't go away
+            "Shoot Me Again", "00:07:10", "I won't go away
 Right here I'll stay
 
 Stand silent in flames
