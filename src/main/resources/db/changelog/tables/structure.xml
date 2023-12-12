@@ -127,9 +127,6 @@
             <column name="nationality" type="varchar(100)">
                 <constraints nullable="true"/>
             </column>
-            <column name="role" type="INTEGER">
-                <constraints nullable="true" foreignKeyName="FK_person_role" references="role(id)"/>
-            </column>
         </createTable>
         <rollback>
             <dropTable tableName="person"/>
@@ -218,6 +215,25 @@
         </createTable>
         <rollback>
             <dropTable tableName="band_genre"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="person_role_table" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="person_role"/>
+            </not>
+        </preConditions>
+        <createTable tableName="person_role">
+            <column name="person_id" type="INTEGER">
+                <constraints nullable="false" foreignKeyName="FK_person_role_person" references="person(id)"/>
+            </column>
+            <column name="role_id" type="INTEGER">
+                <constraints nullable="false" foreignKeyName="FK_person_role_role" references="role(id)"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="person_role"/>
         </rollback>
     </changeSet>
 
