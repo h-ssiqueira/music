@@ -12,8 +12,11 @@
 		<java.version>17</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
-		<spring.version>3.1.2</spring.version>
-		<liquibase.version>4.23.0</liquibase.version>
+		<spring.boot.version>3.2.0</spring.boot.version>
+		<liquibase.version>4.25.0</liquibase.version>
+		<mysql.connector.version>8.1.0</mysql.connector.version>
+		<lombok.version>1.18.30</lombok.version>
+		<junit.version>5.10.1</junit.version>
 	</properties>
 
 	<dependencies>
@@ -21,26 +24,19 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
-			<version>${spring.version}</version>
+			<version>${spring.boot.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-
-		<!-- Parsers -->
-		<dependency>
-			<groupId>org.yaml</groupId>
-			<artifactId>snakeyaml</artifactId>
-			<version>2.0</version>
+			<version>${spring.boot.version}</version>
 		</dependency>
 
 		<!-- Database -->
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
-			<version>8.1.0</version>
+			<version>${mysql.connector.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.liquibase</groupId>
@@ -52,20 +48,20 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.28</version>
+			<version>${lombok.version}</version>
 		</dependency>
 
 		<!-- Testing -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<version>${spring.version}</version>
+			<version>${spring.boot.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.10.0</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -75,7 +71,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>${spring.version}</version>
+				<version>${spring.boot.version}</version>
 				<configuration>
 					<excludes>
 						<exclude>
