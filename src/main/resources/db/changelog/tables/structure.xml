@@ -161,25 +161,6 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="composed_table" author="${author}">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="composed"/>
-            </not>
-        </preConditions>
-        <createTable tableName="composed">
-            <column name="music_id" type="INTEGER">
-                <constraints nullable="false" foreignKeyName="FK_composed_music" references="music(id)"/>
-            </column>
-            <column name="person_id" type="INTEGER">
-                <constraints nullable="false" foreignKeyName="FK_composed_person" references="person(id)"/>
-            </column>
-        </createTable>
-        <rollback>
-            <dropTable tableName="composed"/>
-        </rollback>
-    </changeSet>
-
     <changeSet id="genre_table" author="${author}">
         <preConditions onFail="MARK_RAN">
             <not>

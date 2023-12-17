@@ -9,15 +9,15 @@
     <changeSet id="roles" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
-                SELECT COUNT(1) FROM role AS r WHERE r.name IN ("Vocalist", "Guitarrist", "Drummer", "Bassist")
+                SELECT COUNT(1) FROM role AS r WHERE r.name IN ("Vocalist", "Guitarist", "Drummer", "Bassist")
             </sqlCheck>
         </preConditions>
         <sql>
-            INSERT INTO role (name) VALUES ("Vocalist"), ("Guitarrist"), ("Drummer"), ("Bassist");
+            INSERT INTO role (name) VALUES ("Vocalist"), ("Guitarist"), ("Drummer"), ("Bassist");
         </sql>
         <rollback>
             <sql>
-                DELETE FROM role AS r WHERE r.name IN ("Vocalist", "Guitarrist", "Drummer", "Bassist")
+                DELETE FROM role AS r WHERE r.name IN ("Vocalist", "Guitarist", "Drummer", "Bassist")
             </sql>
         </rollback>
     </changeSet>

@@ -49,6 +49,28 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="metallica_members" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM member WHERE band_id = (SELECT id FROM band WHERE name = "Metallica")
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO member (band_id, person_id, join_date, disjoint_date) VALUES
+            ((SELECT id FROM band WHERE name = "Metallica"),(SELECT id FROM person WHERE name = "James Alan Hetfield"),"1981-10-28",null),
+            ((SELECT id FROM band WHERE name = "Metallica"),(SELECT id FROM person WHERE name = "Dave Scott Mustaine"),"1981-10-28","1983-04-11"),
+            ((SELECT id FROM band WHERE name = "Metallica"),(SELECT id FROM person WHERE name = "Kirk Lee Hammett"),"1983-04-11",null),
+            ((SELECT id FROM band WHERE name = "Metallica"),(SELECT id FROM person WHERE name = "Ron J. McGovney"),"1981-10-28","1982-12-10"),
+            ((SELECT id FROM band WHERE name = "Metallica"),(SELECT id FROM person WHERE name = "Clifford Lee Burton"),"1982-12-10","1986-09-27"),
+            ((SELECT id FROM band WHERE name = "Metallica"),(SELECT id FROM person WHERE name = "Jason Curtis Newsted"),"1986-11-08","2001-01-17"),
+            ((SELECT id FROM band WHERE name = "Metallica"),(SELECT id FROM person WHERE name = "Roberto Agustín Miguel Santiago Samuel Trujillo Veracruz"),"2003-02-24",null),
+            ((SELECT id FROM band WHERE name = "Metallica"),(SELECT id FROM person WHERE name = "Lars Ulrich"),"1981-10-28",null)
+        </sql>
+        <rollback>
+            DELETE FROM member WHERE band_id = (SELECT id FROM band WHERE name = "Metallica")
+        </rollback>
+    </changeSet>
+
     <changeSet id="metallica_kill_them_all" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM album AS a WHERE a.name = "Kill 'Em All"</sqlCheck>

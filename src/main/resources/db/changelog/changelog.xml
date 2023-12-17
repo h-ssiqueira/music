@@ -10,8 +10,12 @@
         <dbms type="mysql"/>
     </preConditions>
 
+    <!-- Database structure -->
     <includeAll path="db/changelog/tables/"/>
+
+    <!-- Database data -->
     <includeAll path="db/changelog/data/enumTables/"/>
+    <includeAll path="db/changelog/data/people/"/>
     <includeAll path="db/changelog/data/bands/"/>
 
 </databaseChangeLog>
