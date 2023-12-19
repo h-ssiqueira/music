@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        logicalFilePath="../db/changelog/data/bands/linkinPark/linkinPark.xml">
+
+        <changeSet id="band_linkin_park" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM band AS b WHERE b.name = "Linkin Park"</sqlCheck>
+        </preConditions>
+        <insert tableName="band">
+            <column name="name" value="Linkin Park"/>
+            <column name="creation" valueDate="1996-01-01"/>
+            <column name="logo" valueBlobFile="../images/LinkinParkLogo.svg"/>
+        </insert>
+        <rollback>DELETE FROM band AS b WHERE b.name = "Linkin Park"</rollback>
+    </changeSet>
+
+    <changeSet id="linkin_park_genres" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM band_genre AS bg
+                WHERE bg.band_id = (SELECT b.id FROM band AS b WHERE b.name = "Linkin Park")
+                AND bg.genre_id IN (SELECT g.id FROM genre AS g WHERE g.name in ())
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            
+
+        </sql>
+        <rollback>
+            DELETE FROM band_genre AS bg
+            WHERE bg.band_id = (SELECT b.id FROM band AS b WHERE b.name = "Linkin Park")
+            AND bg.genre_id IN (SELECT g.id FROM genre AS g WHERE g.name IN ())
+        </rollback>
+    </changeSet>
+
+    <changeSet id="linkin_park_members" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM member WHERE band_id = (SELECT id FROM band WHERE name = "Linkin Park")
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO member (band_id, person_id, join_date, disjoint_date) VALUES
+            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = ""),"19--",null),
+            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = ""),"19--","--"),
+            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = ""),"19--",null),
+            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = ""),"19--",null),
+            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = ""),"19--",null),
+            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = ""),"19--",null),
+            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = ""),"--",null),
+            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = ""),"1996--",null)
+        </sql>
+        <rollback>
+            DELETE FROM member WHERE band_id = (SELECT id FROM band WHERE name = "Linkin Park")
+        </rollback>
+    </changeSet>
+
+    <changeSet id="linkin_park_hybrid_theory" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+
+            </sqlCheck>
+        </preConditions>
+        <sql>
+
+        </sql>
+        <rollback>
+
+        </rollback>
+    </changeSet>
+
+    <changeSet id="linkin_park_hybrid_theory_songs" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+
+            </sqlCheck>
+        </preConditions>
+        <sql>
+
+        </sql>
+        <rollback>
+
+        </rollback>
+    </changeSet>
+
+    <changeSet id="linkin_park_meteora" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+
+            </sqlCheck>
+        </preConditions>
+        <sql>
+
+        </sql>
+        <rollback>
+
+        </rollback>
+    </changeSet>
+
+    <changeSet id="linkin_park_meteora_songs" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+
+            </sqlCheck>
+        </preConditions>
+        <sql>
+
+        </sql>
+        <rollback>
+
+        </rollback>
+    </changeSet>
+
+    <changeSet id="linkin_park_minutes_to_midnight" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+
+            </sqlCheck>
+        </preConditions>
+        <sql>
+
+        </sql>
+        <rollback>
+
+        </rollback>
+    </changeSet>
+
+    <changeSet id="linkin_park_minutes_to_midnight_songs" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+
+            </sqlCheck>
+        </preConditions>
+        <sql>
+
+        </sql>
+        <rollback>
+
+        </rollback>
+    </changeSet>
+
+    <changeSet id="linkin_park_a_thousand_suns" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+
+            </sqlCheck>
+        </preConditions>
+        <sql>
+
+        </sql>
+        <rollback>
+
+        </rollback>
+    </changeSet>
+
+    <changeSet id="linkin_park_a_thousand_suns_songs" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+
+            </sqlCheck>
+        </preConditions>
+        <sql>
+
+        </sql>
+        <rollback>
+
+        </rollback>
+    </changeSet>
+
+    <changeSet id="linkin_park_living_things" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+
+            </sqlCheck>
+        </preConditions>
+        <sql>
+
+        </sql>
+        <rollback>
+
+        </rollback>
+    </changeSet>
+
+    <changeSet id="linkin_park_living_things_songs" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+
+            </sqlCheck>
+        </preConditions>
+        <sql>
+
+        </sql>
+        <rollback>
+
+        </rollback>
+    </changeSet>
+
+    <changeSet id="linkin_park_the_hunting_party" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+
+            </sqlCheck>
+        </preConditions>
+        <sql>
+
+        </sql>
+        <rollback>
+
+        </rollback>
+    </changeSet>
+
+    <changeSet id="linkin_park_the_hunting_party_songs" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+
+            </sqlCheck>
+        </preConditions>
+        <sql>
+
+        </sql>
+        <rollback>
+
+        </rollback>
+    </changeSet>
+
+    <changeSet id="linkin_park_one_more_light" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+
+            </sqlCheck>
+        </preConditions>
+        <sql>
+
+        </sql>
+        <rollback>
+            <sql>
+
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="linkin_park_one_more_light_songs" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+
+            </sqlCheck>
+        </preConditions>
+        <sql>
+
+        </sql>
+        <rollback>
+
+        </rollback>
+    </changeSet>
+
+</changelog>
