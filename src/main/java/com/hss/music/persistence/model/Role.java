@@ -1,6 +1,8 @@
 package com.hss.music.persistence.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Getter;
 
 @Getter
@@ -12,7 +14,10 @@ public enum Role {
     Drummers(3L,"Drummer"),
     Bassist(4L,"Bassist");
 
+    @Id
     private final Long id;
+
+    @Column(name = "name")
     private final String name;
 
     Role(Long id, String role) {

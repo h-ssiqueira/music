@@ -1,6 +1,8 @@
 package com.hss.music.persistence.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Getter;
 
 @Getter
@@ -22,7 +24,10 @@ public enum Genre {
     TM(13L,"Thrash Metal"),
     SM(14L,"Speed Metal");
 
+    @Id
     private final Long id;
+
+    @Column(name = "name")
     private final String name;
 
     Genre(Long id, String name) {

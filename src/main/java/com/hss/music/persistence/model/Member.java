@@ -3,8 +3,8 @@ package com.hss.music.persistence.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
@@ -19,12 +19,12 @@ public class Member {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
-    @Column(name = "person_id")
+    @OneToOne
+    @JoinColumn(name = "person_id")
     private Person person;
 
-    @OneToMany
-    @Column(name = "band_id")
+    @OneToOne
+    @JoinColumn(name = "band_id")
     private Band band;
 
     @Column(name = "join_date")

@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
@@ -21,7 +22,8 @@ public class Album {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "band_id")
+    @ManyToOne
+    @JoinColumn(name = "band_id")
     private Band band;
 
     @Column(name = "name")
@@ -33,7 +35,6 @@ public class Album {
     @Column(name = "cover")
     private File cover;
 
-    @ManyToOne
-    @JoinColumn(name = "band_id")
+    @OneToMany
     private List<Music> songs;
 }

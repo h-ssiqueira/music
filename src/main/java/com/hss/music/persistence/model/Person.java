@@ -2,9 +2,8 @@ package com.hss.music.persistence.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
@@ -29,7 +28,8 @@ public class Person {
     @Column(name = "nationality")
     private String nationality;
 
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
+    @OneToMany
     private Set<Role> role;
 
 }
