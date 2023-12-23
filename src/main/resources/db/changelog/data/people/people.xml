@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        logicalFilePath="../db/changelog/data/bands/metallica.xml">
+
+    <changeSet id="James Hetfield" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "James Alan Hetfield"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "James Alan Hetfield")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("James Alan Hetfield","1963-08-03","American");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "James Alan Hetfield"),(SELECT id FROM role WHERE name = "Vocalist")),
+            ((SELECT id FROM person WHERE name = "James Alan Hetfield"),(SELECT id FROM role WHERE name = "Guitarist"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "James Alan Hetfield");
+            DELETE FROM person WHERE name = "James Alan Hetfield";
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Dave Mustaine" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "Dave Scott Mustaine"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Dave Scott Mustaine")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("Dave Scott Mustaine","1961-09-13","American");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "Dave Scott Mustaine"),(SELECT id FROM role WHERE name = "Guitarist"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Dave Scott Mustaine");
+            DELETE FROM person WHERE name = "Dave Scott Mustaine";
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Kirk Hammett" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "Kirk Lee Hammett"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Kirk Lee Hammett")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("Kirk Lee Hammett","1962-11-18","American");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "Kirk Lee Hammett"),(SELECT id FROM role WHERE name = "Guitarist"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Kirk Lee Hammett");
+            DELETE FROM person WHERE name = "Kirk Lee Hammett";
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Ron McGovney" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "Ron J. McGovney"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Ron J. McGovney")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("Ron J. McGovney","1963-11-02","American");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "Ron J. McGovney"),(SELECT id FROM role WHERE name = "Bassist"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Ron J. McGovney");
+            DELETE FROM person WHERE name = "Ron J. McGovney";
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Cliff Burton" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "Clifford Lee Burton"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Clifford Lee Burton")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("Clifford Lee Burton","1962-02-10","American");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "Clifford Lee Burton"),(SELECT id FROM role WHERE name = "Bassist"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Clifford Lee Burton");
+            DELETE FROM person WHERE name = "Clifford Lee Burton";
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Jason Newsted" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "Jason Curtis Newsted"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Jason Curtis Newsted")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("Jason Curtis Newsted","1963-03-04","American");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "Jason Curtis Newsted"),(SELECT id FROM role WHERE name = "Bassist"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Jason Curtis Newsted");
+            DELETE FROM person WHERE name = "Jason Curtis Newsted";
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Robert Trujillo" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "Roberto Agustín Miguel Santiago Samuel Trujillo Veracruz"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Roberto Agustín Miguel Santiago Samuel Trujillo Veracruz")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("Roberto Agustín Miguel Santiago Samuel Trujillo Veracruz","1964-11-23","American");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "Roberto Agustín Miguel Santiago Samuel Trujillo Veracruz"),(SELECT id FROM role WHERE name = "Bassist"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Roberto Agustín Miguel Santiago Samuel Trujillo Veracruz");
+            DELETE FROM person WHERE name = "Roberto Agustín Miguel Santiago Samuel Trujillo Veracruz";
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Lars Ulrich" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "Lars Ulrich"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Lars Ulrich")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("Lars Ulrich","1963-12-26","Danish");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "Lars Ulrich"),(SELECT id FROM role WHERE name = "Drummer"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Lars Ulrich");
+            DELETE FROM person WHERE name = "Lars Ulrich";
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

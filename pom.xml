@@ -14,6 +14,9 @@
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<spring.boot.version>3.2.0</spring.boot.version>
 		<liquibase.version>4.25.0</liquibase.version>
+		<mysql.connector.version>8.1.0</mysql.connector.version>
+		<lombok.version>1.18.30</lombok.version>
+		<junit.version>5.10.1</junit.version>
 	</properties>
 
 	<dependencies>
@@ -34,18 +37,11 @@
 			<version>${spring.boot.version}</version>
 		</dependency>
 
-		<!-- Parsers -->
-		<dependency>
-			<groupId>org.yaml</groupId>
-			<artifactId>snakeyaml</artifactId>
-			<version>2.0</version>
-		</dependency>
-
 		<!-- Database -->
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
-			<version>8.1.0</version>
+			<version>${mysql.connector.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.liquibase</groupId>
@@ -57,7 +53,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.28</version>
+			<version>${lombok.version}</version>
 		</dependency>
 
 		<!-- Testing -->
@@ -70,7 +66,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.10.0</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
