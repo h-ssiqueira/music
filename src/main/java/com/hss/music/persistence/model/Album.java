@@ -9,7 +9,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class Album {
     private LocalDate releaseDate;
 
     @Column(name = "cover")
-    private File cover;
+    private byte[] cover;
 
     @OneToMany
     private List<Music> songs;

@@ -7,7 +7,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
@@ -27,8 +26,8 @@ public class Band {
     @Column(name = "creation")
     private LocalDate creation;
 
-    @Column(name = "lyrics")
-    private File logo;
+    @Column(name = "logo")
+    private byte[] logo;
 
     @OneToMany
     private List<Album> albums;
