@@ -333,4 +333,27 @@
             DELETE FROM person WHERE name = "Joseph Hahn";
         </rollback>
     </changeSet>
+
+    <changeSet id="Tobias Forge" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "Tobias Jens Forge"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Tobias Jens Forge")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("Tobias Jens Forge","1981-03-03","Swedish");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "Tobias Jens Forge"),(SELECT id FROM role WHERE name = "Vocalist"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Tobias Jens Forge");
+            DELETE FROM person WHERE name = "Tobias Jens Forge";
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

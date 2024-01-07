@@ -1,0 +1,1994 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        logicalFilePath="../db/changelog/data/bands/ghost/ghost.xml">
+
+    <changeSet id="band_ghost" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM band AS b WHERE b.name = "Ghost"</sqlCheck>
+        </preConditions>
+        <insert tableName="band">
+            <column name="name" value="Ghost"/>
+            <column name="creation" valueDate="2006-01-01"/>
+            <column name="logo" valueBlobFile="./images/GhostLogo.png"/>
+        </insert>
+        <rollback>DELETE FROM band AS b WHERE b.name = "Ghost"</rollback>
+    </changeSet>
+
+    <changeSet id="ghost_genres" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM band_genre AS bg
+                WHERE bg.band_id = (SELECT b.id FROM band AS b WHERE b.name = "Ghost")
+                AND bg.genre_id IN (SELECT g.id FROM genre AS g WHERE g.name in ('Hard Rock','Heavy Metal','Doom Metal','Arena Rock','Progressive Rock','Pop Rock'))
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO band_genre (band_id,genre_id) VALUES
+            ((SELECT b.id FROM band AS b WHERE b.name = "Ghost"),(SELECT g.id FROM genre AS g WHERE g.name = 'Hard Rock')),
+            ((SELECT b.id FROM band AS b WHERE b.name = "Ghost"),(SELECT g.id FROM genre AS g WHERE g.name = 'Heavy Metal')),
+            ((SELECT b.id FROM band AS b WHERE b.name = "Ghost"),(SELECT g.id FROM genre AS g WHERE g.name = 'Doom Metal')),
+            ((SELECT b.id FROM band AS b WHERE b.name = "Ghost"),(SELECT g.id FROM genre AS g WHERE g.name = 'Arena Rock')),
+            ((SELECT b.id FROM band AS b WHERE b.name = "Ghost"),(SELECT g.id FROM genre AS g WHERE g.name = 'Progressive Rock')),
+            ((SELECT b.id FROM band AS b WHERE b.name = "Ghost"),(SELECT g.id FROM genre AS g WHERE g.name = 'Pop Rock'))
+        </sql>
+        <rollback>
+            DELETE FROM band_genre AS bg
+            WHERE bg.band_id = (SELECT b.id FROM band AS b WHERE b.name = "Ghost")
+            AND bg.genre_id IN (SELECT g.id FROM genre AS g WHERE g.name IN ('Hard Rock','Heavy Metal','Doom Metal','Arena Rock','Progressive Rock','Pop Rock'))
+        </rollback>
+    </changeSet>
+
+    <changeSet id="ghost_members" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM member WHERE band_id = (SELECT id FROM band WHERE name = "Ghost")
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO member (band_id, person_id, join_date, disjoint_date) VALUES
+            ((SELECT id FROM band WHERE name = "Ghost"),(SELECT id FROM person WHERE name = "Tobias Jens Forge"),"2006-01-01",null)
+        </sql>
+        <rollback>
+            DELETE FROM member WHERE band_id = (SELECT id FROM band WHERE name = "Ghost")
+        </rollback>
+    </changeSet>
+
+    <changeSet id="ghost_opus enonymous" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM album AS a WHERE a.name = "Opus Eponymous"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Ghost')"/>
+            <column name="name" value="Opus Eponymous"/>
+            <column name="release_date" valueDate="2010-10-10"/>
+            <column name="cover" valueBlobFile="./images/GhostOpusEponymousCover.jpg"/>
+        </insert>
+        <rollback>
+            DELETE FROM album AS a WHERE a.name = "Opus Eponymous"
+        </rollback>
+    </changeSet>
+
+    <changeSet id="ghost_opus_eponymous_songs" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Opus Eponymous")
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO music (album_id, name, duration, lyrics) VALUES
+
+            ((SELECT a.id FROM album AS a WHERE a.name = "Opus Eponymous"),
+            "Deus Culpa","00:01:34","Instrumental"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Opus Eponymous"),
+            "Con Clavi Con Dio","00:03:33","Lucifer
+We are here
+For your praise
+Evil one
+
+Our conjuration sings infernal psalms
+And smear the smudge in bleeding palms
+
+Siamo Con Clavi
+Siamo Con Dio
+Siamo con il nostro dio scuro
+
+Demigod
+Our task
+Behind mask
+Chosen son
+
+Oh, you rebel chief, destroyer of the Earth
+Rise from precipice through birth
+
+Sathanas
+We are one
+Out of three
+Trinity
+
+Siamo Con Clavi
+Siamo Con Dio
+Siamo con il nostro dio scuro"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Opus Eponymous"),
+            "Ritual","00:04:28","Tonight, we're summoned for a divine cause
+Remembrance, no
+But for their future loss
+
+This chapel of ritual
+Smells of dead human sacrifices
+From the altar
+
+Bedouins and nomads
+Carried through the times
+Through pestilences and famines
+These ancient scrolls of rhymes
+
+Our fallen angel vexed
+Was banished from the sky
+Recite now from the text
+Pray for all to die
+
+This chapel of ritual
+Smells of dead human sacrifices
+From the altar bed
+On this night of ritual
+Invoking our master
+To procreate the unholy bastard
+
+Our father
+Who art in hell
+Unhallowed be thy name
+Cursed be the sons and daughters
+Of thy Nemesis
+Whom are to blame
+Thy kingdom come
+NemA
+
+Tonight, we summoned for His unholy fiend
+Now celebrate
+The end
+
+This chapel of ritual
+Smells of dead human sacrifices
+From the altar bed
+On this night of ritual
+Invoking our master
+To procreate the unholy bastard"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Opus Eponymous"),
+            "Elizabeth","00:04:01","Underneath the moonlight of old Hungarian skies
+Buried in the blood-drenched earth
+These barren lands of ice
+She was an evil woman with an evil old soul
+Piercing eyes emotionless
+A heart so black and cold
+
+Elizabeth, in the chasm where was my soul
+Forever young, Elizabeth Bathory in the castle of your death
+You're still alive, Elizabeth?
+
+Her pact with Satan
+Her despise of mankind
+Her acts of cruelty and her lust for blood
+Makes her one of us
+
+Our ancient countess was refused her desires will
+To bathe in pure fresh blood
+She'd peasant virgins killed
+
+Elizabeth, in the chasm where was my soul
+Forever young, Elizabeth Bathory in the castle of your death
+You're still alive, Elizabeth?
+
+Elizabeth, in the chasm where was my soul
+Forever young, Elizabeth Bathory in the castle of your death
+You're still alive, Elizabeth?"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Opus Eponymous"),
+            "Stand by Him","00:03:56","The Devil's power is the greatest one
+When his and hers holiest shuns the sun
+A temptress smitten by the blackest force
+A vicar bitten blind in intercourse
+
+The witch hammer struck her down
+On our Sabbath, she's unbound
+
+'Tis the night of the witch
+'Tis the night of the witch tonight
+And the vengeance is hers for as long as she stands by him
+
+'Tis the night of the witch
+'Tis the night of the witch tonight
+And the vengeance is hers for as long as she stands by him
+
+All witchcraft comes from carnal lust
+Which is, in women, insatiable
+A moon shone bright above her trial
+As flames ate through her body defiled
+
+The witch hammer struck her down
+On our Sabbath, she's unbound
+
+'Tis the night of the witch
+'Tis the night of the witch tonight
+And the vengeance is hers for as long as she stands by him
+
+'Tis the night of the witch
+'Tis the night of the witch tonight
+And the vengeance is hers for as long as she stands by him"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Opus Eponymous"),
+            "Satan Prayer","00:04:38","Believe in one God do we
+Satan almighty
+
+The uncreator of heaven and soil
+And the invisible and the visible
+And in his son begotten of father
+By whom all things will be unmade
+
+Who for man and his damnation
+Incarnated rise up from hell
+
+From sitteth on the left hand of his father
+From thence he shall come to judge
+Out of one substance with Satan
+Whose kingdom shall haveth no end
+
+Hear our Satan prayer, our anti-Nicene creed
+Hear our Satan prayer, for the coming of seed
+Hear our Satan prayer, our anti-Nicene creed
+Hear our Satan prayer, for the cumming of seed
+
+Unholy ghost, overlord
+And taker of life
+
+Hear our Satan prayer, our anti-Nicene creed
+Hear our Satan prayer, for the coming of seed
+Hear our Satan prayer, our anti-Nicene creed
+Hear our Satan prayer, for the coming of seed
+Hear our Satan prayer, our anti-Nicene creed
+Hear our Satan prayer, for the coming of seed
+Hear our Satan prayer, our anti-Nicene creed
+Hear our Satan prayer"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Opus Eponymous"),
+            "Death Knell","00:04:36","Say, can you see the cross?
+Inverted solemnly
+A symbol for the goat
+Of a thousand young
+
+Six, six, six
+Evoke the king of hell
+Strike the death knell, death knell
+Death knell, death knell
+
+Say, can you hear the chimes?
+Tolls now for the end
+Bells call out our doom
+As victor reaches womb
+
+Sex, sex, sex
+Receive the beast of evil, of evil
+
+Can you say his name?
+Carrier of the light
+Legions of this seed
+A child you espouse will feed
+
+S-A-T-A-N
+Under spell
+Of the death knell, death knell
+Death knell, death knell"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Opus Eponymous"),
+            "Prime Mover","00:03:53","Clad in cloak, secretive nun
+Bearing the old ones' bastard son
+A varicose phallus obsessed and poised her
+Cast a veil of dusk upon the cloister
+
+Prime mover, maternal slave
+With child of her grave
+
+Mother, filth in her womb
+Father, waiting in tomb
+Sathanas, anti-Christus, spiritus non sancti
+
+Selected heir, machinery insect
+The bloodline of the dark architect
+Toxic blood of not known birth
+Antichrist will walk the earth
+
+Prime mover, maternal slave
+With child of her grave
+Prime mover, maternal slave
+With child of her grave"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Opus Eponymous"),
+            "Genesis","00:04:03","Instrumental")
+        </sql>
+        <rollback>
+            DELETE FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Opus Eponymous")
+        </rollback>
+    </changeSet>
+
+    <changeSet id="ghost_infestissumam" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM album AS a WHERE a.name = "Infestissumam"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Ghost')"/>
+            <column name="name" value="Infestissumam"/>
+            <column name="release_date" valueDate="2013-04-10"/>
+            <column name="cover" valueBlobFile="./images/GhostInfestissumamCover.jpg"/>
+        </insert>
+        <rollback>
+            DELETE FROM album AS a WHERE a.name = "Infestissumam"
+        </rollback>
+    </changeSet>
+
+    <changeSet id="ghost_infestissumam_songs" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Infestissumam")
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO music (album_id, name, duration, lyrics) VALUES
+
+            ((SELECT a.id FROM album AS a WHERE a.name = "Infestissumam"),"Infestissumam","00:01:42","Il Padre
+Il Filio
+Et Lo Spiritus Malum
+Omnis Caelestis
+Delenda Est
+
+Anti Cristus
+Il Filio De Sathanas
+Infestissumam
+
+Il Padre
+Il Filio
+Et Lo Spiritus Malum
+Omnis Caelestis
+Delenda Est
+
+Anti Cristus
+Il Filio De Sathanas
+Infestissumam
+
+Il Padre
+Il Filio
+Et Lo Spiritus Malum
+Omnis Caelestis
+Delenda Est
+
+Anti Cristus
+Il Filio De Sathanas
+Infestissumam
+
+Infestissumam"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Infestissumam"),"Per Aspera ad Inferi","00:04:09","Unholy
+Is the lust in your eyes
+""Blasphemous""
+Would not suffice
+
+Perverted
+Are your wishes and dreams
+Tanning in lucifer's beams
+
+Per aspera ad inferi
+Per aspera ad inferi
+Per aspera ad inferi
+Per aspera ad inferi
+
+All your dreams will come true
+All your dreams will come true
+
+Oh, Satan
+Devour us all
+Hear our desperate call
+
+Per aspera ad inferi
+Per aspera ad inferi
+Per aspera ad inferi
+Per aspera ad inferi
+
+Per aspera ad inferi
+Per aspera ad inferi
+Per aspera ad inferi
+Per aspera ad inferi"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Infestissumam"),"Secular Haze","00:05:11","You know that the fog is here omnipresent
+When the diseases sees no cure
+You know that the fog is here omnipresent
+When the intents remain obscure
+Forevermore
+
+Weave us a mist
+Fog weaver
+Hide us in shadows
+Unfathomable wall-less maze
+A secular haze
+
+You know that his son is near omnipotent
+When she sees eye to eye with spears
+You know that his son is near omnipotent
+When youth and innocence disappear
+Forever lost
+
+Weave us a mist
+Fog weaver
+Hide us in shadows
+Unfathomable, wall-less maze
+A secular haze
+
+He is divinity omniscient
+Seeing the world revolve with spite
+The surge of humanity oblivious
+To the divine whom bringeth light
+Let there be night
+
+Weave us a mist
+Fog weaver
+Hide us in shadows
+Fog weaver
+
+Come, mist eternal
+Come, mist eternal
+Come, secular haze"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Infestissumam"),"Jigolo Har Megiddo","00:03:58","I am the one who preys on weak
+I offer everything they seek
+And I am the one who comes richly endowed
+Harvesting crops of fields that others have ploughed
+
+I am the one, lascivious
+
+I am the son of one below
+The progeny of beast of woe
+And I am the son who comes into the daughters of men
+Destroying all and make them want it again
+
+I am the son, lascivious
+
+He is the one desacralizer
+He is the son of the enticer
+The all seeing subterranean kaiser
+He is the way, he is the way
+
+I am the way
+And you invited me to stay
+However fair and pure, you crave the wand
+You see through me what lies beyond
+
+I am the son lascivious
+I am the son lascivious
+I am the one lascivious
+With magic potion niveous"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Infestissumam"),"Ghuleh / Zombie Queen","00:07:29","Ghuleh, Ghuleh
+Ghuleh, Ghuleh
+
+Putrefaction
+A scent that cursed be
+Under coat of dust
+From the darkness
+Rise as succubus
+From the earthen rust
+
+Haresis dea
+Once a majesty
+Now exposing bone
+From the darkness
+Rise as succubus
+And usurp the throne
+
+The Moon is full and shines
+An evil blinding light
+Under a monolith, her likeness
+Marble white
+
+Zombie queen
+Zombie queen
+Black light guides you
+Ghuleh, Ghuleh
+
+Zombie queen
+Zombie queen
+Black light guides you
+Ghuleh, Ghuleh
+
+Up from the stinking dirt
+She rises ghastly pale
+Shape shifting soon, but now she's
+Rigid, stiff and stale
+
+Zombie queen
+Zombie queen
+Black light guides you
+Ghuleh, Ghuleh
+
+Zombie queen
+Zombie queen
+Black flame guides you
+Ghuleh, Ghuleh"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Infestissumam"),"Year Zero","00:05:50","Belial, Behemoth, Beelzebub
+Asmodeus, Sathanas, Lucifer
+Belial, Behemoth, Beelzebub
+Asmodeus, Sathanas, Lucifer
+
+Since dawn of time
+The fate of man is that of lice
+Equal as parasites
+And moving without eyes
+A day of reckoning
+Where man exist to burn
+Count down together now
+And say the words
+That you heard
+
+Hail Satan, Archangelo
+Hail Satan, welcome Year Zero
+Hail Satan, Archangelo
+Hail Satan, welcome Year Zero
+
+Belial, Behemoth, Beelzebub, Asmodeus, Sathanas, Lucifer
+
+Crestfallen kings and queens
+Comforting in their faith
+Unbeknownst to them
+Is the presence of the wraith
+Since fate of man is equal
+To the fate of lice
+As new dawn rises
+You shalt recognize now
+The Overlord of Flies
+
+Hail Satan, Archangelo
+Hail Satan, Welcome Year Zero
+Hail Satan
+
+He will tremble the nations
+Kingdoms to fall one by one
+Victim to fall for temptations
+A daughter to fall for a son
+The ancient serpent deceiver
+To masses standing in awe
+He will ascend to the heavens
+Above the stars of God
+
+Hail Satan, Archangelo
+Hail Satan, welcome Year Zero
+Hail Satan, Archangelo
+Hail Satan, welcome Year Zero"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Infestissumam"),"Body and Blood","00:03:43","This gravehill stinks of death
+A reek from the ground
+Catches whiff of the hound
+A dead ones breath
+The casket lid is cold
+Waiting inside
+Is someone petrified
+That odours old
+
+His body and blood
+Sharing in common
+His body and blood
+His body and blood
+Serving Messiah
+
+Son of God
+The bitter taste is sweet
+So eat nazarene
+And you kiss the obscene
+Anointed feet
+
+His body and blood
+Sharing in common
+His body and blood
+His body and blood
+Serving Messiah
+
+Son of God
+Receive, consume
+Receive, consume
+Digest
+Defecate
+
+His body and blood
+Sharing in common
+His body and blood
+His body and blood
+Serving Messiah
+Son of God"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Infestissumam"),"Idolatrine","00:04:24","Profaner of the vices, a simple charlatan
+Inflaming puerile minds with the guilt of sin
+Imaginations fed to children, it has served me well
+That the bowels of the earth hides the pits of hell
+
+Idolatrine for the imbeciles
+Idolatrine
+Idolatrine for the debiles and the simpletons
+Disciples of the watch awaits at my command
+
+Lord of silence
+Desolated one
+Vengeance is his
+
+An existence as a human
+Is leaden monotony
+With all desires drowned
+Impure sanctimony
+
+Idolatrine for the imbeciles
+Idolatrine
+Idolatrine for the debiles and the simpletons
+Disciples of the watch awaits at my command
+
+Suffer little children to come unto me
+Suffer little children to come unto me
+Suffer little children grant me sovereignty
+Suffer little, little, princes and princesses
+
+Idolatrine for the imbeciles
+Idolatrine
+Idolatrine for the debiles and the simpletons
+Disciples of the watch awaits at my command
+
+Suffer little children to come unto me
+Suffer little children to come unto me
+Suffer little children grant me sovereignty
+Suffer little, little, princes and princesses"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Infestissumam"),"Depth of Satan's Eyes","00:05:25","Through scapes of murmur
+Noisy walls of sound
+Without a starlit night
+Shores are nowhere to be found
+On seas of wonder
+Ye confused strays
+Without a guiding light
+You see no ways
+
+Into the eyes of fire
+Into the gaze ablaze
+Into the burning light
+Of satan's rays
+Into the source of wisdom
+Beyond the bible lies
+Into the endless depth
+Of satan's eyes
+
+Spiral and pulsating
+His eyes are enthralling
+His eyes like a vortex
+A well in which you're falling
+
+The swamp of feces
+That is the world
+Flatuates a whirlwind storm
+In which you swirl
+
+In disarray you ponder
+Your soul malaise
+Abandon the long lost man
+Your child portrays
+
+Into the eyes of fire
+Into the gaze ablaze
+Into the burning light
+Of satan's rays
+Into the source of wisdom
+Beyond the bible lies
+Into the endless depth
+Of satan's eyes
+
+Into the eyes of fire
+Into the gaze ablaze
+Into the burning light
+Of satan's rays
+Into the source of wisdom
+Beyond the bible lies
+Into the endless depth
+Of satan's eyes"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Infestissumam"),"Monstrance Clock","00:05:53","To the sound of the monstrance clock
+Air is cleansed, assembled flock
+Black candles burn, all minds aligned
+
+To the sound of the monstrance clock
+Air is cleansed, assembled flock
+Black candles burn, all minds aligned
+
+As the parish sighs in smoke
+Enters lady revealed of cloak
+To the haunting sound of the monstrance clock
+Singing
+
+Come together, together as one
+Come together for Lucifer's son
+
+To the sound of the end of day
+Mesmerized, the assembled sway
+Black candles burn, all minds aligned
+
+Hypnotizing horns of ram
+Paralyzing pentagram
+And the eerie sound of the monstrance clock
+Singing
+
+Come together, together as one
+Come together for Lucifer's son
+Come together, together as one
+Come together for Lucifer's son
+Come together, together as one
+Come together for Lucifer's son
+Come together, together as one
+Come together for Lucifer's son
+
+Come together, together as one
+Come together for Lucifer's son
+Come together (come together), together as one
+Come together (come together) for Lucifer's son (for Lucifer's son)
+Come together (come together), together as one
+Come together (come together) for Lucifer's son (for Lucifer's son)
+Come together (come together), together as one
+Come together (come together), forever as one (forever as one)")
+        </sql>
+        <rollback>
+            DELETE FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Infestissumam")
+        </rollback>
+    </changeSet>
+
+    <changeSet id="ghost_meliora" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM album AS a WHERE a.name = "Meliora"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Ghost')"/>
+            <column name="name" value="Meliora"/>
+            <column name="release_date" valueDate="2015-08-21"/>
+            <column name="cover" valueBlobFile="./images/GhostMelioraCover.jpg"/>
+        </insert>
+        <rollback>
+            DELETE FROM album AS a WHERE a.name = "Meliora"
+        </rollback>
+    </changeSet>
+
+    <changeSet id="ghost_meliora_songs" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Meliora")
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO music (album_id, name, duration, lyrics) VALUES
+
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meliora"),"Spirit","00:05:15","Throw yourself
+Into the vessel
+Of possibilities
+
+Your green muse
+The apparatus
+For soul mobility
+A gateway to secrecy
+
+Spirit, absinthe
+Spirit, absinthe
+
+Seven seals
+Devilish creatures
+Trumpets the end of time
+
+Cloven hooves
+Anti-Saint wormwood
+Catapulting your mind
+Into the jaws of hell
+
+Spirit, absinthe
+Spirit, absinthe
+
+There's no return
+From this excursion
+Of possibilities
+You're at the seventh gate
+
+Spirit, absent
+Spirit, absent
+
+Let none of this earth inherit
+This vision of my spirit"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meliora"),"From the Pinnacle to the Pit","00:04:02","You have the power
+You wear the crown
+From the pinnacle to the pit
+It is a long way down
+
+You wield the scepter
+You wear the gown
+From the pinnacle to the pit
+It is a long way down
+
+In your empire
+They stare in frown
+From the pinnacle to the pit
+It is a long way down
+
+You are cast out from the heavens to the ground
+Blackened feathers falling down
+You are cast out from the heavens to the ground
+Blackened feathers falling down
+You will wear your independence like a crown
+
+Cruciger globus
+You stand your ground
+The orb disfigured
+What's flat looks round
+
+From the pinnacle to the pit
+It is along way down
+
+You are cast out from the heavens to the ground
+Blackened feathers falling down
+You are cast out from the heavens to the ground
+Blackened feathers falling down
+You will wear your independence like a crown"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meliora"),"Cirice","00:06:02","I feel your presence amongst us
+You cannot hide in the darkness
+Can you hear the rumble?
+Can you hear the rumble that's calling?
+
+I know your soul is not tainted
+Even though you've been told so
+Can you hear the rumble?
+Can you hear the rumble that's calling?
+
+I can feel the thunder that's breaking in your heart
+I can see through the scars inside you
+I can feel the thunder that's breaking in your heart
+I can see through the scars inside you
+
+A candle casting a faint glow
+You and I see eye to eye
+
+Can you hear the thunder?
+How can you hear the thunder that's breaking?
+Now there is nothing between us
+From now our merge is eternal
+
+Can't you see that you're lost?
+Can't you see that you're lost without me?
+I can feel the thunder that's breaking in your heart
+I can see through the scars inside you
+I can feel the thunder that's breaking in your heart
+I can see through the scars inside you
+
+Can't you see that you're lost without me?
+I can feel the thunder that's breaking in your heart
+I can see through the scars inside you
+I can feel the thunder that's breaking in your heart
+I can see through the scars inside you!
+
+(I can feel the thunder that's breaking in your heart)
+(I can see through the scars inside you)
+I can feel the thunder that's breaking in your heart
+I can see through the scars inside you"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meliora"),"Spöksonat","00:00:56","Instrumental"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meliora"),"He Is","00:04:13","We're standing here by the abyss
+And the world is in flames
+Two star-crossed lovers reaching out
+To the beast with many names
+
+He is
+He's the shining and the light without whom I cannot see
+And He is
+Insurrection, He is spite, He's the force that made me be
+
+He is
+Nostro dis pater
+Nostr'alma mater
+He is
+
+We are hiding here inside a dream
+And all our doubts are now destroyed
+The guidance of the Morning Star
+Will lead the way into the void
+
+He is
+He's the shining and the light without whom I cannot see
+And He is
+Insurrection, He is spite, He's the force that made me be
+
+He is
+Nostro dis pater
+Nostr'alma mater
+He is
+
+He is
+He's the shining and the light without whom I cannot see
+And He is
+Insurrection, He is spite, He's the force that made me be
+
+He is
+He's the shining and the light without whom I cannot see
+And He is
+The disobedience that holds us together
+
+He is
+Nostro dis pater
+Nostr'alma mater
+And we are falling over the precipice"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meliora"),"Mummy Dust","00:04:07","Dust
+
+I was carried on a wolf's back
+To corrupt humanity
+I will pummel it with opulence
+With corpulence and greed
+
+In God you trust, my mummy dust
+Dust
+My mummy dust
+
+Your cavalier of crapulence
+To this feast of rapacity
+I will bury you in treasures
+Just to feed your incapacity
+
+In God you trust, my mummy dust
+Dust
+My mummy dust
+In God you trust
+My mummy dust
+Dust
+My mummy dust
+
+You are the possessée of avarice
+I am the ruler of the earth
+I will smother you in riches
+Until you choke on sordid mirth
+
+You are summoned in cupidity
+For purulence and lust
+I am the magnet for stupidity
+And divine you feel my thrust
+
+In God you trust, my mummy dust
+Dust
+My Mummy dust
+In God you trust, my mummy dust
+Dust
+In God we trust, my mummy dust
+In God we trust, my mummy dust
+In God we trust, my mummy dust"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meliora"),"Majesty","00:05:24","A higher power underground
+From seraph skies and now to chaos bound
+He is sitting sacred and profound
+In midst of sinners licking up to kiss his crown
+
+Pathetic humans in despair
+Defaced, deflowered, now to death devout
+A fallen angel in his glare
+In midst of sinners kneeling down before His clout
+
+Old One, Master
+All beauty lies within
+Old One, Master
+All beauty lies within you
+
+This oasis is a poisoned well
+Of rotting carcasses that clog the deep
+A prince in exile here in Hell
+In midst of sinners flocking up like soulless sheep
+
+Old One, Master
+All beauty lies within
+Old One, Master
+All beauty lies within you
+
+Your Infernal Majesty"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meliora"),"Devil Church","00:01:06","Instrumental"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meliora"),"Absolution","00:04:50","Ever since you were born you've been dying
+Every day a little more you've been dying
+Dying to reach the setting sun
+
+As I child with your mind on the horizon
+Over corpses to the prize you kept your eyes on
+Trying to be the chosen one
+
+All those things that you desire
+You will find here in the fire
+
+Put your hands up and reach for the sky
+Cry for absolution
+You'll be down on your knees and you'll cry
+Cry for absolution
+
+Even now when you here you are moving
+Hysterically seeking out what needs improving
+You are still asking for the sun
+
+All those things that you desire
+You will find here in the fire
+
+Put your hands up and reach for the sky
+Cry for absolution
+You'll be down on your knees and you'll cry
+Cry for absolution
+
+You'll cry
+You'll cry
+You'll cry
+You'll cry
+You'll cry
+You'll cry
+
+Put your hands up and reach for the sky
+Cry for absolution
+You'll be down on your knees and you'll cry
+Cry for absolution
+
+Put your hands up and reach for the sky
+Cry for absolution
+You'll be down on your knees and you'll cry
+Cry for absolution"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meliora"),"Deus in Absentia","00:05:37","In this your time of need
+You're turning to the light
+You had just begun to explore the dark
+In the urban night
+
+The world is on fire
+And you are here to stay and burn with me
+Our funeral pyre
+And we are here to revel forevermore
+
+You're so goddamn frail
+Failing for a change
+You just had to know all about the world
+But you will never know
+'Cause no one ever told you how
+
+The world is on fire
+And you are here to stay and burn with me
+A funeral pyre
+And we are here to revel forever
+
+The world is on fire
+And we are tied as one eternally
+Our funeral pyre
+And we are here to revel forevermore
+
+All of your imaginations
+Are now running down your face
+All of your imaginations
+Are now running down your face
+
+Oh, you are looking good
+Payback in disgrace
+And you're doing fine worshipping your lord
+Standing in his grace
+'Cause no one ever told you how
+
+The world is on fire
+And you are here to stay and burn with me
+A funeral pyre
+And we are here to revel forever
+The world is on fire
+And we are tied as one eternally
+A funeral pyre
+And we are here to revel forever more")
+        </sql>
+        <rollback>
+            DELETE FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Meliora")
+        </rollback>
+    </changeSet>
+
+    <changeSet id="ghost_praquelle" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM album AS a WHERE a.name = "Praquelle"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Ghost')"/>
+            <column name="name" value="Praquelle"/>
+            <column name="release_date" valueDate="2018-07-01"/>
+            <column name="cover" valueBlobFile="./images/GhostPrequelleCover.jpg"/>
+        </insert>
+        <rollback>
+            DELETE FROM album AS a WHERE a.name = "Praquelle"
+        </rollback>
+    </changeSet>
+
+    <changeSet id="ghost_praquelle_songs" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Praquelle")
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO music (album_id, name, duration, lyrics) VALUES
+
+            ((SELECT a.id FROM album AS a WHERE a.name = "Praquelle"),"Asges","00:01:21","Ring a ring of roses
+A pocket full of posies
+Atishoo, atishoo
+We all fall down
+
+Ashes on the water
+Ashes in the sea
+Ashes on the riverside
+One, two, three"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Praquelle"),"Rats","00:04:21","In times of turmoil
+In times like these
+Beliefs contagious
+Spreading disease
+
+This wretched mischief
+Is now coursing through your souls
+Never to let go
+Never to let go
+
+Them rats!
+
+Into your sanctum
+You let them in
+Now all your loved ones
+And all your kin
+
+Will suffer punishments
+Beneath the wrath of God
+Never to forgive
+Never to forgive
+
+Them rats!
+Rats!
+Rats!
+Rats!
+
+This devastation
+Left your cities to be burnt
+Never to return
+Never to return
+
+Them filthy rodents
+Are still coming for your souls
+Never to let go
+Never to let go
+
+Them rats!
+Rats!
+Rats!
+Rats!
+
+They're still coming after you (rats)
+And there's nothing you can do (rats)
+They're still coming after you (rats)
+And there's nothing you can do (rats)
+
+Rats!"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Praquelle"),"Faith","00:04:29","There is a scourge in the guise of sanctity
+A perpetrator with a quill
+Although it's
+Often steeped in well spun mystery
+The accuser sends the bill
+
+Yeah!
+
+I am all eyes
+I am all ears
+I am the wall
+And I'm watching you fall
+
+Because faith is mine!
+
+The Luddites shun the diabolical
+A fecal trail across the land
+Although it
+Stinks, feels and looks identical
+A pack of fools can take the stand
+
+Ha!
+
+I am all eyes
+I am all ears
+I am the wall
+And I'm watching you fall
+
+Because faith is mine!
+
+I am all eyes
+I am all ears
+I am the wall
+And I'm watching you fall
+
+I am all eyes
+I am all ears
+I am the wall
+And I'm watching you fall
+
+I am all eyes
+I am all ears
+I am the wall
+And I'm watching you fall
+
+Because faith is mine!"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Praquelle"),"See the Light","00:04:05","Many a sin I have witnessed
+And in many indeed I have been
+Many a rat I've befriended
+And so many a thorn stood between
+But of all the demons I've known
+None could compare to you
+
+Every day that you feed me with hate
+I grow stronger!
+Every day that you feed me with hate
+I grow stronger!
+
+Drink me, eat me
+Then you'll see the light
+Drink me, eat me
+Then you'll see the light
+
+Many a mind I have haunted
+And in many a way, I have been
+Often the one to have flaunted
+An image grotesque and obscene
+But of all these dark roads that I roam
+None could compare to you
+
+Every day that you feed me with hate
+I grow stronger!
+Every day that you feed me with hate
+I grow stronger!
+
+Drink me, eat me
+Then you'll see the light
+Drink me, eat me
+Then you'll see the light
+
+Drink me, eat me
+Then you'll see the light
+Drink me, eat me
+Then you'll see the light
+
+Every day that you feed me with hate (drink me, eat me)
+I grow stronger! (then you'll see the light)
+Every day that you feed me with hate (drink me, eat me)
+I grow stronger! (then you'll see the light)"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Praquelle"),"Miasma","00:05:17","Instrumental"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Praquelle"),"Dance Macabre","00:03:39","You'll soon be hearing the chime
+Close to midnight
+If I could turn back the time
+I'd make all right
+
+How could it end like this?
+There's a sting in the way you kiss me
+Something within your eyes
+Said it could be the last time
+'Fore it's over!
+
+Just wanna be
+Wanna bewitch you in the moonlight
+Just wanna be
+I wanna bewitch you all night
+
+It keeps on giving me chills
+But I know now
+I feel the closer we get
+To the last bow
+
+I don't wanna end like this (cataclysm!)
+But the sting in the way you kiss me (armageddon!)
+Something within your eyes
+Said it could be the last time
+'Fore it's over!
+
+Just wanna be
+Wanna bewitch you in the moonlight
+Just wanna be
+I wanna bewitch you all night
+Just wanna be
+I wanna bewitch you, one last time in the ancient rite
+Just wanna be
+I wanna bewitch you all night
+
+Just wanna be
+Wanna bewitch you in the moonlight
+Just wanna be
+Wanna bewitch you all night
+Just wanna be
+Wanna bewitch you in the moonlight
+Just wanna be
+I wanna bewitch you all night
+
+All night!
+Woh-woh-woh, wohh!"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Praquelle"),"Pro Memoria","00:05:39","Lucifer, whispering
+Silently into your mind
+Who walks behind
+Who walks behind
+Standing tall, invincible
+But do not forget your knives
+To save your lives
+To save your lives
+
+Don't you forget about dying
+Don't you forget about your friend death
+Don't you forget that you will die
+
+Don't you vomit savage slurs
+Spewed up wickedly
+To hide from me
+To hide from me
+Navigate all alone
+On this tempestuous sea
+To ride with me
+To ride with me
+
+Don't you forget about dying
+Don't you forget about your friend death
+Don't you forget that you will die
+Don't you forget about dying
+Don't you forget about your friend death
+Don't you forget that you will die
+
+Lucifer, whispering
+Silently into your mind
+Who walks behind
+Who walks behind
+Had you had the chance today
+You could've sold out too
+Ain't that right
+Swede Saint Peter?
+
+Don't you forget about dying
+Don't you forget about your friend death
+Don't you forget that you will die
+Don't you forget about dying
+Don't you forget about your friend death
+Don't you forget that you will die
+
+Don't you forget about dying
+Don't you forget about your friend death
+Don't you forget that you will die
+Don't you forget about dying
+Don't you forget about your friend death
+Don't you forget that you will die
+
+Oh, oh, oh, oh, oh
+Oh, oh, oh, oh, oh-oh!
+Oh, oh, oh, oh, oh
+Oh, oh, oh, oh, oh-oh!"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Praquelle"),"Witch Image","00:03:30","You (you)
+Have never stood this close to where you want to be
+You (you)
+Have always waded in the shallows
+Between me and the deep blue sea
+
+You'd never want me to appear
+You never want it to be over
+You never want it to reach out to the edge of time
+
+While you sleep in earthly delight
+Someone's flesh is rotting tonight
+Like no other to you
+What you've done you cannot undo
+
+I (I)
+Have always kept you closer than you've known
+I (I)
+I am riding in the shadows
+Behind you on a pale white horse
+
+You'd never want me to appear
+You never want this to be over
+
+Someone's flesh is rotting tonight
+Like no other to you
+What you've done you cannot undo
+While you sleep in earthly delight
+Still, your soul will suffer this plight
+Like your father in hell
+What you've sold you cannot unsell
+
+While you sleep in earthly delight
+Someone's flesh is rotting tonight
+Like no other to you
+What you've done you cannot undo
+While you sleep in earthly delight
+Still, your soul will suffer this plight
+But like a mother would save
+Her own child from digging a grave"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Praquelle"),"Helvetesfönster","00:05:55","Instrumental"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Praquelle"),"Life Eternal","00:03:27","Can you hear me say your name forever?
+Can you see me longing for you forever?
+Would you let me touch your soul forever?
+Can you feel me longing for you forever, forever?
+
+I know the light grows darker down below
+But in your eyes, it's gone before you know
+This is the moment of just letting go, she said
+If you had life eternal
+
+Can you hear me say your name forever?
+Can you see me longing for you forever, forever?
+Would you let me touch your soul forever?
+Can you feel me longing for you forever, forever?
+
+We dance once more, I feel your hands are cold
+Within your heart, a story to be told
+This is the moment of just letting go
+This is the moment of just letting go
+(This is the moment of just letting go)
+(This is the moment of just letting go, she said)
+
+Can you hear me say your name forever?
+Can you see me longing for you forever, forever?
+Would you let me touch your soul forever?
+Can you feel me longing for you forever and ever?
+
+Forever (forever), forever (forever), forever (forever)
+Forever (forever), forever (forever), forever (forever)
+Forever (forever), forever (forever), forever (forever)
+Forever (forever), forever (forever), forever (forever)
+Forever (forever), forever (forever), forever (forever)
+Forever (forever), forever (forever), forever
+If you had life eternal")
+        </sql>
+        <rollback>
+            DELETE FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Praquelle")
+        </rollback>
+    </changeSet>
+
+    <changeSet id="ghost_impera" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM album AS a WHERE a.name = "Impera"
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Ghost')"/>
+            <column name="name" value="Impera"/>
+            <column name="release_date" valueDate="2022-03-11"/>
+            <column name="cover" valueBlobFile="./images/GhostImperaCover.jpg"/>
+        </insert>
+        <rollback>
+            DELETE FROM album AS a WHERE a.name = "Impera"
+        </rollback>
+    </changeSet>
+
+    <changeSet id="ghost_impera_songs" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Impera")
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO music (album_id, name, duration, lyrics) VALUES
+
+            ((SELECT a.id FROM album AS a WHERE a.name = "Impera"),"Imperium","00:01:40","Instrumental"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Impera"),"Kaisarion","00:05:02","Kaisarion, a prophecy told
+We're building our empire from the ashes of an old
+Kaisarion, the fruit of the womb
+Our brotherhood of good faith sealed an apostate witch's doom
+
+It's the sound of another deadline whistling past your ears
+It's the sight of a million regrets mounting over years
+It's the words that were never spoken that echoes through the times
+It's the smell of the burning temples swept away by rhymes
+
+(Hypatia) Far away from the stench of the heavens
+(Hypatia) Long ago, yet too close to forever
+(Hypatia) When a paradise is lost, go straight to
+
+Kaisarion, a matter of love
+When mother earth is calling for a father up above
+Kaisarion, put on the smiles
+And throw your holy rocks right at her for her satanic wiles
+
+It's the truth of candor shone through the prism of deceit
+It's the continence of bishops with their choirboys en-suite
+It's the tongue selling adulation that licks to no avail
+It's the noise of the righteous dogma that hides the handmaid's tale
+
+(Hypatia) Far away from the stench of the heavens
+(Hypatia) Long ago, yet too close to forever
+(Hypatia) When a paradise is lost, go straight to
+
+It's the sound of another deadline whistling past your ears
+It's the sight of a million regrets mounting over years
+It's the words that were never spoken that echoes through the times
+It's the smell of the burning temples swept away by rhymes
+
+It's the truth of candor shone through the prism of deceit
+It's the continence of bishops with their choirboys en-suite
+It's the tongue selling adulation that licks to no avail
+It's the noise of the righteous dogma that hides the handmaid's tale
+
+(Hypatia) Far away from the stench of the heavens
+(Hypatia) Long ago, yet too close to forever
+(Hypatia) When a paradise is lost, go straight to
+(Hypatia) Far away from the stench of the heavens
+(Hypatia) Long ago, yet too close to forever
+(Hypatia) When a paradise is lost, go straight to"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Impera"),"Spillways","00:03:16","Through benediction
+You tried to rid your mind
+Of malediction
+But through all this time
+You try to peel it off
+And it is such a ride
+
+Your desolation
+Led you into this
+Vile incarnation
+Of consummated bliss
+I know you need it now
+To make you feel alive
+
+All your faith
+All your rage
+All your pain
+It ain't over now
+And I ain't talking about forgiveness
+All your faith
+All your rage
+All your pain
+It ain't over now
+
+It is the cruel beast that you feed
+It is your burning, yearning need to bleed
+Through the spillways
+
+You keep a casket
+Buried deep within
+You try to mask it
+But fall back in sin
+You want to shake it off
+But you are stuck inside
+
+When stripped of rags
+Of skin and spine
+Human decay
+Corpus dei
+Terminally dispelled
+And it is such a ride
+
+All your faith
+All your rage
+All your pain
+It ain't over now
+And I ain't talking about forgiveness
+All your faith
+All your rage
+All your pain
+It ain't over now
+
+It is the cruel beast that you feed
+It is your burning, yearning need to bleed
+Through the spillways
+Through the spillways of your soul
+Through the spillways
+
+It is the cruel beast that you feed
+It is your burning, yearning need to bleed
+
+Through the spillways
+Through the spillways of your soul
+Through the spillways
+Through the spillways of your soul
+Through the spillways
+Through the spillways of your soul
+Through the spillways
+Through the spillways of your soul"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Impera"),"Call Me Little Sunshine","00:04:44","Call out in the middle of the night
+For when else would I hear you?
+Fall out in the cold starlight
+I can save you, if you do
+
+You will never walk alone
+You can always reach me
+You will never ever walk alone
+
+(Call me) Little Sunshine
+(Call me) call me Mephistopheles
+(Call me) when you feel all alone
+Just call me Little Sunshine
+
+Light up in the middle of the day
+For how else could you see me?
+Ease up to the hunter from the prey
+And transform indefinitely
+
+You will never walk alone
+You can always reach me
+You will never ever walk alone
+
+(Call me) Little Sunshine
+(Call me) call me Mephistopheles
+(Call me) when you feel all alone
+Just call me Little Sunshine
+
+You will never walk alone
+You can always reach me
+You will never ever walk alone
+
+You will never walk alone
+You can always reach me
+You will never ever walk alone
+
+You will never walk alone
+You can always reach me
+You will never ever walk alone
+
+Even when you're dead and gone
+You can always reach me
+All you gotta do is call me, call me
+
+(Call me) Little Sunshine
+(Call me) call me Mephistopheles
+(Call me) when you feel all alone
+Just call me Little Sunshine"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Impera"),"Hunter's Moon","00:03:16","It's been a long time coming
+I'm coming back for you, my friend
+To where we'd hide as children
+I'm coming back for you, my friend
+
+Though my memories have faded
+They come back to haunt me once again
+And though my mind is somewhat jaded now
+It's time for me to strike again
+
+Tonight, it's a hunter's Moon
+
+Under a headstone, sister
+I'm dying to see you, my friend
+Back in the old cemetery
+I'm dying to see you, my friend
+
+Though my memories have faded
+They come back to haunt me once again
+And though my mind is somewhat jaded now
+It's time for me to strike again
+
+Tonight, it's a hunter's Moon
+
+Ooh, I'm coming, I'm dying
+To see you one last time, together
+
+Though my memories have faded
+They come back to haunt me once again
+And though my mind is somewhat jaded now
+It's time for me to strike again
+I'm coming back for you, my friend
+
+Tonight, it's a hunter's Moon
+
+Hunt, hunt, hunter's Moon
+Hunt, hunt, hunter
+Hunt, hunt, hunt"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Impera"),"Watcher in the Sky","00:05:48","Searchlights
+Searchlights
+Looking for the watcher in the sky
+
+Evolutionary the optics for us
+To get answers as to why
+We signal to another dimension that we
+Stand here ready for reply
+
+Communication is key
+When you are locked to believe
+Can you see what I see?
+
+Searchlights
+Looking for the watcher in the sky
+Searchlights
+Looking for the watcher in the sky
+
+The kaleidoscopian visions we've seen
+Tell our bloodlines are top-notch
+The pre-destinated we'll dispatch while your realm has rotted on our watch
+
+Communication is key
+When you are locked to believe
+Can you see what I see?
+
+Searchlights
+Looking for the watcher in the sky
+Searchlights
+Looking for the watcher in the sky
+Searchlights
+Looking for the watcher in the sky
+Searchlights
+Looking for the watcher in the sky
+
+For the light, our savior (savior)
+His Machiavellian grace
+And in a shield of splendor (splendor)
+There is a better place
+
+Searchlights
+Looking for the watcher in the sky
+Searchlights
+Looking for the watcher in the sky
+Searchlights
+Looking for the watcher in the sky
+Searchlights
+Looking for the watcher in the sky
+Searchlights
+Looking for the watcher in the sky
+Searchlights
+Looking for the watcher in the sky
+
+Searchlights
+Looking for the watcher in the sky
+Searchlights
+Looking for the watcher in the sky
+Searchlights
+Looking for the watcher in the sky
+Searchlights
+Looking for the watcher in the sky
+Searchlights
+Looking for the watcher in the sky
+Searchlights
+Looking for the watcher in the sky"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Impera"),"Dominion","00:01:22","Instrumental"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Impera"),"Twenties","00:03:46","Listen up, hatchet man
+Set controls for the heart of the land
+Tell 'em all it is time
+You're the next in the chain of command (as my)
+Apparition (apparition)
+Direct the course for collision
+(Grow)
+Suspicion (suspicion)
+For the Reich to come to fruition
+
+In the Twenties (twenties)
+We'll be singing in a reign of pennies
+In the Twenties (twenties)
+We'll be soaring in disguise of Bevies
+
+In the Twenties (twenties)
+We'll be smooching at the feet of Da Rulah
+In the Twenties (twenties)
+We'll be grinding in a pile of moolah
+
+Listen up, you motherfuckers
+Those Ivy League dopes, they wanna mock us
+Tell 'em all this is war
+And not fighting a war is for suckers
+(Kiss my)
+Assassinate (assassinate)
+Gather the tools to disintegrate
+(Feed)
+Hate (hate)
+Reaping the seeds as a reprobate
+I'm number one, you're number two
+You've got a lot of God's work to do
+
+In the Twenties (twenties)
+We'll be singing in a reign of pennies
+In the Twenties (twenties)
+We'll be soaring in disguise of Bevies
+
+In the Twenties (twenties)
+We'll be taking no shit from no chulas
+In the Twenties (twenties)
+We'll be grabbing 'em all by the hoo-has
+
+We'll be dancing in the fields of freedom
+In the Twenties (twenties)
+We'll be crushing them laws 'cause we don't need 'em
+In the Twenties
+In the Twenties (twenties)
+All the way to the thirties
+
+In the Twenties (twenties)
+We'll be singing in a reign of pennies
+In the Twenties (twenties)
+We'll be soaring in disguise of Bevies
+
+In the Twenties (twenties)
+We'll be smooching at the feet of Da Rulah
+In the Twenties (twenties)
+We'll be grinding in a pile of moolah"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Impera"),"Darkness at the Heart of My Love","00:04:58","When the summer dies
+Severing the ties
+I'm with you always
+Always
+
+Will you walk the line?
+My path serpentine
+Remember always
+That love is all you need
+
+Tell me who you want to be
+And I will set you free
+
+There is a darkness at the heart of my love
+That runs cold, that runs deep
+The darkness at the heart of my love for you
+
+Will you spill the wine?
+To summon the divine
+I'm with you always
+Always
+
+Now paint a pair of eyes
+And let's watch as it dries
+Remember always
+That love is all you need
+Tell me who you want to be
+And I will set you free
+
+There's a darkness at the heart of my love
+That runs cold, runs deep
+The darkness at the heart of my love so bold, so sweet
+There's a darkness at the heart of my love
+That runs cold, runs deep
+The darkness at the heart of my love for you
+
+Remember always
+That love is all you need
+
+Tell me who you want to be
+And I will set you free
+
+There's a darkness at the heart of my love
+That runs cold, runs deep
+The darkness at the heart of my love so bold, so sweet
+There's a darkness at the heart of my love
+That runs cold, runs deep
+The darkness at the heart of my love so bold, so sweet
+And all this time you knew
+That I would put you through
+The darkness at the heart of my love for you
+
+When the summer dies
+Severing the ties
+I'm with you always, always
+Paint a pair of eyes
+Let's watch as it dries
+I'm with you always, always"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Impera"),"GriftWood","00:05:16","Yes
+Yeah
+
+Suffering for the lord is not an easy thing
+Be it a conjuring
+So ordained and adored, so immaculate
+Ooh, so worth the debt
+
+I'm your rock, baby
+I won't back down
+I'm your rock, baby
+Ask yourself, ooh
+Are you righteous?
+Yes
+You wanna play with the sire?
+Yes
+You want a view from the spire?
+Yes
+You want a seat by the pyre?
+And never ever suffer again
+Yes
+Yeah
+Yeah
+
+Sacrifice for the horde leads the way from shame
+Be it a losers game
+The disdained and abhorred lash of the senate wip
+Ooh, it's a power trip
+
+I'm your rock, baby
+I won't back down
+I'm your rock, baby
+Ask yourself, ooh
+Are you righteous?
+Yes
+You want to play with the sire?
+Yes
+You want a view from the spire?
+Yes
+You want a seat by the pyre?
+And never ever suffer again
+Yes
+You want to console the griever
+Yes
+You want to guide the believer
+Yes
+You and the greatest deceiver
+And never ever suffer again
+
+Holy mother
+You washeth the sin from my feet
+Holy mother
+You shine like the Sun and the Moon and the stars in the sky
+Holy mother
+You washeth the sin from my feet
+Holy mother
+You shine like the Sun and the Moon and the stars in the sky
+Holy mother
+The world has set me on your shoulders
+Holy mother
+You shine like the Sun and the Moon and the stars in the sky
+
+I'm your rock, baby
+I won't back down
+I'm your rock, baby
+Ask yourself
+Are you righteous?
+Yes
+You want to play with the sire?
+Yes
+You want a view from the spire?
+Yes
+You want a seat by the pyre?
+And never ever suffer again
+Never ever suffer again
+You want to play with the sire?
+Yes
+You want a view from the spire?
+Yes
+You want a seat by the pyre?
+And never ever suffer again
+
+You want to console the griever
+You want to guide the believer
+You and the greatest deceiver
+And never ever suffer again"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Impera"),"Bite of Passage","00:00:31","Instrumental"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Impera"),"Respite of the Spitalfields","00:06:42","We are here in the after
+Of a murderous crafter
+The past
+Is spun like a yarn and mangled
+With flesh and blood and bones
+I wonder
+Did no one hear the distant thunder?
+
+The autumnal reaper
+The stains of this creeper
+Will last
+The shine and the sham entangled
+Like salting earth with tears of Jesus
+He sliced and diced our dreams to pieces
+
+For the dreams that you dread
+Can become just as real
+As the blood that was shed
+With the slash of his steel
+Now the street walking dead
+Was quite a scene, wasn't it?
+For the lost and mislead
+Were promised seats by the pit
+
+We will break away together
+I'll be the shadow
+You'll be the light
+Nothing ever lasts forever
+We will go softly into the night
+
+We are leaving this city
+So this is farewell
+Goodbye Seven Sisters
+And Saint Jezebel
+The Moon in the gutter
+Has a story to tell
+One day he will come back
+From the bowels of hell
+
+He appeared to ascend
+So we all stood there in awe
+Now we have to pretend
+We did not see what we saw
+When the curtain unveiled
+To the sound of applause
+That the king that we hailed
+Was the Wizard of Oz
+
+We will break away together
+I'll be the shadow
+You'll be the light
+Nothing ever lasts forever
+We will go softly into the night
+
+Nothing ever lasts forever
+We will go softly into the night")
+        </sql>
+        <rollback>
+            DELETE FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Impera")
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
