@@ -6,7 +6,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
         logicalFilePath="../db/changelog/data/bands/linkinPark/linkinPark.xml">
 
-        <changeSet id="band_linkin_park" author="${author}">
+    <changeSet id="band_linkin_park" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">SELECT COUNT(1) FROM band AS b WHERE b.name = "Linkin Park"</sqlCheck>
         </preConditions>
@@ -23,17 +23,22 @@
             <sqlCheck expectedResult="0">
                 SELECT COUNT(1) FROM band_genre AS bg
                 WHERE bg.band_id = (SELECT b.id FROM band AS b WHERE b.name = "Linkin Park")
-                AND bg.genre_id IN (SELECT g.id FROM genre AS g WHERE g.name in ())
+                AND bg.genre_id IN (SELECT g.id FROM genre AS g WHERE g.name in ("Alternative Rock","Nu Metal","Alternative Metal","Rap Rock","Electronic Rock","Pop Rock"))
             </sqlCheck>
         </preConditions>
         <sql>
-            
-
+            INSERT INTO band_genre (band_id,genre_id) VALUES
+            ((SELECT b.id FROM band AS b WHERE b.name = "Linkin Park"),(SELECT g.id FROM genre AS g WHERE g.name = 'Alternative Rock')),
+            ((SELECT b.id FROM band AS b WHERE b.name = "Linkin Park"),(SELECT g.id FROM genre AS g WHERE g.name = 'Nu Metal')),
+            ((SELECT b.id FROM band AS b WHERE b.name = "Linkin Park"),(SELECT g.id FROM genre AS g WHERE g.name = 'Alternative Metal')),
+            ((SELECT b.id FROM band AS b WHERE b.name = "Linkin Park"),(SELECT g.id FROM genre AS g WHERE g.name = 'Rap Rock')),
+            ((SELECT b.id FROM band AS b WHERE b.name = "Linkin Park"),(SELECT g.id FROM genre AS g WHERE g.name = 'Electronic Rock')),
+            ((SELECT b.id FROM band AS b WHERE b.name = "Linkin Park"),(SELECT g.id FROM genre AS g WHERE g.name = 'Pop Rock'))
         </sql>
         <rollback>
             DELETE FROM band_genre AS bg
             WHERE bg.band_id = (SELECT b.id FROM band AS b WHERE b.name = "Linkin Park")
-            AND bg.genre_id IN (SELECT g.id FROM genre AS g WHERE g.name IN ())
+            AND bg.genre_id IN (SELECT g.id FROM genre AS g WHERE g.name IN ("Alternative Rock","Nu Metal","Alternative Metal","Rap Rock","Electronic Rock","Pop Rock"))
         </rollback>
     </changeSet>
 
@@ -45,14 +50,12 @@
         </preConditions>
         <sql>
             INSERT INTO member (band_id, person_id, join_date, disjoint_date) VALUES
-            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = ""),"19--",null),
-            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = ""),"19--","--"),
-            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = ""),"19--",null),
-            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = ""),"19--",null),
-            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = ""),"19--",null),
-            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = ""),"19--",null),
-            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = ""),"--",null),
-            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = ""),"1996--",null)
+            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = "Michael Kenji Shinoda"),"1996-01-01",null),
+            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = "Chester Charles Bennington"),"1999-03-01","2017-07-20"),
+            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = "Robert Gregory Bourdon"),"1996-01-01",null),
+            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = "Brad Delson"),"1996-01-01",null),
+            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = "David Michael Farrell"),"1996-01-01",null),
+            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = "Joseph Hahn"),"1996-01-01",null)
         </sql>
         <rollback>
             DELETE FROM member WHERE band_id = (SELECT id FROM band WHERE name = "Linkin Park")
@@ -62,199 +65,4635 @@
     <changeSet id="linkin_park_hybrid_theory" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
-
+                SELECT COUNT(1) FROM album AS a WHERE a.name = "Hybrid Theory"
             </sqlCheck>
         </preConditions>
-        <sql>
-
-        </sql>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Linkin Park')"/>
+            <column name="name" value="Hybrid Theory"/>
+            <column name="release_date" valueDate="2000-10-24"/>
+            <column name="cover" valueBlobFile="./images/LinkinParkHybridTheoryCover.webp"/>
+        </insert>
         <rollback>
-
+            DELETE FROM album AS a WHERE a.name = "Hybrid Theory"
         </rollback>
     </changeSet>
 
     <changeSet id="linkin_park_hybrid_theory_songs" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
-
+                SELECT COUNT(1) FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Hybrid Theory")
             </sqlCheck>
         </preConditions>
         <sql>
+            INSERT INTO music (album_id, name, duration, lyrics) VALUES
 
+            ((SELECT a.id FROM album AS a WHERE a.name = "Hybrid Theory"),
+            "Papercut","00:03:04","Why does it feel like night today?
+Something in here's not right today
+Why am I so uptight today?
+Paranoia's all I got left
+I don't know what stressed me first
+Or how the pressure was fed
+But I know just what it feels like
+To have a voice in the back of my head
+
+Like a face that I hold inside
+A face that awakes when I close my eyes
+A face watches everytime I lie
+A face that laughs everytime I fall
+And watches everything
+
+So I know that when it's time to sink or swim
+That the face inside is hearing me
+Right beneath my skin
+It's like I'm paranoid lookin' over my back
+It's like a whirlwind inside of my head
+It's like I can't stop what I'm hearing within
+It's like the face inside is right beneath my skin
+
+I know I've got a face in me
+Points out all my mistakes to me
+You've got a face on the inside too
+And your paranoia's probably worse
+I don't know what set me off first
+But I know what I can't stand
+Everybody acts like the fact of the matter is
+I can't add up to what you can
+
+But everybody has a face that they hold inside
+A face that awakes when I close my eyes
+A face watches every time they lie
+A face that laughs every time they fall
+And watches everything
+
+So you know that when it's time to sink or swim
+That the face inside is watching you too
+Right inside your skin
+
+It's like I'm paranoid lookin' over my back
+It's like a whirlwind inside of my head
+It's like I can't stop what I'm hearing within
+It's like the face inside is right beneath my skin
+
+It's like I'm paranoid lookin' over my back
+It's like a whirlwind inside of my head
+It's like I can't stop what I'm hearing within
+It's like the face inside is right beneath my skin
+
+The face inside is right beneath your skin
+The face inside is right beneath your skin
+The face inside is right beneath your skin
+
+The Sun goes down
+I feel the light betray me
+The Sun goes down
+I feel the light betray me
+The Sun
+I feel the light betray me
+The Sun
+I feel the light betray me
+
+(The Sun) it's like I'm paranoid lookin' over my back
+It's like a whirlwind inside of my head
+It's like I can't stop what I'm hearing within
+(I feel the light betray me) it's like the face inside is right beneath my skin
+
+(The Sun) it's like I'm paranoid lookin' over my back
+It's like a whirlwind inside of my head
+It's like I can't stop what I'm hearing within
+(I feel the light betray me) it's like I can't stop what I'm hearing within
+It's like I can't stop what I'm hearing within
+It's like the face inside is right beneath my skin"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Hybrid Theory"),
+            "One Step Closer","00:02:35","I cannot take this anymore
+Saying everything I've said before
+All these words they make no sense
+I found bliss in ignorance
+Less I hear the less you'll say
+You'll find that out anyway
+
+(Just like before)
+
+Everything you say to me
+(Takes me one step closer to the edge, and I'm about to break)
+I need a little room to breathe
+('Cause I'm one step closer to the edge, I'm about to break)
+
+I find the answers aren't so clear
+Wish I could find a way to disappear
+All these thoughts they make no sense
+I found bliss in ignorance
+Nothing seems to go away
+Over and over again
+
+(Just like before)
+
+Everything you say to me
+(Takes me one step closer to the edge, and I'm about to break)
+I need a little room to breathe
+('Cause I'm one step closer to the edge, I'm about to break)
+
+Everything you say to me
+(Takes me one step closer to the edge, and I'm about to break)
+I need a little room to breathe
+('Cause I'm one step closer to the edge, I'm about to break)
+
+Shut up when I'm talking to you!
+
+Shut up!
+Shut up!
+Shut up!
+Shut up when I'm talking to you!
+Shut up!
+Shut up!
+Shut up!
+Shut up, I'm about to break
+
+Everything you say to me
+(Takes me one step closer to the edge, and I'm about to break)
+I need a little room to breathe
+('Cause I'm one step closer to the edge, I'm about to break)
+
+Everything you say to me
+(Takes me one step closer to the edge, and I'm about to break)
+I need a little room to breathe
+('Cause I'm one step closer to the edge, and I'm about to break)"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Hybrid Theory"),
+            "With You","00:03:23","I woke up in a dream today
+To the cold of the static
+And put my cold feet on the floor
+Forgot all about yesterday
+Remembering I'm pretending to be where I'm not anymore
+A little taste of hypocrisy
+And I'm left in the wake of the mistake slow to react
+And even knowing you're so close to me
+You're still so distant
+And I can't bring you back
+
+It's true, the way I feel
+Was promised by your face
+The sound of your voice
+Painted on my memories
+Even if you're not with me, I'm
+
+With you
+You, now I see, keeping everything inside
+With you
+You, now I see, even when I close my eyes
+
+I hit you and you hit me back
+We fall to the floor, the rest of the day stands still
+Fine line between this and that
+When things go wrong
+I pretend that the past isn't real
+Now I'm trapped in this memory
+And I'm left in the wake of the mistake slow to react
+So, even though you're close to me
+You're still so distant, and I can't bring you back
+
+It's true, the way I feel
+Was promised by your face
+The sound of your voice
+Painted on my memories
+Even if you're not with me, I'm
+
+With you
+You, now I see, keeping everything inside
+With you
+You, now I see, even when I close my eyes
+With you
+You, now I see, keeping everything inside
+With you
+You, now I see, even when I close my eyes
+
+No, no matter how far we've come
+I can't wait to see tomorrow
+No matter how far we've come, I
+I can't wait to see tomorrow
+
+With you
+You, now I see, keeping everything inside
+With you
+You, now I see, even when I close my eyes
+With you
+You, now I see, keeping everything inside
+With you
+You, now I see, even when I close my eyes"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Hybrid Theory"),
+            "Points of Authority","00:03:20","Forfeit the game
+Before somebody else takes you out of the frame
+And put your name to shame
+Cover up your face, you can't run the race
+The pace is too fast, it just won't last
+
+You love the way I look at you
+While taking pleasure in the awful things you put me through
+You take away if I give in
+My life, my pride is broken
+
+You like to think you're never wrong
+You live what you've learned
+You have to act like you're someone
+You live what you've learned
+You want someone to hurt like you
+You live what you've learned
+You want to share what you've been through
+Do you live what you've learned?
+
+You love the things I say I'll do
+The way I'll hurt myself again just to get back at you
+You take away when I give in
+My life, my pride is broken
+
+You like to think you're never wrong
+You live what you've learned
+You have to act like you're someone
+You live what you've learned
+You want someone to hurt like you
+You live what you've learned
+You want to share what you've been through
+Do you live what you've learned?
+
+Forfeit the game
+Before somebody else takes you out of the frame
+And put your name to shame
+Cover up your face, you can't run the race
+The pace is too fast, it just won't last
+
+Forfeit the game
+Before somebody else takes you out of the frame
+And put your name to shame
+Cover up your face, you can't run the race
+The pace is too fast, it just won't last
+
+You like to think you're never wrong
+You live what you've learned
+You have to act like you're someone
+You live what you've learned
+You want someone to hurt like you
+You live what you've learned
+You want to share what you've been through
+You live what you've learned
+
+You like to think you're never wrong
+Forfeit the game
+You live what you've learned
+You have to act like you're someone
+Forfeit the game
+You live what you've learned
+You want someone to hurt like you
+Forfeit the game
+You live what you've learned
+You want to share what you've been through
+Do you live what you've learned?"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Hybrid Theory"),
+            "Crawling","00:03:29","Crawling in my skin
+These wounds, they will not heal
+Fear is how I fall
+Confusing what is real
+
+There's something inside me that pulls beneath the surface
+Consuming, confusing
+This lack of self-control I fear is never-ending
+Controlling, I can't seem
+
+To find myself again
+My walls are closing in
+(Without a sense of confidence)
+(I'm convinced that there's just too much pressure to take)
+I've felt this way before, so insecure
+
+Crawling in my skin
+These wounds, they will not heal
+Fear is how I fall
+Confusing what is real
+
+Discomfort endlessly has pulled itself upon me
+Distracting, reacting
+Against my will I stand beside my own reflection
+It's haunting, how I can't seem
+
+To find myself again
+My walls are closing in
+(Without a sense of confidence)
+(I'm convinced that there's just too much pressure to take)
+I've felt this way before, so insecure
+
+Crawling in my skin
+These wounds, they will not heal
+Fear is how I fall
+Confusing what is real
+
+Crawling in my skin
+These wounds, they will not heal
+Fear is how I fall
+Confusing, confusing what is real
+
+(There's something inside me that pulls beneath the surface)
+(Consuming)
+Confusing what is real
+
+(This lack of self-control I fear is never-ending)
+(Controlling)
+Confusing what is real"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Hybrid Theory"),
+            "Runaway","00:03:03","Graffiti decorations
+Under a sky of dust
+A constant wave of tension
+On top of broken trust
+The lessons that you taught me
+I learned were never true
+Now I find myself in question
+They point the finger at me again
+Guilty by association
+You point the finger at me again
+
+I wanna runaway
+Never say goodbye
+I wanna know the truth
+Instead of wondering why
+I wanna know the answers
+No more lies
+I wanna shut the door
+And open up my mind
+
+Paper bags and angry voices
+Under a sky of dust
+Another wave of tension
+Has more than filled me up
+All my talk of taking action
+These words were never true
+Now I find myself in question
+They point the finger at me again
+Guilty by association
+You point the finger at me again
+
+I wanna runaway
+Never say goodbye
+I wanna know the truth
+Instead of wondering why
+I wanna know the answers
+No more lies
+I wanna shut the door
+And open up my mind
+
+I'm gonna runaway
+And never say goodbye
+Gonna runaway, gonna runaway
+Gonna runaway, gonna runaway
+
+I'm gonna runaway
+And never wonder why
+Gonna runaway, gonna runaway
+Gonna runaway, gonna runaway
+
+I'm gonna runaway
+And open up my mind
+Gonna runaway, gonna runaway
+Gonna runaway, gonna runaway
+Gonna runaway, gonna runaway
+Gonna runaway, gonna runaway
+
+I wanna runaway
+Never say goodbye
+I wanna know the truth
+Instead of wondering why
+I wanna know the answers
+No more lies
+I wanna shut the door
+And open up my mind
+
+I wanna runaway and open up my mind
+I wanna runaway and open up my mind
+I wanna runaway and open up my mind
+I wanna runaway and open up my mind"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Hybrid Theory"),
+            "By Myself","00:03:09","What do I do to ignore them behind me?
+Do I follow my instincts blindly?
+Do I hide my pride from these bad dreams
+And give into sad thoughts that are maddening?
+
+Do I sit here and try to stand it?
+Or do I try to catch them red-handed?
+Do I trust some and get fooled by phoniness?
+Or do I trust nobody and live in loneliness?
+
+'Cause I can't hold on when stretched so thin
+I make the right moves but I'm lost within
+I put on my daily facade but then
+I just end up getting hurt again
+
+By myself, myself
+I ask why but in my mind I find
+I can't rely on myself, myself
+I ask why but in my mind I find
+I can't rely on myself
+
+I can't hold on
+To what I want when I'm stretched so thin
+It's all too much to take in
+I can't hold on
+To anything, watching everything spin
+With thoughts of failure sinking in
+
+If I turn my back I'm defenseless
+And to go blindly seems senseless
+If I hide my pride and let it all go on
+Then they'll take from me till everything is gone
+
+If I let them go I'll be outdone
+But if I try to catch them I'll be outrun
+If I'm killed by the questions like a cancer
+Then I'll be buried in the silence of the answer
+
+By myself, myself
+I ask why but in my mind I find
+I can't rely on myself, myself
+I ask why but in my mind I find
+I can't rely on myself
+
+I can't hold on
+To what I want when I'm stretched so thin
+It's all too much to take in
+I can't hold on
+To anything, watching everything spin
+With thoughts of failure sinking in
+
+How do you think?
+I've lost so much, I'm so afraid
+And I'm out of touch
+How do you expect I would know what to do
+When all I know is what you tell me to?
+
+Don't you know?
+I can't tell you how to make it go
+No matter what I do, how hard I try
+I can't seem to convince myself why
+I'm stuck on the outside
+
+Don't you know?
+I can't tell you how to make it go
+No matter what I do, how hard I try
+I can't seem to convince myself why
+I'm stuck on the outside
+
+I can't hold on
+To what I want when I'm stretched so thin
+It's all too much to take in
+I can't hold on
+To anything, watching everything spin
+With thoughts of failure sinking in
+
+I can't hold on
+To what I want when I'm stretched so thin
+It's all too much to take in
+I can't hold on
+To anything, watching everything spin
+With thoughts of failure sinking in"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Hybrid Theory"),
+            "In The End","00:03:36","(It starts with one)
+
+One thing, I don't know why
+It doesn't even matter how hard you try
+Keep that in mind, I designed this rhyme
+To explain in due time (all I know)
+
+Time is a valuable thing
+Watch it fly by as the pendulum swings
+Watch it count down to the end of the day
+The clock ticks life away, it's so unreal (it's so unreal)
+
+You didn't look out below
+Watch the time go right out the window
+Trying to hold on, to didn't even know
+I wasted it all just to watch you go (watch you go)
+
+I kept everything inside
+And even though I tried, it all fell apart
+What it meant to me will eventually
+Be a memory of a time when
+
+I tried so hard and got so far
+But in the end, it doesn't even matter
+I had to fall to lose it all
+But in the end, it doesn't even matter
+
+One thing, I don't know why
+It doesn't even matter how hard you try
+Keep that in mind I designed this rhyme
+To remind myself how I tried so hard (I tried so hard)
+
+In spite of the way you were mocking me
+Acting like I was part of your property
+Remembering all the times you fought with me
+I'm surprised it got so far (got so far)
+
+Things aren't the way they were before
+You wouldn't even recognize me anymore
+Not that you knew me back then
+But it all comes back to me (in the end)
+
+You kept everything inside
+And even though I tried, it all fell apart
+What it meant to me will eventually
+Be a memory of a time when
+
+I tried so hard and got so far
+But in the end, it doesn't even matter
+I had to fall to lose it all
+But in the end, it doesn't even matter
+
+I've put my trust in you
+Pushed as far as I can go
+For all this
+There's only one thing you should know
+
+I've put my trust in you
+Pushed as far as I can go
+For all this
+There's only one thing you should know
+
+I tried so hard and got so far
+But in the end, it doesn't even matter
+I had to fall to lose it all
+But in the end, it doesn't even matter"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Hybrid Theory"),
+            "A Place For My Head","00:03:04","I watch how the Moon
+Sits in the sky on a dark night
+Shining with the light from the Sun
+And the Sun doesn't give light to the Moon, assuming
+The Moon is gonna owe it one
+And makes me think of how you act to me, you do
+Favors then rapidly
+Just turn around and start asking me about
+Things that you want back from me
+
+I'm sick of the tension, sick of the hunger
+Sick of you acting like I owe you this
+Find another place to feed your greed
+While I find a place to rest
+
+I wanna be in another place
+I hate when you say you don't understand
+(You'll see it's not meant to be)
+I wanna be in the energy
+Not with the enemy, a place for my head
+
+Maybe someday I'll be just like you and
+Step on people like you do
+Run away, all the people I thought I knew
+I remember back then who you were
+You used to be calm
+Used to be strong, used to be generous
+You should've known
+That you wear out your welcome and now you see
+How quiet it is all alone
+
+I'm so sick of the tension
+Sick of the hunger
+Sick of you acting like I owe you this
+Find another place to feed your greed
+While I find a place to rest
+
+I'm so sick of the tension
+Sick of the hunger
+Sick of you acting like I owe you this
+Find another place to feed your greed
+While I find a place to rest
+
+I wanna be in another place
+I hate when you say you don't understand
+(You'll see it's not meant to be)
+I wanna be in the energy
+Not with the enemy, a place for my head
+
+You, try to take the best of me, go away
+You, try to take the best of me, go away!
+You, try to take the best of me, go away!
+You, try to take the best of me, go away!
+
+You, try to take the best of me, go away
+You, try to take the best of me, go away!
+You, try to take the best of me, go away!
+You, try to take the best of me, go away!
+
+I wanna be in another place
+I hate when you say you don't understand
+(You'll see it's not meant to be)
+I wanna be in the energy
+Not with the enemy, a place for my head
+
+Stay
+A
+Way
+
+I am so sick of the tension
+Sick of the hunger
+Sick of you acting like I owe you this
+Find another place to feed your greed
+While I find a place to rest
+I'm so sick of the tension
+Sick of the hunger
+Sick of you acting like I owe you this
+
+(Stay away from me!)
+
+Find another place to feed your greed
+While I find
+A place to rest"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Hybrid Theory"),
+            "Forgotten","00:03:14","From the top to the bottom
+Bottom to top I stop
+At the core I've forgotten
+In the middle of my thoughts
+Taken far from my safety
+The picture is there
+The memory won't escape me
+But why should I care?
+
+There's a place so dark
+You can't see the end
+Skies cock back
+And shock that which can't defend
+The rain then sends dripping acidic questions
+Forcefully, the power of suggestion
+Then with the eyes shut looking
+Through the rust and rottendust
+A small spot of light floods the floor
+And pours over the rusted world of pretend
+In the eyes easy open
+And it's dark again
+
+From the top to the bottom
+Bottom to top I stop
+At the core I've forgotten
+In the middle of my thoughts
+Taken far from my safety
+The picture is there
+The memory won't escape me
+But why should I care?
+
+In the memory you'll find me
+Eyes burning up
+The darkness holding me tightly
+Until the Sun rises up
+
+Moving all around
+Screaming of the up's and down's
+Pollution manifested in perpetual sound
+The wheels go round
+And the sunset creeps
+Past the street lamps, chain-link and concrete
+A little piece of paper with a picture drawn
+Floats on down the street
+'Till the wind is gone
+The memory now is like the picture was then
+When the paper's crumpled up
+It can't be perfect again
+
+From the top to the bottom
+Bottom to top I stop
+At the core I've forgotten
+In the middle of my thoughts
+Taken far from my safety
+The picture is there
+The memory won't escape me
+But why should I care?
+
+In the memory you'll find me
+Eyes burning up
+The darkness holding me tightly
+Until the Sun rises up
+
+Now, you got me caught in the act, you bring the thought back
+I'm telling you that I see it right through you
+Now, you got me caught in the act, you bring the thought back
+I'm telling you that I see it right through you
+Now, you got me caught in the act, you bring the thought back
+I'm telling you that I see it right through you
+Now, you got me caught in the act, you bring the thought back
+I'm telling you that I see it right through you
+Now, you got me caught in the act, you bring the thought back
+I'm telling you that I see it right through you
+Now, you got me caught in the act, you bring the thought back
+I'm telling you that I see it right through you
+Now, you got me caught in the act, you bring the thought back
+I'm telling you that I see it right through you
+
+In the memory you'll find me
+Eyes burning up
+The darkness holding me tightly
+Until the Sun rises up
+In the memory, you'll find me
+Eyes burning up
+The darkness holding me tightly
+Until the Sun, rises up"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Hybrid Theory"),
+            "Cure for the Itch","00:02:37","Folks, we have
+A very special guest
+For you tonight
+I'd like to introduce:
+Mr. Hahn
+
+Let's hear it for
+The great Mr. Hahn
+
+And now a lesson in
+Rhythm management
+Let's begin
+
+All right now,
+Wasn't that fun?
+Let's try something else"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Hybrid Theory"),
+            "Pushing me Away","00:03:11","I've lied to you
+The same way that I always do
+This is the last smile
+That I'll fake for the sake of being with you
+
+Everything falls apart
+Even the people who never frown
+Eventually break down
+The sacrifice of hiding in a lie
+Everything has to end
+You'll soon find we're out of time
+Left to watch it all unwind
+The sacrifice is never knowing
+
+Why I never walked away?
+Why I played myself this way?
+Now I see you're testing me
+It pushes me away
+
+Why I never walked away?
+Why I played myself this way?
+Now I see you're testing me
+It pushes me away
+
+I've tried, like you
+To do everything you wanted to do
+This is the last time
+I'll take the blame for the sake of being with you
+
+Everything falls apart
+Even the people who never frown
+Eventually break down
+The sacrifice of hiding in a lie
+Everything has to end
+You'll soon find we're out of time
+Left to watch it all unwind
+The sacrifice is never knowing
+
+Why I never walked away?
+Why I played myself this way?
+Now I see you're testing me
+It pushes me away
+
+Why I never walked away?
+Why I played myself this way?
+Now I see you're testing me
+It pushes me away
+
+We're all out of time
+This is how we find how it all unwinds
+The sacrifice of hiding in a lie
+We're all out of time
+This is how we find how it all unwinds
+The sacrifice is never knowing
+
+Why I never walked away?
+Why I played myself this way?
+Now I see you're testing me
+It pushes me away
+
+Why I never walked away?
+Why I played myself this way?
+Now I see you're testing me
+It pushes me away
+Pushes me away")
         </sql>
         <rollback>
-
+            DELETE FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Hybrid Theory")
         </rollback>
     </changeSet>
 
     <changeSet id="linkin_park_meteora" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
-
+                SELECT COUNT(1) FROM album AS a WHERE a.name = "Meteora"
             </sqlCheck>
         </preConditions>
-        <sql>
-
-        </sql>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Linkin Park')"/>
+            <column name="name" value="Meteora"/>
+            <column name="release_date" valueDate="2003-03-25"/>
+            <column name="cover" valueBlobFile="./images/LinkinParkMeteoraCover.webp"/>
+        </insert>
         <rollback>
-
+            DELETE FROM album AS a WHERE a.name = "Meteora"
         </rollback>
     </changeSet>
 
     <changeSet id="linkin_park_meteora_songs" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
-
+                SELECT COUNT(1) FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Meteora")
             </sqlCheck>
         </preConditions>
         <sql>
+            INSERT INTO music (album_id, name, duration, lyrics) VALUES
 
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meteora"),
+            "Foreword","00:00:13","This is your world
+These are your people
+You can live for yourself today
+Or help build tomorrow for everyone"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meteora"),
+            "Don't Stay","00:03:07","Sometimes I
+Need to remember just to breathe
+Sometimes I
+Need you to stay away from me
+Sometimes I'm
+In disbelief I didn't know
+Somehow I
+Need you to go
+
+Don't stay
+Forget our memories
+Forget our possibilities
+What you were changing me into
+Just give me myself back
+And don't stay
+Forget our memories
+Forget our possibilities
+Take all your faithlessness with you
+Just give me myself back
+And don't stay
+
+Sometimes I
+Feel like I trusted you too well
+Sometimes I
+Just feel like screaming at myself
+Sometimes I'm
+In disbelief I didn't know
+Somehow I
+Need to be alone
+
+Don't stay
+Forget our memories
+Forget our possibilities
+What you were changing me into
+Just give me myself back
+And don't stay
+Forget our memories
+Forget our possibilities
+Take all your faithlessness with you
+Just give me myself back
+And don't stay
+
+I don't need you anymore
+I don't want to be ignored
+I don't need one more day
+Of you wasting me away
+With no apologies
+
+Don't stay
+Forget our memories
+Forget our possibilities
+What you were changing me into
+Just give me myself back
+And don't stay
+Forget our memories
+Forget our possibilities
+Take all your faithlessness with you
+Just give me myself back
+And don't stay
+
+Don't stay, don't stay"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meteora"),
+            "Somewhere I Belong","00:03:33","(When this began) I had nothing to say
+And I'd get lost in the nothingness inside of me
+(I was confused) and I let it all out to find
+That I'm not the only person with these things in mind
+
+(Inside of me) but all the vacancy the words revealed
+Is the only real thing that I've got left to feel
+(Nothing to lose) just stuck, hollow and alone
+And the fault is my own, and the fault is my own
+
+I wanna heal, I wanna feel
+What I thought was never real
+I wanna let go of the pain I've held so long
+(Erase all the pain till it's gone)
+
+I wanna heal, I wanna feel
+Like I'm close to something real
+I wanna find something I've wanted all along
+Somewhere I belong
+
+And I've got nothing to say
+I can't believe I didn't fall right down on my face
+(I was confused) looking everywhere, only to find
+That it's not the way I had imagined it all in my mind
+
+(So what am I?) What do I have but negativity?
+'Cause I can't justify the way everyone is looking at me
+(Nothing to lose) nothing to gain, hollow and alone
+And the fault is my own, and the fault is my own
+
+I wanna heal, I wanna feel
+What I thought was never real
+I wanna let go of the pain I've held so long
+(Erase all the pain till it's gone)
+
+I wanna heal, I wanna feel
+Like I'm close to something real
+I wanna find something I've wanted all along
+Somewhere I belong
+
+I will never know
+Myself until I do this on my own
+And I will never feel
+Anything else until my wounds are healed
+
+I will never be anything till I break away from me
+I will break away
+I'll find myself today
+
+I wanna heal, I wanna feel
+What I thought was never real
+I wanna let go of the pain I've held so long
+(Erase all the pain till it's gone)
+
+I wanna heal, I wanna feel
+Like I'm close to something real
+I wanna find something I've wanted all along
+Somewhere I belong
+
+I wanna heal, I wanna feel like I'm somewhere I belong
+I wanna heal, I wanna feel like I'm somewhere I belong
+Somewhere I belong"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meteora"),
+            "Lying from You","00:02:55","When I pretend everything is what I want it to be
+I look exactly like what you had always wanted to see
+When I pretend I can forget about the criminal I am
+Stealing second after second
+Just 'cause I know I can
+But I can't pretend this is the way it'll stay
+I'm just trying to bend the truth
+I can't pretend I'm who you want me to be
+So I'm
+
+Lying my way from you
+(No, no turning back now)
+I wanna be pushed aside, so let me go
+(No, no turning back now)
+Let me take back my life
+I'd rather be all alone
+(No turning back now)
+Anywhere on my own 'cause I can see
+(No, no turning back now)
+The very worst part of you is me
+
+I remember what they taught to me
+Remember condescending talk of who I ought to be
+Remember listening to all of that and this again
+So I pretended up a person who was fittin' in
+And now you think this person really is me
+And I'm trying to bend the truth
+But the more I push, the more I'm pulling away
+'Cause I'm
+
+Lying my way from you
+(No, no turning back now)
+I wanna be pushed aside, so let me go
+(No, no turning back now)
+Let me take back my life
+I'd rather be all alone
+(No turning back now)
+Anywhere on my own 'cause I can see
+(No, no turning back now)
+The very worst part of you
+The very worst part of you is me
+
+This isn't what I wanted to be
+I never thought that what I said
+Would have you running from me
+Like this
+
+This isn't what I wanted to be
+I never thought that what I said
+Would have you running from me
+Like this
+
+This isn't what I wanted to be
+I never thought that what I said
+Would have you running from me
+Like this
+
+This isn't what I wanted to be
+I never thought that what I said
+Would have you running from me
+Like this
+
+You
+(No turning back now)
+I wanna be pushed aside, so let me go
+(No, no turning back now)
+Let me take back my life
+I'd rather be all alone
+(No turning back now)
+Anywhere on my own 'cause I can see
+(No, no turning back now)
+The very worst part of you
+The very worst part of you is me"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meteora"),
+            "Hit the Floor","00:02:44","There are just too many times that people
+Have tried to look inside of me
+Wondering what I think of you
+And I protect you out of courtesy
+
+Too many times that I've held on
+When I needed to push away
+Afraid to say what was on my mind
+Afraid to say what I need to say
+
+Too many things that you've said about me
+When I'm not around
+You think having the upper hand
+Means you've got to keep putting me down
+
+But I've had too many stand-offs with you
+It's about as much as I can stand
+Just wait until the upper hand is mine
+
+One minute you're on top
+The next you're not
+Watch it drop
+Making your heart stop
+Just before you hit the floor
+
+One minute you're on top
+The next you're not
+Missed your shot
+Making your heart stop
+You think you won
+And then it's all gone
+
+So many people like me
+Put so much trust in all your lies
+So concerned with what you think
+To just say what we feel inside
+
+So many people like me
+Walk on eggshells all day long
+All I know is that all I want
+Is to feel like I'm not stepped on
+
+There are so many things you say
+That make me feel like you've crossed the line
+What goes up will surely fall
+And I'm counting down the time
+
+'Cause I've had so many stand-offs with you
+It's about as much as I can stand
+So i'm waiting until the upper hand is mine
+
+One minute you're on top
+The next you're not
+Watch it drop
+Making your heart stop
+Just before you hit the floor
+
+One minute you're on top
+The next you're not
+Missed your shot
+Making your heart stop
+You think you won
+And then it's all gone
+
+I know I'll never trust a single thing you say
+You knew your lies would divide us
+But you lied anyway
+And all the lies have got you floating
+Up above us all
+But what goes up has got to fall
+
+One minute you're on top
+The next you're not
+Watch it drop
+Making your heart stop
+Just before you hit the floor
+
+One minute you're on top
+The next you're not
+Missed your shot
+Making your heart stop
+You think you won
+
+And then it's all gone
+Now is all gone"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meteora"),
+            "Easier to Run","00:03:24","It's easier to run
+Replacing this pain with something numb
+It's so much easier to go
+Than face all this pain here all alone
+
+Something has been taken
+From deep inside of me
+The secret I've kept locked away
+No one can ever see
+
+Wounds so deep, they never show
+They never go away
+Like moving pictures in my head
+For years and years they've played
+
+If I could change, I would
+Take back the pain, I would
+Retrace every wrong move
+That I made, I would
+
+If I could stand up
+And take the blame, I would
+If I could take all the shame
+To the grave, I would
+
+If I could change, I would
+Take back the pain, I would
+Retrace every wrong move
+That I made, I would
+
+If I could stand up
+And take the blame, I would
+I would take all my shame to the grave
+
+It's easier to run
+Replacing this pain with something numb
+It's so much easier to go
+Than face all this pain here all alone
+
+Sometimes I remember the darkness of my past
+Bringing back these memories
+I wish I didn't have
+Sometimes I think of letting go
+And never looking back
+And never moving forward
+So there'd never be a past
+
+If I could change, I would
+Take back the pain, I would
+Retrace every wrong move
+That I made, I would
+
+If I could stand up
+And take the blame, I would
+If I could take all the shame
+To the grave, I would
+
+If I could change, I would
+Take back the pain, I would
+Retrace every wrong move
+That I made, I would
+
+If I could stand up
+And take the blame, I would
+I would take all my shame to the grave
+
+Just washing it aside
+All of the helplessness inside
+Pretending I don't feel misplaced
+It's so much simpler than change
+
+It's easier to run
+Replacing this pain with something numb
+It's so much easier to go
+Than face all this pain here all alone
+
+It's easier to run
+If I could change, I would
+Take back the pain, I would
+Retrace every wrong move that I made
+
+It's easier to go
+If I could change, I would
+Take back the pain, I would
+Retrace every wrong move
+That I made, I would
+
+If I could stand up
+And take the blame, I would
+I would take all my shame to the grave"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meteora"),
+            "Faint","00:02:42","I am a little bit of loneliness a little bit of disregard
+Handful of complaints but I can't help the fact that everyone can see these scars
+I am what I want you to want, what I want you to feel
+But it's like no matter what I do, I can't convince you, to just believe this is real
+So I let go, watching you, turn your back like you always do
+Face away and pretend that I'm not
+But I'll be here 'cause you're all that I got
+
+I can't feel the way I did before
+Don't turn your back on me
+I won't be ignored
+Time won't heal this damage anymore
+Don't turn your back on me
+I won't be ignored
+
+I am a little bit insecure, a little unconfident
+'Cause you don't understand I do what I can, but sometimes I don't make sense
+I am what you never wanna say, but I've never had a doubt
+It's like no matter what I do, I can't convince you for once just to hear me out
+So I let go, watching you turn your back like you always do
+Face away and pretend that I'm not
+But I'll be here, 'cause you're all that I've got
+
+I can't feel the way I did before
+Don't turn your back on me
+I won't be ignored
+Time won't heal this damage anymore
+Don't turn your back on me
+I won't be ignored
+
+Now
+Hear me out now
+You're gonna listen to me, like it or not
+Right now
+Hear me out now
+You're gonna listen to me, like it or not
+Right now
+
+I can't feel the way I did before
+Don't turn your back on me
+I won't be ignored
+
+I can't feel the way I did before
+Don't turn your back on me
+I won't be ignored
+Time won't heal this damage anymore
+Don't turn your back on me
+I won't be ignored
+
+I can't feel
+Don't turn your back on me
+I won't be ignored
+Time won't heal
+Don't turn your back on me
+I won't be ignored"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meteora"),
+            "Figure.09","00:03:17","Nothing ever stops all these thoughts
+And the pain attached to them
+Sometimes I wonder why this is happening
+It's like nothing I can do would distract me when
+I think of how I shot myself in the back again
+
+'Cause from the infinite words I could say
+I put all the pain you gave to me on display
+But didn't realize, instead of setting it free
+I took what I hated and made it a part of me
+
+It never goes away, it never goes away
+
+And now
+You've become a part of me
+You'll always be right here
+You've become a part of me
+You'll always be my fear
+
+I can't separate
+Myself from what I've done
+Given up a part of me
+I've let myself become you
+
+Hearing the name, the memories come back again
+I remember when it started happening
+I'd see you in every thought I had and then
+The thoughts slowly found words attached to them
+
+And I knew as they escaped away
+I was committing myself to whom
+And every day I regret saying those things
+'Cause now I see that I
+Took what I hated and made it a part of me
+
+It never goes away, it never goes away
+
+And now
+You've become a part of me
+You'll always be right here
+You've become a part of me
+You'll always be my fear
+
+I can't separate
+Myself from what I've done
+Given up a part of me
+I've let myself become you
+
+It never goes away, it never goes away
+It never goes away, it never goes away
+
+Get away from me
+Gimme my space back, you gotta just go
+Everything comes down to memories of you
+I've kept it in but now I'm letting you know
+I watch you go, so
+
+Get away from me
+Gimme my space back, you gotta just go
+Everything comes down to memories of you
+I've kept it in but now I'm letting you know
+I let you go
+
+And now
+You've become a part of me
+You'll always be right here
+You've become a part of me
+You'll always be my fear
+
+I can't separate
+Myself from what I've done
+Given up a part of me
+I've let myself become you
+
+I've let myself become you
+I've let myself become
+Lost inside these thoughts of you
+Giving up a part of me
+I've let myself become you"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meteora"),
+            "Breaking the Habit","00:03:16","Memories consume
+Like opening the wound
+I'm picking me apart again
+You all assume
+I'm safe here in my room
+Unless I try to start again
+
+I don't want to be the one
+Who the battles always choose
+'Cause inside I realize
+That I'm the one confused
+
+I don't know what's worth fighting for
+Or why I have to scream
+I don't know why I instigate
+And say what I don't mean
+
+I don't know how I got this way
+I know it's not alright
+So I'm breaking the habit
+I'm breaking the habit
+Tonight
+
+Clutching my cure
+I tightly lock the door
+I try to catch my breath again
+I hurt much more
+Than anytime before
+I had no options left again
+
+I don't want to be the one
+Who the battles always choose
+'Cause inside I realize
+That I'm the one confused
+
+I don't know what's worth fighting for
+Or why I have to scream
+I don't know why I instigate
+And say what I don't mean
+
+I don't know how I got this way
+I'll never be alright
+So I'm breaking the habit
+I'm breaking the habit
+Tonight
+
+I'll paint it on the walls
+'Cause I'm the one at fault
+I'll never fight again
+And this is how it ends
+
+I don't know what's worth fighting for
+Or why I have to scream
+But now I have some clarity
+To show you what I mean
+
+I don't know how I got this way
+I'll never be alright
+So I'm breaking the habit
+I'm breaking the habit
+I'm breaking the habit
+Tonight"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meteora"),
+            "From the Inside","00:02:55","I don't know who to trust, no surprise
+Everyone feels so far away from me
+Heavy thoughts sift through dust and the lies
+
+Trying not to break
+But I'm so tired of this deceit
+Every time I try to make myself get back up on my feet
+All I ever think about is this
+All the tiring time between
+And how I try and I put my trust in you
+Just takes so much out of me
+
+Take everything from the inside
+And throw it all away
+'Cause I swear, for the last time
+I won't trust myself with you
+
+Tension is building inside, steadily
+Everyone feels so far away from me
+Heavy thoughts forcing their way out of me
+
+Trying not to break
+But I'm so tired of this deceit
+Every time I try to make myself get back up on my feet
+All I ever think about is this
+All the tiring time between
+And how I try and I put my trust in you
+Just takes so much out of me
+
+Take everything from the inside
+And throw it all away
+'Cause I swear, for the last time
+I won't trust myself with you
+
+I won't waste myself on you, you, you
+Waste myself on you, you, you
+
+I'll take everything from the inside
+And throw it all away
+'Cause I swear, for the last time
+I won't trust myself with you
+
+Everything from the inside
+And just throw it all away
+'Cause I swear, for the last time
+I won't trust myself with you, you, you"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meteora"),
+            "Nobody's Listening","00:02:58","Peep the style and the kids checking for it
+The number one question is how could you ignore it
+We drop right back in the cut
+Over basement tracks
+With raps that got you backing this up like
+
+Rewind that we're just rolling with the rhythm
+Rise from the ashes of stylistic division
+With these non-stop lyrics of life living
+Not to be forgotten, but still unforgiven
+But, in the meantime, there are those
+Who wanna talk this and that
+So I suppose that it gets to
+At that point feelings gotta get hurt
+And get dirty with the people spreading the dirty goes
+
+Try to give you warning
+But everyone ignores me
+Told you everything loud and clear
+But nobody's listening
+Call to you so clearly
+But you don't want to hear me
+Told you everything loud and clear
+But nobody's listening
+
+I got a heart full of pain
+Head full of stress
+Hand full of anger
+Held in my chest
+And everything left is a waste of time
+I hate my rhymes
+But hate everyone else's more
+I'm riding on the back of this pressure
+Guessing that it's better
+That I can't keep myself together
+Because all of this stress
+Gave me something to write on
+The pain gave me something I could set my sights on
+You never forget the blood, sweat and tears
+The uphill struggle over years
+The fear and trash talking
+And the people it was to
+And the people that started it just like you
+
+Try to give you warning
+But everyone ignores me
+Told you everything loud and clear
+But nobody's listening
+Call to you so clearly
+But you don't want to hear me
+Told you everything loud and clear
+But nobody's listening
+
+I got a
+Heart full of pain
+Head full of stress
+Hand full of anger
+Held in my chest
+Uphill struggle
+Blood, sweat and tears
+Nothing to gain, everything to fear
+
+I got a
+Heart full of pain
+Head full of stress
+Hand full of anger
+Held in my chest
+Uphill struggle
+Blood, sweat and tears
+Nothing to gain, everything to fear
+
+Heart full of pain
+Heart full of pain
+
+Try to give you warning
+But everyone ignores me
+Told you everything loud and clear
+But nobody's listening
+Call to you so clearly
+But you don't want to hear me
+Told you everything loud and clear
+But nobody's listening
+
+I got a
+Heart full of pain
+Head full of stress
+(Nobody's listening)
+Hand full of anger
+Held in my chest
+(Nobody's listening)
+Uphill struggle
+Blood, sweat and tears
+(Nobody's listening)
+Nothing to gain, everything to fear
+(Nobody's listening)
+
+Coming at you"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meteora"),
+            "Session","00:02:24","Instrumental"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Meteora"),
+            "Numb","00:03:07","I'm tired of being what you want me to be
+Feeling so faithless, lost under the surface
+I don't know what you're expecting of me
+Put under the pressure of walking in your shoes
+
+(Caught in the undertow, just caught in the undertow)
+Every step that I take is another mistake to you
+(Caught in the undertow, just caught in the undertow)
+
+I've become so numb, I can't feel you there
+Become so tired, so much more aware
+I'm becoming this, all I want to do
+Is be more like me and be less like you
+
+Can't you see that you're smothering me?
+Holding too tightly, afraid to lose control
+'Cause everything that you thought I would be
+Has fallen apart right in front of you
+
+(Caught in the undertow, just caught in the undertow)
+Every step that I take is another mistake to you
+(Caught in the undertow, just caught in the undertow)
+And every second I waste is more than I can take
+
+I've become so numb, I can't feel you there
+Become so tired, so much more aware
+I'm becoming this, all I want to do
+Is be more like me and be less like you
+
+And I know I may end up failing too
+But I know you were just like me
+With someone disappointed in you
+
+I've become so numb, I can't feel you there
+Become so tired, so much more aware
+I'm becoming this, all I want to do
+Is be more like me and be less like you
+
+I've become so numb, I can't feel you there
+(I'm tired of being what you want me to be)
+I've become so numb, I can't feel you there
+(I'm tired of being what you want me to be)")
         </sql>
         <rollback>
-
+            DELETE FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Meteora")
         </rollback>
     </changeSet>
 
     <changeSet id="linkin_park_minutes_to_midnight" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
-
+                SELECT COUNT(1) FROM album AS a WHERE a.name = "Minutes To Midnight"
             </sqlCheck>
         </preConditions>
-        <sql>
-
-        </sql>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Linkin Park')"/>
+            <column name="name" value="Minutes To Midnight"/>
+            <column name="release_date" valueDate="2007-05-14"/>
+            <column name="cover" valueBlobFile="./images/LinkinParkMinutesToMidnightCover.webp"/>
+        </insert>
         <rollback>
-
+            DELETE FROM album AS a WHERE a.name = "Minutes To Midnight"
         </rollback>
     </changeSet>
 
     <changeSet id="linkin_park_minutes_to_midnight_songs" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
-
+                SELECT COUNT(1) FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Minutes To Midnight")
             </sqlCheck>
         </preConditions>
         <sql>
+            INSERT INTO music (album_id, name, duration, lyrics) VALUES
 
+            ((SELECT a.id FROM album AS a WHERE a.name = "Minutes To Midnight"),
+            "Wake","00:01:43","Should I have a taste of this
+Run across your lips
+And start all over again
+
+Could this all just be a dream
+If I should fall to stormy weather
+Wake me, wake me
+
+Maybe this time I can do it all right
+Without my foot in my mouth
+Without that blind in my sight
+
+Could this all just be a dream
+Too scared to lose the one
+I tried so hard for
+Too scared to lose the one
+I never had"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Minutes To Midnight"),
+            "Given Up","00:03:11","Wake in a sweat again
+Another day's been laid to waste
+In my disgrace
+Stuck in my head again
+Feels like I'll never leave this place
+There's no escape
+
+I'm my own worst enemy
+
+I've given up, I'm sick of feeling
+Is there nothing you can say?
+Take this all away, I'm suffocating
+Tell me, what the fuck is wrong with me?
+
+I don't know what to take
+Thought I was focused, but I'm scared
+I'm not prepared
+I hyperventilate
+Looking for help, somehow, somewhere
+And no one cares
+
+I'm my own worst enemy
+
+I've given up, I'm sick of feeling
+Is there nothing you can say?
+Take this all away, I'm suffocating
+Tell me, what the fuck is wrong with me?
+
+God!
+
+Put me out of my misery!
+Put me out of my misery!
+Put me out of my
+Put me out of my fucking misery!
+
+I've given up, I'm sick of feeling
+Is there nothing you can say?
+Take this all away, I'm suffocating
+Tell me, what the fuck is wrong with me?"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Minutes To Midnight"),
+            "Leave Out All the Rest","00:03:31","I dreamed I was missing
+You were so scared
+But no one would listen
+'Cause no one else care
+
+After my dreaming
+I woke with this fear
+What am I leaving
+When I'm done here?
+
+So if you're asking me
+I want you to know
+
+When my time comes
+Forget the wrong that I've done
+Help me leave behind some
+Reasons to be missed
+And don't resent me
+When you're feeling empty
+Keep me in your memory
+Leave out all the rest
+Leave out all the rest
+
+Don't be afraid
+I've taken my beating
+I've shared what I'd made
+
+I'm strong on the surface
+Not all the way through
+I've never been perfect
+But neither have you
+
+So if you're asking me
+I want you to know
+
+When my time comes
+Forget the wrong that I've done
+Help me leave behind some
+Reasons to be missed
+And don't resent me
+When you're feeling empty
+Keep me in your memory
+Leave out all the rest
+Leave out all the rest
+
+Forgetting
+All the hurt inside
+You've learned to hide so well
+Pretending
+Someone else can come
+And save me from myself
+I can't be who you are
+
+When my time comes
+Forget the wrong that I've done
+Help me leave behind some
+Reasons to be missed
+And don't resent me
+When you're feeling empty
+Keep me in your memory
+Leave out all the rest
+Leave out all the rest
+
+Forgetting
+All the hurt inside
+You've learned to hide so well
+Pretending
+Someone else can come and save me from myself
+I can't be who you are
+I can't be who you are"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Minutes To Midnight"),
+            "Bleed It Out","00:02:46","Yeah, here we go for the hundred time
+Hand grenade pins in every line
+Throw 'em up and let something shine
+Going out of my fucking mind
+Filthy mouth, no excuse
+Find a new place to hang this noose
+String me up from atop these roofs
+Knot it tight so I won't get loose
+
+Truth, this you can stop and stare
+Bled myself out and no one cares
+Dug the trench out, laid down there
+With a shovel up out of reach somewhere
+Yeah, someone pour it in
+Make it a dirty dance floor again
+Say your prayers and stomp it out
+When they bring that chorus in
+
+I bleed it out
+Digging deeper just to throw it away
+I bleed it out
+Digging deeper just to throw it away
+I bleed it out
+Digging deeper just to throw it away
+Just to throw it away, just to throw it away
+I bleed it out
+
+I bleed it out, go, stop the show
+Choppy words and a sloppy flow
+Shotgun opera, lock and load
+Cock it back and then watch it go
+Mama help me, I've been cursed
+Death is rolling in every verse
+Candy paint on his brand new hearse
+Can't contain me, he knows his works
+
+Fuck this hurts, I won't lie
+Doesn't matter how hard I try
+Half the words don't mean a thing
+And I know I won't be satisfied
+So why try ignoring him?
+Make it a dirt dance floor again
+Say your prayers and stomp it out
+When they bring that chorus in
+
+I bleed it out
+Digging deeper just to throw it away
+I bleed it out
+Digging deeper just to throw it away
+I bleed it out
+Digging deeper just to throw it away
+Just to throw it away, just to throw it away
+
+I bleed it out, I've opened up these scars
+I'll make you face this
+I pull myself so far
+I'll make you face this now
+
+I bleed it out
+Digging deeper just to throw it away
+I bleed it out
+Digging deeper just to throw it away
+I bleed it out
+Digging deeper just to throw it away
+Just to throw it away, just to throw it away
+
+I bleed it out
+Digging deeper just to throw it away
+I bleed it out
+Digging deeper just to throw it away
+I bleed it out
+Digging deeper just to throw it away
+Just to throw it away, just to throw it away
+
+I bleed it out
+I bleed it out
+I bleed it out"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Minutes To Midnight"),
+            "Shadow of the Day","00:04:52","I close both locks below the window
+I close both blinds and turn away
+Sometimes solutions aren't so simple
+Sometimes goodbye's the only way
+
+And the sun will set for you
+The sun will set for you
+And the shadow of the day
+Will embrace the world in grey
+And the sun will set for you
+
+In cards and flowers on your window
+Your friends all plead for you to stay
+Sometimes beginnings aren't so simple
+Sometimes goodbye's the only way
+
+And the sun will set for you
+The sun will set for you
+And the shadow of the day
+Will embrace the world in grey
+And the sun will set for you
+And the shadow of the day
+Will embrace the world in grey
+And the sun will set for you
+And the shadow of the day
+Will embrace the world in grey
+And the sun will set for you"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Minutes To Midnight"),
+            "What I've Done","00:03:28","In this farewell
+There's no blood, there's no alibi
+'Cause I've drawn regret
+From the truth of a thousand lies
+
+So let mercy come and wash away
+What I've done
+I'll face myself to cross out what I've become
+Erase myself and let go of what I've done
+
+Put to rest what you thought of me
+While I clean this slate
+With the hands of uncertainty
+
+So let mercy come and wash away
+What I've done
+I'll face myself to cross out what I've become
+Erase myself and let go of what I've done
+
+For what I've done, I start again
+And whatever pain may come, today this ends
+I'm forgiving what I've done
+
+I'll face myself to cross out what I've become
+Erase myself and let go of what I've done
+
+(Na-na-na-na-na-na-na-na)
+(Na-na-na-na-na-na-na-na) what I've done
+(Na-na-na-na-na-na-na-na)
+(Na-na-na-na-na-na-na-na) forgiving what I've done
+(Na-na-na-na-na-na-na-na)
+(Na-na-na-na-na-na-na-na)"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Minutes To Midnight"),
+            "Hands Held High","00:03:55","Turn my mic up louder, I got to say something
+Lightweights step it aside when we come in
+Feel it in your chest, the syllables get pumping
+People on the street, they panic and start running
+Words on loose-leaf sheet complete coming
+I jump in my mind 
+And summon the rhyme I'm dumping
+Healing the blind, I promise to let the Sun in
+Sick of the dark ways we march to the drumming
+Jump when they tell us that they wanna see jumping
+Fuck that, I wanna see some fists pumping
+Risk something, take back what's yours
+Say something that you know they might attack you for
+'Cause I'm sick of being treated like I have before
+Like it's stupid standing for what I'm standing for
+Like this war's really just a different brand of war
+Like it doesn't cater to rich and abandon poor
+Like they understand you in the back of the jet
+When you can't put gas in your tank
+These fuckers are laughing their way to the bank 
+And cashing the check
+Asking you to have compassion and have some respect
+For a leader so nervous in an obvious way
+Stuttering and mumbling for nightly news to replay
+And the rest of the world watching at the end of the day
+In the living room laughing, like, What did he say?
+
+Amen, amen, amen, amen, amen
+
+In my living room watching, but I am not laughing
+'Cause when it gets tense, I know what might happen
+The world is cold, the bold men take action
+Have to react or get blown into fractions
+Ten years old, something to see
+Another kid my age drugged under a Jeep
+Taken and bound and found later under a tree
+I wonder if he had thought the next one could be me
+Do you see the soldiers that are out, today?
+They brush the dust from bulletproof vests away
+It's ironic, at times like this you'd pray
+But a bomb blew the mosque up, yesterday
+There's bombs on the buses, bikes, roads
+Inside your market, your shops, your clothes
+My dad, he's got a lot of fear, I know
+But enough pride inside not to let that show
+My brother had a book he would hold with pride
+A little red cover with a broken spine
+On the back, he hand-wrote a quote inside
+When the rich wage war, it's the poor who die
+Meanwhile, the leader just talks away
+Stuttering and mumbling for nightly news to replay
+The rest of the world watching, at the end of the day
+Both scared and angry, like, What did he say?
+
+Amen, amen, amen, amen, amen
+
+With hands held high into a sky so blue
+As the ocean opens up to swallow you
+With hands held high into a sky so blue
+As the ocean opens up to swallow you
+With hands held high into a sky so blue
+As the ocean opens up to swallow you
+With hands held high into a sky so blue
+As the ocean opens up to swallow you
+With hands held high into a sky so blue
+As the ocean opens up to swallow you
+With hands held high into a sky so blue
+As the ocean opens up to swallow you"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Minutes To Midnight"),
+            "No More Sorrow","00:03:43","Are you lost in your lies?
+Do you tell yourself I don't realize
+Your crusade's a disguise?
+Replaced freedom with fear
+You trade money for lives
+I'm aware of what you've done
+
+No, no more sorrow
+I've paid for your mistakes
+Your time is borrowed
+Your time has come to be replaced
+
+I see pain, I see need
+I see liars and thieves
+Abuse power with greed
+I had hope, I believed
+But I'm beginning to think that I've been decieved
+You will pay for what you've done
+
+No, no more sorrow
+I've paid for your mistakes
+Your time is borrowed
+Your time has come to be replaced
+
+Thieves and hypocrites!
+Thieves and hypocrites!
+Thieves and hypocrites!
+
+No, no more sorrow
+I've paid for your mistakes
+Your time is borrowed
+Your time has come to be replaced
+
+No more sorrow
+I've paid for your mistakes
+Your time is borrowed
+Your time has come to be replaced
+
+Your time has come to be replaced
+Your time has come to be erased"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Minutes To Midnight"),
+            "Valentine's Day","00:03:18","My insides all turn to ash
+So slow
+And blew away as I collapsed
+So cold
+A black wind took them away
+From sight
+And held the darkness over day
+That night
+
+And the clouds above move closer
+Looking so dissatisfied
+But the heartless wind kept blowing, blowing
+
+I used to be my own protection
+But not now
+'Cause my path has lost direction
+Somehow
+A black wind took you away
+From sight
+And held darkness over day
+That night
+
+And the clouds above move closer
+Looking so dissatisfied
+And the ground below grew colder
+As they put you down inside
+But the heartless wind kept blowing, blowing
+
+So now you're gone
+And I was wrong
+I never knew what it was like
+To be alone
+
+On a Valentine's Day, on a Valentine's Day
+On a Valentine's Day, on a Valentine's Day
+
+On a Valentine's Day, on a Valentine's Day
+(I used to be my own protection)
+(But not now)
+On a Valentine's Day, on a Valentine's Day
+('Cause my mind has lost direction)
+(Somehow)
+
+On a Valentine's Day, on a Valentine's Day
+(I used to be my own protection)
+(But not now)
+On a Valentine's Day, on a Valentine's Day
+('Cause my mind has lost direction)
+(Somehow)"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Minutes To Midnight"),
+            "In Between","00:03:18","Let me apologize to begin with
+Let me apologize for what I'm about to say
+But trying to be genuine
+Was harder than it seems
+And somehow I got caught up in between
+
+Let me apologize to begin with
+Let me apologize for what I'm about to say
+But trying to be someone else
+Was harder than it seems
+And somehow I got caught up in between
+
+Between my pride and my promise
+Between my lies and how the truth gets in the way
+The things I want to say to you
+Get lost before they come
+The only thing that's worse than one is none
+
+Let me apologize to begin with
+Let me apologize for what I'm about to say
+But trying to regain your trust
+Was harder than it seems
+And somehow I got caught up in between
+
+Between my pride and my promise
+Between my lies and how the truth gets in the way
+The things I want to say to you
+Get lost before they come
+The only thing that's worse than one is none
+The only thing that's worse than one is none
+
+And I cannot explain to you
+In anything I say or do or plan
+Fear is not afraid you
+But guilt's a language you can understand
+I cannot explain to you in anything I say or do
+I hope the actions speak the words they can
+
+For my pride and my promise
+For my lies and how the truth gets in the way
+The things I want to say to you
+Get lost before they come
+The only thing that's worse than one is none
+
+For my pride and my promise
+Between my lies and how the truth gets in the way
+The things I want to say to you get lost before they come
+The only thing that's worse than one is none
+The only thing that's worse than one is none
+The only thing that's worse than one is none"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Minutes To Midnight"),
+            "In Pieces","00:03:38","Telling me to go
+But hands beg me to stay
+Your lips say that you love
+Your eyes say that you hate
+
+There's truth in your lies
+Doubt in your faith
+What you build you lay to waste
+There's truth in your lies
+Doubt in your faith
+All I've got's what you didn't take
+
+So I
+I won't be the one
+Be the one to leave this
+In pieces
+And you
+You will be alone
+Alone with all your secrets
+And regrets
+Don't lie
+
+You promise me the sky
+Then toss me like a stone
+You wrap me in your arms
+And chill me to the bone
+
+There's truth in your lies
+Doubt in your faith
+All I've got's what you didn't take
+
+So I
+I won't be the one
+Be the one to leave this
+In pieces
+And you
+You will be alone
+Alone with all your secrets
+And regrets
+Don't lie
+
+So I
+I won't be the one
+Be the one to leave this
+In pieces
+And you
+You will be alone
+Alone with all your secrets
+And regrets
+Don't lie"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Minutes To Midnight"),
+            "The Little Things Give You Away","00:06:25","Water grey
+Through the windows, up the stairs
+Chilling rain
+Like an ocean, everywhere
+
+Don't want to reach for me, do you?
+I mean nothing to you
+The little things give you away
+And now there will be no mistaking
+The levees are breaking
+
+All you've ever wanted
+Was someone to truly look up to you
+And 6 feet underwater, I do
+
+Hope decays
+Generations disappear
+Washed away
+As a nation simply stares
+
+Don't want to reach for me, do you?
+I mean nothing to you
+The little things give you away
+But now there will be no mistaking
+The levees are breaking
+
+All you've ever wanted
+Was someone to truly look up to you
+And six feet underwater, I do
+
+All you've ever wanted
+Was someone to truly look up to you
+And six feet underground
+Now I, now I do
+
+Oh, oh
+
+The little things give you away
+The little things give you away
+The little things give you away
+The little things give you away
+
+All you've ever wanted (the little things give you away)
+Was someone to truly look up to you (the little things give you away)
+All you've ever wanted (the little things give you away)
+Was someone to truly look up to you (the little things give you away)
+
+All you've ever wanted (the little things give you away)
+Was someone to truly look up to you (the little things give you away)
+All you've ever wanted (the little things give you away)
+Was someone to truly look up to you (the little things give you away)
+
+All you've ever wanted (the little things give you away)
+Was someone to truly look up to you (the little things give you away)
+All you've ever wanted (the little things give you away)
+Was someone to truly look up to you (the little things give you away)")
         </sql>
         <rollback>
-
+            DELETE FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Minutes To Midnight")
         </rollback>
     </changeSet>
 
     <changeSet id="linkin_park_a_thousand_suns" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
-
+                SELECT COUNT(1) FROM album AS a WHERE a.name = "A Thousand Suns"
             </sqlCheck>
         </preConditions>
-        <sql>
-
-        </sql>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Linkin Park')"/>
+            <column name="name" value="A Thousand Suns"/>
+            <column name="release_date" valueDate="2010-09-14"/>
+            <column name="cover" valueBlobFile="./images/LinkinParkAThousandSunsCover.webp"/>
+        </insert>
         <rollback>
-
+            DELETE FROM album AS a WHERE a.name = "A Thousand Suns"
         </rollback>
     </changeSet>
 
     <changeSet id="linkin_park_a_thousand_suns_songs" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
-
+                SELECT COUNT(1) FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "A Thousand Suns")
             </sqlCheck>
         </preConditions>
         <sql>
+            INSERT INTO music (album_id, name, duration, lyrics) VALUES
 
+            ((SELECT a.id FROM album AS a WHERE a.name = "A Thousand Suns"),
+            "The Reliquem","00:02:01","God save us every one
+Will we burn inside the fires of a thousand suns
+For the sins of our hand
+The sins of our tongue
+The sins of our father
+The sins of our young"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "A Thousand Suns"),
+            "The Radiance","00:00:57",""We knew the world would not be the same. A few people laughed, a few people cried, most people were silent. I remembered the line from the Hindu scripture, the Bhagavad-Gita. Vishnu is trying to persuade the Prince that he should do his duty, and to impress him, takes on his multi-armed form, and says, 'Now I am become Death, the destroyer of worlds.' I suppose we all thought that, one way or another."
+-Robert Oppenheimer"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "A Thousand Suns"),
+            "Burning in the Skies","00:04:13","I used the deadwood to make the fire rise
+The blood of innocence burning in the skies
+I filled my cup with the rising of the sea
+And poured it out in an ocean of debris
+Oh
+
+I'm swimming in the smoke
+Of bridges I have burned
+So don't apologize
+I'm losing what I don't deserve
+What I don't deserve
+
+We held our breath when the clouds began to form
+But you were lost in the beating of the storm
+And in the end we were made to be apart
+Like separate chambers of the human heart
+No
+
+I'm swimming in the smoke
+Of bridges I have burned
+So don't apologize
+I'm losing what I don't deserve
+It's in the blackened bones
+Of bridges I have burned
+So don't apologize
+I'm losing what I don't deserve
+What I don't deserve
+
+I'm swimming in the smoke
+Of bridges I have burned
+So don't apologize
+I'm losing what I don't deserve
+The blame is mine alone
+Of bridges I have burned
+So don't apologize
+I'm losing what I don't deserve
+What I don't deserve
+
+What I don't deserve
+What I don't deserve (oh)
+What I don't deserve
+
+I used the deadwood to make the fire rise
+The blood of innocence burning in the skies"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "A Thousand Suns"),
+            "Empty Spaces","00:00:18","instrumental"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "A Thousand Suns"),
+            "When They Come for Me","00:04:53","I am not a pattern to be followed
+The pill that I'm on is a tough one to swallow
+I'm not a criminal
+Not a role model
+Not a born leader
+I'm a tough act to follow
+I am not  the fortune and the fame
+Nor the same person telling you to forfeit the game
+I came in the ring like a dog on a chain
+And I found out the underbelly's sicker than it seems
+
+And it seems ugly but it can get worse
+'Cause even a blueprint is a gift and a curse
+'Cause once you got a theory of how the thing works
+Everybody wants the next thing to be just like the first
+And I'm not a robot
+I'm not a monkey
+I will not dance even if the beat's funky
+Opposite of lazy
+Far from a punk
+Ya'll ought to stop talking
+Start trying to catch up, motherfucker
+And all the people say
+
+Aaaaaah
+Trying to catch up, motherfucker
+Aaaaaah
+
+Lauryn said money change a situation
+Big said it increase the complication
+Kane said "don't step, I ain't the one"
+Chuck said that uzi weigh a motherfuckin' ton
+
+And I'm just a student of the game that they taught me
+Rockin' every stage in every place that it brought me
+I'm awfully underrated but came here to correct it
+And so it ain't mistaken I'ma state it for the record
+I am the opposite of wack
+Opposite of weak, opposite of slack
+Synonym of heat, synonym of crack
+Closest to a peak
+Far from a punk
+Ya'll ought to stop talking
+Start trying to catch up, motherfucker
+And all the people say
+
+Aaaaaaaah
+Trying to catch up, motherfucker
+Aaaaaaaah
+
+Oh, when they come for me
+Come for me
+I'll be gone
+
+Oh, when they come for me
+Come for me
+I'll be gone
+
+Oh, when they come for me
+Come for me
+I'll be gone
+
+And all the people say
+Aaaaaaaah
+Trying to catch up, motherfucker
+Aaaaaaaah"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "A Thousand Suns"),
+            "Robot Boy","00:04:29","You say, you're not gonna fight
+'Cause no one will fight for you
+And, you think
+There's not enough love
+And no one to give it to
+And, you're sure
+You've hurt for so long
+You've got nothing left to lose
+
+So, you say
+You're not gonna fight
+'Cause no one will fight for you
+You say, the weight of the world
+Has kept you from letting go
+
+And, you think
+Compassion's a flaw
+And you'll never let it show
+And, you're sure
+You've hurt in a way
+That no one will ever know
+
+But, someday
+The weight of the world
+Will give you the strength to go
+Hold on, the weight of the world
+Will give you the strength to go
+
+So, hold on
+The weight of the world
+Will give you the strength to go
+So, hold on
+The weight of the world
+Will give you the strength to go
+Just, hold on
+The weight of your world
+Will give you the strength to go"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "A Thousand Suns"),
+            "Jornada del Muerto","00:01:34","Mochiagete
+(Lift me up)
+Tokihanashite
+(Let me go)
+
+Mochiagete
+(Lift me up)
+Tokihanashite
+(Let me go)
+
+Mochiagete
+(Lift me up)
+Tokihanashite
+(Let me go)
+
+Mochiagete
+(Lift me up)
+Tokihanashite
+(Let me go)"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "A Thousand Suns"),
+            "Waiting for the End","00:03:51","This is not the end, this is not the beginning
+Just a voice like a riot rocking every revision
+But you listen to the tone and the violent rhythm and
+Though the words sound steady, something empty's within 'em
+We say yeah
+With fists flying up in the air
+Like we're holding onto something that's invisible there
+'Cause we're living at the mercy of the pain and fear
+Until we dead it
+Forget it
+Let it all disappear
+
+Waiting for the end to come
+Wishing I had strength to stand
+This is not what I had planned
+It's out of my control
+Flying at the speed of light
+Thoughts were spinning in my head
+So many things were left unsaid
+It's hard to let you go
+
+(Oh) I know what it takes to move on
+(Oh) I know how it feels to lie
+All I wanna do is trade this life for something new
+Holding on to what I haven't got
+
+Sitting in an empty room
+Trying to forget the past
+This was never meant to last
+I wish it wasn't so
+
+(Oh) I know what it takes to move on
+(Oh) I know how it feels to lie
+All I wanna do is trade this life for something new
+Holding on to what I haven't got
+
+What was left when that fire was gone
+I thought it felt right but that right was wrong
+All caught up in the eye of the storm
+And trying to figure out what it's like moving on
+And I don't even know what kind of things I've said
+My mouth kept moving and my mind went dead
+So, picking up the pieces now where to begin
+The hardest part of ending is starting again
+
+All I wanna do is trade this life for something new
+Holding on to what I haven't got
+
+This is not the end, this is not the beginning
+Just a voice like a riot rocking every revision
+(I'm holding on to what I haven't got)
+But you listen to the tone and the violent rhythm and
+Though the words sound steady, something empty's within 'em
+We say yeah
+With fists flying up in the air
+Like we're holding onto something that's invisible there
+'Cause we're living at the mercy of the pain and fear
+(Holding on to what I haven't got)
+Until we dead it
+Forget it
+Let it all disappear"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "A Thousand Suns"),
+            "Blackout","00:04:39","I'm stuck in this bed you made
+Alone with a sinking feeling
+I saw through the words you said
+To the secrets you've been keeping
+
+It's written upon your face
+All the lies, how they cut so deeply
+You can't get enough, you take
+And take, and take, and never say
+
+No, you've gotta get it inside
+You push it back down, you push it back down
+No, you'll never get it inside
+Push it back down, blackout, blood in your eye
+
+You say that it's not your fault
+And swear that I am mistaken
+You said it's not what it seems
+No remorse for the trust you're breaking
+
+You run but then back, you fall
+Suffocate in the mess you're making
+You can't get enough, you take
+And take, and take, and take, and take
+Fuck it, are you listening?
+
+No, you've gotta get it inside
+You push it back down, you push it back down
+No, you'll never get it inside
+You push it back down, you push it back down
+
+No, you've gotta get it inside
+You push it back down, you push it back down
+No, you'll never get it inside
+Push it back down, blackout, blood in your eye
+
+Blackout, blood in your eye
+You push it back down, you push it back down
+You push it back down, blood in your eye
+
+Blackout, blood in your eye
+Blackout, blood in your eye
+Blackout, blood in your eye
+Blackout, blood in your eye
+Blackout, blood in your eye
+Blackout, blood in your eye
+
+Floating down
+As colors fill the light
+We look up from the ground
+In fields of paper white
+
+And floating up
+You pass us in the night
+A future gazing out
+A past to overwrite
+
+So come down, far below
+We've been waiting to collect the things you know
+Come down, far below
+We've been waiting to collect what you've let go
+
+Come down, oh
+Come down, oh
+Come down, oh
+Come down, oh
+Come down, oh"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "A Thousand Suns"),
+            "Wretches and Kings","00:04:15","There's a time, when the operation of the machine becomes so odious
+Makes you so sick at heart, that you can't take part
+You can't even passively take part
+And you've got to put your bodies upon the gears and upon the wheels
+Upon the levers, upon all the apparatus
+And you've got to make it stop (Mario Savio)
+
+To save face, how low can you go
+Talk a lot of game but yet you don't know
+Static on the way, make us all say whoa
+The people up top push the people down low
+Get down
+And obey every word
+Steady getting mine if you haven't yet heard
+Wanna take what I got, don't be absurd
+Don't fight the power, nobody gets hurt
+If you haven't heard yet then I'm letting you know
+There ain't shit we don't run when the guns unload
+And no one make a move unless my people say so
+Got everything outta control
+Now everybody go
+
+Hey! Hey! Hey! Hey! Hey! Hey! Hey! Hey!
+
+Steel unload, final blow
+We the animals, take control
+Hear us now, clear and true
+Wretches and kings we come for you
+
+So keep pace, how slow can you go
+Talk a lot of shit and yet you don't know
+Fire on the way, make you all say whoa
+The people up top and the people down low
+Get down
+And I'm running it like that
+The front of the attack is exactly where I'm at
+Somewhere in-between, the kick and the hi-hat
+The pen and the contract, the pitch and the contact
+So get with the combat, I'm letting 'em know
+There ain't shit you can say to make me back down no
+So push the button let the whole thing blow
+Spinning everything outta control
+Now everybody go
+
+Hey! Hey! Hey! Hey! Hey! Hey! Hey! Hey!
+
+Feel alone, final blow
+We, the animals, take control
+Hear us now, clear and tall
+Wretches and kings, we come for you
+
+Steel unload, fire blow
+Filthy animals, beat them low
+Skin and bone, black and blue
+No more this Sun shall beat onto you
+
+From the front to the back and the side to side
+If you fear what I feel put 'em up real high
+Front to the back and the side to side
+If you fear what I feel put 'em up real high
+Front to the back and the side to side
+If you fear what I feel put 'em up real high
+Front to the back and the side to side
+If you fear what I feel put 'em up real high
+Front to the back and the side to side
+If you fear what I feel put 'em up real high
+Front to the back and the side to side
+If you fear what I feel put 'em up real high
+
+When the operation of the machine becomes so odious
+Makes you so sick at heart, that you can't take part
+You can't even passively take part
+And you've got to put your bodies upon the gears and upon the wheels
+Upon the levers, upon all the apparatus, and you've got to make it stop
+And you've got to indicate to the people, run in to the people on it
+And unless you're free, the machine will be prevented from working at all! (Mario Savio)
+
+Hey! Hey! Hey! Hey! Hey! Hey! Hey! Hey!"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "A Thousand Suns"),
+            "Wisdom, Justice, and Love","00:01:38","I come to this magnificent house of worship tonight
+Because my conscience leaves me no other choice
+A true revolution of values will lay hand on the world order
+And say of war
+
+This way of settling differences is not just
+This business of burning human beings with napalm
+Of filling our nation's homes with orphans and widows
+Of injecting poisonous drugs of hate
+Into the veins of peoples normally humane
+Of sending men home from dark and bloody battlefields
+Physically handicapped and psychologically deranged
+Cannot be reconciled with wisdom, justice, and love
+
+Cannot be reconciled with wisdom, justice, and love
+Cannot be reconciled with wisdom, justice, and love
+Cannot be reconciled with wisdom, justice, and love
+Cannot be reconciled with wisdom, justice, and love"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "A Thousand Suns"),
+            "Iridescent","00:04:56","When you were standing
+In the wake of devastation
+When you were waiting on the edge of the unknown
+And with the cataclysm raining down
+Insides crying, save me now
+You were there impossibly alone
+
+Do you feel cold and lost in desperation?
+You build up hope but failure's all you've known
+Remember all the sadness and frustration
+And let it go
+Let it go
+
+And in a burst of light that blinded every angel
+As if the sky had blown the heavens into stars
+You felt the gravity of tempered grace
+Falling into empty space
+No one there to catch you in their arms
+
+Do you feel cold and lost in desperation?
+You build up hope but failure's all you've known
+Remember all the sadness and frustration
+And let it go
+Let it go
+
+Do you feel cold and lost in desperation?
+You build up hope but failure's all you've known
+Remember all the sadness and frustration
+And let it go
+
+Let it go
+Let it go
+Let it go
+Let it go
+
+Do you feel cold and lost in desperation?
+You build up hope but failure's all you've known
+Remember all the sadness and frustration
+And let it go
+Let it go"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "A Thousand Suns"),
+            "Fallout","00:01:23","I'm swimming in the smoke / of bridges I have burned
+So don't apologize / I'm losing what I don't deserve
+The blame is mine alone / of bridges I have burned
+So don't apologize / I'm losing what I don't deserve
+What I don't deserve"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "A Thousand Suns"),
+            "The Catalyst","00:05:39","God bless us everyone
+We're a broken people
+Living under loaded gun
+
+And it can't be outfought
+It can't be outdone
+It can't be outmatched
+It can't be outrun, no
+
+God bless us everyone
+We're a broken people
+Living under loaded gun
+
+And it can't be outfought
+It can't be outdone
+It can't be outmatched
+It can't be outrun, no
+
+And when I close my eyes tonight
+To symphonies of blinding lights
+
+God bless us everyone
+We're a broken people
+Living under loaded gun, oh
+
+Like memories in cold decay
+Transmissions echoing away
+Far from the world of you and I
+Where oceans bleed into the sky
+
+God save us everyone
+Will we burn inside the fires
+Of a thousand suns
+
+For the sins of our hand
+The sins of our tongue
+The sins of our fathers
+The sins of our young, no
+
+God save us everyone
+Will we burn inside the fires
+Of a thousand suns
+
+For the sins of our hand
+The sins of our tongue
+The sins of our fathers
+The sins of our young, no
+
+And when I close my eyes tonight
+To symphonies of blinding lights
+
+God save us everyone
+Will we burn inside the fires
+Of a thousand suns, oh
+
+Like memories in cold decay
+Transmissions echoing away
+Far from the world of you and I
+Where oceans bleed into the sky
+
+Like memories in cold decay
+Transmissions echoing away
+Far from the world of you and I
+Where oceans bleed into the sky
+
+Lift me up, let me go
+Lift me up, let me go
+Lift me up, let me go
+Lift me up, let me go
+Lift me up, let me go
+Lift me up, let me go
+
+Lift me up, let me go
+Lift me up, let me go
+Lift me up, let me go
+Lift me up, let me go
+(Lift me up, let me go)
+
+(And it can't be outfought)
+(It can't be outdone)
+(It can't be outmatched)
+It can't be outrun, no
+
+(Lift me up, let me go)
+God bless us everyone
+We're a broken people
+Living under loaded gun
+
+(Lift me up, let me go)
+And it can't be outfought
+It can't be outdone
+It can't be outmatched
+It can't be outrun
+
+(Lift me up, let me go)
+God bless us everyone
+We're a broken people
+Living under loaded gun
+
+(Lift me up, let me go)
+And it can't be outfought
+It can't be outdone
+It can't be outmatched
+It can't be outrun"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "A Thousand Suns"),
+            "The Messenger","00:03:01","When you feel you're alone
+Cut off from this cruel world
+Your instincts telling you to run
+Listen to your heart
+Those angel voices
+They'll sing to you
+They'll be your guide
+Back home
+
+When life leaves us blind
+Love keeps us kind
+It keeps us kind
+
+When you've suffered enough
+And your spirit is breaking
+You're growing desperate from the fight
+Remember, you're loved
+And you always will be
+This melody will bring you right
+Back home
+
+When life leaves us blind
+Love keeps us kind
+When life leaves us blind
+Love keeps us kind
+
+Oh, oh, oh
+Oh, oh, oh
+Oh, oh, oh, oh
+Oh, oh, oh
+Oh, oh, oh
+Oh, oh, oh, oh")
         </sql>
         <rollback>
-
+            DELETE FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "A Thousand Suns")
         </rollback>
     </changeSet>
 
     <changeSet id="linkin_park_living_things" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
-
+                SELECT COUNT(1) FROM album AS a WHERE a.name = "Living Things"
             </sqlCheck>
         </preConditions>
-        <sql>
-
-        </sql>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Linkin Park')"/>
+            <column name="name" value="Living Things"/>
+            <column name="release_date" valueDate="2012-06-26"/>
+            <column name="cover" valueBlobFile="./images/LinkinParkLivingThingsCover.webp"/>
+        </insert>
         <rollback>
-
+            DELETE FROM album AS a WHERE a.name = "Living Things"
         </rollback>
     </changeSet>
 
     <changeSet id="linkin_park_living_things_songs" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
-
+                SELECT COUNT(1) FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Living Things")
             </sqlCheck>
         </preConditions>
         <sql>
+            INSERT INTO music (album_id, name, duration, lyrics) VALUES
 
+            ((SELECT a.id FROM album AS a WHERE a.name = "Living Things"),
+            "Lost in the Echo","00:03:25","You were that foundation
+Never gonna be another one, no
+I followed, so taken
+So conditioned, I could never let go
+Then sorrow, then sickness
+Then the shock when you flip it on me
+So hollow, so vicious
+So afraid, I couldn't let myself see
+That I could never be held
+Back or up, no, I hold myself
+Check the rep, yep, you know mine well
+Forget the rest, let them know my hell
+There and back, yet my soul ain't sell
+Kept respect up, the best they fell
+Let the rest be the tale they tell
+That I was there, saying
+
+In these promises broken, deep below
+Each word gets lost in the echo
+So, one last lie I can see through
+This time, I finally let you go, go, go
+
+Test my will, test my heart
+Let me tell you how the odds gonna stack up
+Y'all go hard, I go smart
+How's that working out for y'all in the back, huh?
+I've seen that frustration
+Been crossed and lost and told no
+And I've come back, unshaken
+Let down and lived and let go
+So, you can let it be known
+I don't hold back, I hold my own
+I can't be mapped, I can't be cloned
+I can't C-flat, it ain't my tone
+I can't fall back, I came too far
+Hold myself up and love my scars
+Let the bells ring wherever they are
+'Cause I was there, saying
+
+In these promises broken, deep below
+Each word gets lost in the echo
+So, one last lie I can see through
+This time, I finally let you go!
+(Go, go, go, go)
+(Go, go, go, go)
+
+No, you can tell 'em all now
+I don't back up, I don't back down
+I don't fold up and I don't bow
+I don't roll over, don't know how
+I don't care where the enemies are
+Can't be stopped, all I know, go hard
+Won't forget how I got this far
+For every time, saying
+
+In these promises broken, deep below
+Each word gets lost in the echo
+So, one last lie I can see through
+This time, I finally let you go, go, go, go, go, go, go"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Living Things"),
+            "In My Remains","00:03:20","Separate
+Sifting through the wreckage
+I can't concentrate
+Searching for a message 
+In that fear and pain
+Broken down and waiting 
+For the chance to feel alive
+
+Now, in my remains
+Are promises that never came
+Set this silence free
+To wash away the worst of me
+
+Come apart
+Falling in the cracks 
+Of every broken heart
+Digging through the wreckage of your disregard
+Sinking down and waiting
+For the chance to feel alive
+Now, in my remains
+Are promises that never came
+Set this silence free
+To wash away the worst of me
+
+Like an army falling
+One by one by one 
+Like an army falling
+One by one by one
+Like an army falling
+One by one by one 
+Like an army falling
+One by one by one
+
+Now, in my remains
+Are promises that never came
+Set this silence free
+To wash away the worst of me
+
+Like an army falling
+One by one by one 
+Like an army falling
+One by one by one"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Living Things"),
+            "Burn It Down","00:03:50","The cycle repeated
+As explosions broke in the sky
+All that I needed
+Was the one thing I couldn't find
+
+And you were there at the turn
+Waiting to let me know
+
+We're building it up to break it back down
+We're building it up to burn it down
+We can't wait to burn it to the ground
+
+The colors conflicted
+As the flames climbed into the clouds
+I wanted to fix this
+But couldn't stop from tearing it down
+
+And you were there at the turn
+Caught in the burning glow
+And I was there at the turn
+Waiting to let you know
+
+We're building it up to break it back down
+We're building it up to burn it down
+We can't wait to burn it to the ground
+
+You told me yes, you held me high
+And I believed when you told that lie
+I played soldier, you played king
+And struck me down when I kissed that ring
+
+You lost that right to hold that crown
+I built you up but you let me down
+So when you fall, I'll take my turn
+And fan the flames as your blazes burn
+
+And you were there at the turn
+Waiting to let me know
+
+We're building it up to break it back down
+We're building it up to burn it down
+We can't wait to burn it to the ground
+
+When you fall, I'll take my turn
+And fan the flames as your blazes burn
+We can't wait to burn it to the ground
+
+When you fall, I'll take my turn
+And fan the flames as your blazes burn
+We can't wait to burn it to the ground"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Living Things"),
+            "Lies Greed Misery","00:02:26","I'ma be that nail in your coffin
+Saying that I softened
+I was ducking down to reload
+So you can save your petty explanations
+I don't have the patience
+Before you even say it I know
+You let your pride or your ego
+Talk slick to me no
+That is not the way I get down
+And look at how you lose your composure
+Now let me show you
+Exactly how the breaking point sounds
+
+I wanna see you choke on your lies
+Swallow up your greed
+Suffer all alone in your misery
+Choke on your lies
+Swallow up your greed
+Suffer all alone in your misery
+
+What is it you want me to tell ya?
+I am not the failure
+I would rather live and let be
+But you came with the right kind of threat to
+Push me to let you
+Know you can't intimidate me
+You disrespect me so clearly
+Now you better hear me
+That is not the way it goes down
+You did it to yourself and it's over
+Now let me show you
+Exactly how the breaking point sounds
+
+I wanna see you choke on your lies
+Swallow up your greed
+Suffer all alone in your misery
+Choke on your lies
+Swallow up your greed
+Suffer all alone in your misery
+
+You did it to yourself
+
+I wanna see you choke on your lies
+Swallow up your greed
+Suffer all alone in your misery
+Choke on your lies
+Swallow up your greed
+Suffer all alone in your misery"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Living Things"),
+            "I'll Be Gone","00:03:31","Like shining oil this night is dripping down
+Stars are slipping down, glistening
+When I'm trying not to think what I am leaving now
+And no deceiving now, it's time you let me know
+Let me know
+
+When the lights go out
+And we open our eyes
+Out there in the silence
+I'll be gone, I'll be gone
+Let the Sun fade out
+And another one rise
+Climbing through tomorrow
+I'll be gone, I'll be gone
+
+This in between us is getting thinner now
+Into winter now, bitter sweet
+And across that horizon the Sun is settin' down
+You're forgetting now, it's time you let me go
+Let me go
+
+When the lights go out
+And we open our eyes
+Out there in the silence
+I'll be gone, I'll be gone
+Let the Sun fade out
+And another one rise
+Climbing through tomorrow
+I'll be gone, I'll be gone
+
+And tell them I
+Couldn't help myself
+And tell them I
+Was alone huh-oh
+Tell me I am the only one
+And there's nothing left to stop me
+
+When the lights go out
+And we open our eyes
+Out there in the silence
+I'll be gone, I'll be gone
+Let the Sun fade out
+And another one rise
+Climbing through tomorrow
+I'll be gone, I'll be gone
+
+I'll be gone!"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Living Things"),
+            "Castle of Glass","00:03:25","Take me down to the river bend
+Take me down to the fighting end
+Wash the poison from off my skin
+Show me how to be whole again
+
+Fly me up on a silver wing
+Past the black, where the sirens sing
+Warm me up in a nova's glow
+And drop me down to the dream below
+
+'Cause I'm only a crack
+In this castle of glass
+Hardly anything there for you to see
+For you to see
+
+Bring me home in a blinding dream
+Through the secrets that I have seen
+Wash the sorrow from off my skin
+And show me how to be whole again
+
+'Cause I'm only a crack
+In this castle of glass
+Hardly anything there for you to see
+For you to see
+
+'Cause I'm only a crack
+In this castle of glass
+Hardly anything else I need to be
+
+'Cause I'm only a crack
+In this castle of glass
+Hardly anything there for you to see
+For you to see
+For you to see"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Living Things"),
+            "Victimized","00:01:46","No regret for the confidence betrayed
+No more hiding in shadow
+'Cause I won't wait
+For the debt to be repaid
+Time has come for you
+
+Victimized! Victimized!
+Never again! Victimized!
+Victimized! Victimized!
+Never again! Victimized
+
+They're acting like they want a riot/It's a riot I'll give 'em
+As a siren climbs higher on this violent rythm
+Threw your snakes in the grass/Supplyin' the venom
+I ain't scared of your teeth/I admire what's in 'em
+You've been waiting in the shadows/And thinkin' you're hidden
+But the truth is you will have a stumble to get 'em
+Lauryn already hit 'em/And you've gotta be kiddin'
+Wanna talk about a victim?/I'ma put you there with 'em
+
+Victimized! Victimized!
+Never again! Victimized!
+Victimized! Victimized!
+Never again! Victimized
+
+No!!!!"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Living Things"),
+            "Roads Untraveled","00:03:49","Weep not for roads untravelled
+Weep not for paths left alone
+'Cause beyond every bend
+Is a long blinding end
+It's the worst kind of pain
+I've known
+
+Give up your heart left broken
+And let that mistake pass on
+'Cause the love that you lost
+Wasn't worth what it cost
+And in time you'll be glad it's gone
+
+Woah-oo-oh-oh
+Woah-oo-ohh
+Woah-oo-oh-oh
+Woah-oo-ohh
+
+Weep not for roads untravelled
+Weep not for sights unseen
+May your love never end
+And if you need a friend
+There's a seat here alongside me
+
+Woah-oo-oh-oh
+Woah-oo-ohh
+Woah-oo-oh-oh
+Woah-oo-ohh"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Living Things"),
+            "Skin to Bone","00:02:48","Skin to bone/Steel to rust
+Ash to ashes/Dust to dust
+Let tomorrow have it's way
+With the promises we made
+Skin to bone/Steel to rust
+Ash to ashes/Dust to dust
+Your deception/My disgust
+When your name is finally drawn
+I'll be happy that you're gone
+Ash to ashes dust to dust
+
+Uh-uh-uh
+Ash to ashes/Dust to dust
+Uh-uh-uh
+Skin to bone and steel to rust
+
+Right to left/Left to right
+Night to day/And day to night
+As the skylight fades to gray
+I'll be marching far away
+Right to left/And left to right
+
+Uh-uh-uh
+Ash to ashes/Dust to dust
+Uh-uh-uh
+Skin to bone and steel to rust
+
+Let tomorrow have it's way
+With the promises betrayed
+Skin to bone/And steel to rust
+Skin to bone/And steel to rust
+Skin to bone/And steel to rust..."),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Living Things"),
+            "Until It Breaks","00:03:43","It goes a one, two, three
+
+(I was born with) the hunger of a lion, the strength of a sun
+I don't need to sweat it when the competition come
+Original style like an 808 drum
+So I don't run the track
+No, I make the track run
+My mom taught me words, my dad built rockets
+I put 'em both together now, tell me what I got
+It's a pretty smart weapon
+I can shoot it, I can drop it
+(But) learn to respect it 'cause you clearly can't stop it like that
+
+Yeah, it ain't over, 'cause the sharks on the left side, the snakes on the right
+And anything you do, they wanna get a little bite
+It really doesn't matter if you're wrong or if you're right
+'Cause once they get the teeth in, nothing really fights
+
+Except for me, I do it like I got nothing to lose
+And you can run your mouth like you could try to fill my shoes
+But steady little soldier, I ain't standing next to you
+I'd be laying on the ground before you're even in my view
+Like that
+
+Give me the strength of the rising sun
+Give me the truth of the words unsung
+And when the large bells ring, the poor men sing
+"Bring me to kingdom come"
+
+This is something for your people on the block to black out and rock to
+Give you whatcha need like: "papa, who shot ya?"
+Separate the weak from the obsolete, you're meek, I creep hard on imposters
+And switch styles on the dime/quick witted ya'll/quit tripping
+I don't have time for your crying
+I grind tough, sucker, make your mind up
+Are you in the firing squad or are you in the line-up?
+Bang bang/little monkey man playing
+With the big guns will only get you slain and I ain't playing
+I'm just saying / you ain't gotta sliver of a chance
+I get iller, I deliver/while you quiver in your pants
+So shake shake down/money, here's the break down
+You can play the bank/I'ma play the bank take down
+And no mistakes now/I'm coming to getcha
+I'm just a banksy/you're a brainwash, get the picture?
+It's like that
+
+We swim against the rising waves
+And crash against the shore
+The body bends until it breaks
+The early morning sings no more
+
+So rest your head, it's time to sleep
+And dream of what's in store
+The body bends until it breaks
+Then sings again no more
+
+'Cause time has torn the flesh away
+The early morning sings no more"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Living Things"),
+            "Tinfoil","00:01:11","Instrumental"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "Living Things"),
+            "Powerless","00:03:44","You hid your skeletons when I had shown you mine
+You woke the devil that I thought you'd left behind
+I saw the evidence, the crimson soaking through
+Ten thousand promises, ten thousand ways to lose
+
+And you held it all
+But you were careless to let it fall
+You held it all
+And I was by your side
+Powerless
+
+I watched you fall apart and chased you to the end
+I left with emptiness that words can not defend
+You'll never know what I became because of you
+Ten thousand promises, ten thousand ways to lose
+
+And you held it all
+But you were careless to let it fall
+You held it all
+And I was by your side
+Powerless
+
+And you held it all
+But you were careless to let it fall
+You held it all
+And I was by your side
+Powerless
+Powerless
+Powerless")
         </sql>
         <rollback>
-
+            DELETE FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "Living Things")
         </rollback>
     </changeSet>
 
     <changeSet id="linkin_park_the_hunting_party" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
-
+                SELECT COUNT(1) FROM album AS a WHERE a.name = "The Hunting Party"
             </sqlCheck>
         </preConditions>
-        <sql>
-
-        </sql>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Linkin Park')"/>
+            <column name="name" value="The Hunting Party"/>
+            <column name="release_date" valueDate="2014-06-13"/>
+            <column name="cover" valueBlobFile="./images/LinkinParkTheHuntingPartyCover.webp"/>
+        </insert>
         <rollback>
-
+            DELETE FROM album AS a WHERE a.name = "The Hunting Party"
         </rollback>
     </changeSet>
 
     <changeSet id="linkin_park_the_hunting_party_songs" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
-
+                SELECT COUNT(1) FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "The Hunting Party")
             </sqlCheck>
         </preConditions>
         <sql>
+            INSERT INTO music (album_id, name, duration, lyrics) VALUES
 
+            ((SELECT a.id FROM album AS a WHERE a.name = "The Hunting Party"),
+            "Keys to the Kingdom","00:03:38","No control!
+No surprise!
+Throw the keys to the kingdom down there
+Down the hole in my eye
+I'm my own casualty
+I fuck up everything I see
+Fighting in futility
+
+Its our final war
+Tell me what's worth fighting for
+When we know there's nothing more
+Take the hand or fist
+Just to sell ourselves for this
+The path we least resist
+
+No control!
+No surprise!
+Throw the keys to the kingdom down there
+Down the hole in my eye
+I'm my own casualty
+I fuck up everything I see
+Fighting in futility
+
+Uh, I give you what you came for
+This is not the same though
+Got a different method
+But I still can bring the pace so
+Not all give the same though
+I got down the same flow
+I ain't shock and get you
+Never really in my range, though
+Somehow they ain't grow
+High five, Bango
+All pride childs
+Mama let the bass bang though
+All you fucking lames go
+Yelling out the names though
+Careful what you shoot
+'Cause you might hit what you came for
+(Careful what you shoot
+'Cause you might hit what you came for)
+
+No control!
+No surprise!
+Throw the keys to the kingdom down there
+Down the hole in my eye
+I'm my own casualty
+I fuck up everything I see
+Fighting in futility
+
+No control!
+No surprise!
+Throw the keys to the kingdom down there
+Down the hole in my eye
+I'm my own casualty
+I fuck up everything I see
+Fighting in futility
+
+I'm my own casualty"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "The Hunting Party"),
+            "All for Nothing","00:03:33","Yeah
+Uh
+
+So whatcha waiting for?
+Anticipating more
+Why you debate what it can take to instigate a war?
+Yeah I've been hating on the time I wasn't hated for
+There's nothing they can fucking say they didn't say before
+But you could never see it, your battle's not mine
+Wanna skate and play it safe but this is take a shot time
+You're waiting for a purpose, I already got mine
+While you tell me step to it like 1, 2, 3, 4!
+
+And if I do what you demand (you say!)
+You'll let me understand (you say!)
+You're gonna hold me to your word
+And if I sell myself away (you say!)
+I'll have no debt to pay (you say!)
+I'm gonna get what I deserve
+Woah
+
+Your word!
+Obeyed!
+My debt!
+Repaid!
+Our trust!
+Betrayed!
+All for nothing!
+All for nothing!
+
+Came back, there's no other way to say it
+So let me break this fucker down for ya
+I really don't know ya
+You're talk, but let me show you where to put your paranoia
+Your're joking I don't have a half a sucker bone to throw yah
+I'm disgusted wonder what's gonna make you tuck your tail below ya
+And no I'm not your soldier, I'm not taking any orders
+I'm a five star general infantry controller, need a lesson, let me show you.
+Have you checking your composure while I make you step to it like 1, 2, 3, 4!
+
+And if I do what you demand (you say!)
+You'll let me understand (you say!)
+You're gonna hold me to your word
+And if I sell myself away (you say!)
+I'll have no debt to pay (you say!)
+I'm gonna get what I deserve
+Woah
+
+And if I do what you demand
+You'll let me understand
+
+Your word!
+Obeyed!
+My debt!
+Repaid!
+Our trust!
+Betrayed!
+All for nothing!
+All for nothing!
+All for nothing
+All, oh, oh, oh, oh"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "The Hunting Party"),
+            "Guilty All the Same","00:05:55","Tell us all again
+What you think we should be
+What the answers are
+What it is we can't see
+Tell us all again
+How to do what you say
+How to fall in line
+How there's no other way
+But, ooh
+We all know
+
+You're guilty all the same
+Too sick to be ashamed
+You want to point your finger
+But there's no one else to blame
+
+You're guilty all the same
+Too sick to be ashamed
+You want to point your finger
+But there's no one else to blame
+
+You're guilty all the same
+
+Show us all again
+That our hands are unclean
+That we're unprepared
+That you have what we need
+Show us all again
+'Cause we cannot be saved
+'Cause the end is near
+Now there's no other way
+And, ooh
+You will know
+
+You're guilty all the same
+Too sick to be ashamed
+You want to point your finger
+But there's no one else to blame
+
+You're guilty all the same
+Too sick to be ashamed
+You want to point your finger
+But there's no one else to blame
+There's no one else to blame
+Guilty all the same
+
+Guilty all the same
+You're guilty all the same
+
+Yeah
+You already know what it is
+Can y'all explain what kind of land is this
+When a man has plans of being rich
+But the bosses plans is wealthy
+Dirty money scheme
+A clean split is nonsense, it's insane
+Even corporate hands is filthy
+They talk team and take the paper route
+All they think is bank accounts, assets and realty
+At anybody's expense
+No shame with a clear conscience
+No regrets and guilt free
+They claim that ain't the way that they built me
+The smoke screen before the flame
+Knowin' as soon as the dough or the deal peak
+They say it's time for things to change
+Rearrange like good product rebuilt cheap
+Anything if it's more to gain
+Drained, manipulated like artists, it's real deep
+Until no more remains, but I'm still me
+Like authentic hip-hop and rock, til pop and radio
+And record companies kill me
+Try to force me to stray and obey
+And got the gall to say how real can real be
+You feel me, we'll see
+If greed could be to blame
+Or greedy for the fame
+Tv or a name
+The media and the game
+To me you're all the same
+You're guilty
+
+You're guilty all the same
+Too sick to be ashamed
+You want to point your finger
+But there's no one else to blame
+
+You're guilty all the same
+Too sick to be ashamed
+You want to point your finger
+But there's no one else to blame
+There's no one else to blame
+Guilty all the same
+
+Guilty all the same
+Guilty all the same"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "The Hunting Party"),
+            "The Summoning","00:01:00","Instrumental"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "The Hunting Party"),
+            "War","00:02:11","One, two, one, two, thank you!
+
+There's no peace
+Only war
+Victory decides who's wrong or right
+It will not cease
+Only grow
+You better be prepared to fight!
+
+And it will not apologize
+For laying down your life
+
+War!
+
+There's no pain
+It will spare
+Fear has become your only right
+And once you're lost
+In your despair
+Forever black, eternal light
+
+And it will not apologize
+For laying down your life
+
+War
+Destroy you
+War
+Destroy you
+
+It needs no side to justify
+Laying down your life
+
+War
+Destroyer
+
+War"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "The Hunting Party"),
+            "Wastelands","00:03:15","This is war with no weapons
+Marchin with no steppin'
+Murder with no killin'
+Illin' every direction
+First, no sequel
+Do the math, no equal
+John with no Yoko
+More power, less people
+
+And, no, I'm not afraid of that
+Print it in your paperback
+Every rap made in fact to act as a delayed attack
+Every phrase a razorblade
+That's saved till they play it back
+To slay'em and leave'em on the pavement
+Bang
+Fade to black
+
+In the wastelands of today
+Where there's nothing left to lose
+And and there's nothing more to take
+But you force yourself to choose
+
+In the wastelands of today
+Where tomorrow disappears
+While the future slips away
+And your hope turns into fear
+In the wastelands of today
+
+Roll credits, you get it
+The show's done
+They're talking for just talkin'
+But meaning they got none
+None of you come proper
+They talk like a shotgun
+But how many of you got bred with integrity
+Not one
+
+So, no
+I'm not afraid to see you suckas hold a blade to me
+Ain't no way to shake the ground I built before you came to be
+Take it how you take it
+I'm the opposite of vacancy
+And this is not negotiation
+Y'all can hate and wait and see
+
+In the wastelands of today
+Where there's nothing left to lose
+And and there's nothing more to take
+But you force yourself to choose
+
+In the wastelands of today
+Where tomorrow disappears
+While the future slips away
+And your hope turns into fear
+And your hope turns into fear
+In the wastelands of today
+
+In the wastelands of today
+Where there's nothing left to lose
+And and there's nothing more to take
+But you force yourself to choose
+
+In the wastelands of today
+Where tomorrow disappears
+While the future slips away
+And your hope turns into fear
+And your hope turns into fear
+In the wastelands of today
+
+In the wastelands of today
+In the wastelands of today"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "The Hunting Party"),
+            "Until It's Gone","00:03:53","A fire needs a space to burn
+A breath to build a glow
+I've heard it said a thousand times
+But now I know
+
+That you don't know what you've got
+Oh, you don't know what you've got
+No you don't know what you've got
+Until it's gone
+Until it's gone
+Until it's gone
+
+I thought I kept you safe and sound
+I thought I made you strong
+But something made me realize
+That I was wrong
+
+'Cause finding what you've got sometimes
+Means finding it alone
+And I can finally see your light
+When I let go
+
+'Cause you don't know what you've got
+Until it's gone
+Until it's gone
+till it's gone
+
+Until it's gone
+Until it's gone
+Until it's gone
+till it's gone
+till it's gone
+
+'Cause you don't know what you've got
+Oh, you don't know what you've got
+No, you don't know what you've got
+It's your battle to be fought
+No, you don't know what you've got
+till it's gone
+till it's gone
+till it's gone"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "The Hunting Party"),
+            "Rebellion","00:03:44","I've seen the blood
+I've seen the broken
+The lost and the sights unseen
+
+I want a flood
+I want an ocean
+To wash my confusion clean
+I can't resolve this empty story
+I can't repair the damage done
+
+We are the fortunate ones
+Who've never faced oppression's gun
+We are the fortunate ones
+Imitations of rebellion
+
+We act it out
+We wear the colors
+Confined by the things we own
+We're not without
+We're like each other
+Pretending we're here alone
+And far away they burn their buildings
+Right in the face of the damage done
+
+We are the fortunate ones
+Who've never faced oppression's gun
+We are the fortunate ones
+Imitations of rebellion
+Rebellion
+Rebellion
+Rebellion
+
+Rebellion! Rebellion!
+We lost before the start
+Rebellion! Rebellion!
+One by one, we fall apart
+We fall apart! We fall apart! We fall apart!
+
+We are the fortunate ones
+Who've never faced oppression's gun
+We are the fortunate ones
+Imitations of, imitations of
+
+We are the fortunate ones
+Who've never faced oppression's gun
+We are the fortunate ones
+Imitations of rebellion
+Rebellion
+Rebellion
+Rebellion"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "The Hunting Party"),
+            "Mark the Graves","00:05:05","There's a fragile game we play
+With the ghosts of yesterday
+If we can't let go we'll never say goodbye
+No trace of what remains
+No stones to mark the graves
+Only memories we thought we could deny
+
+There was so much more to lose
+Than the pain I put you through
+In my carelessness I left you in the dark
+And the blood may wash away
+But the scars will never fade
+At least I know somehow I made a mark
+
+In the dark
+In the light
+Nothing left
+Nothing right
+
+In the dark
+In the light
+Nothing left
+Nothing right"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "The Hunting Party"),
+            "Drawbar","00:02:46","Instrumental"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "The Hunting Party"),
+            "Final Masquerade","00:03:37","Tearing me apart with words you wouldn't say
+And, suddenly, tomorrow's moment washed away
+'Cause I don't have a reason
+And you don't have the time
+But we both keep on waiting
+For something we won't find
+
+The light on the horizon
+Was brighter yesterday
+With shadows floating over
+The scars begin to fade
+We said it was forever
+But then it slipped away
+Standing at the end
+Of the final masquerade
+The final masquerade
+
+All I ever wanted
+The secrets that you keep
+All you ever wanted
+The truth I couldn't speak
+'Cause I can't see forgiveness
+And you can't see the crime
+And we both keep on waiting for
+What we left behind
+
+The light on the horizon
+Was brighter yesterday
+With shadows floating over
+The scars begin to fade
+We said it was forever
+But then it slipped away
+Standing at the end
+Of the final masquerade
+The final masquerade
+
+The final masquerade
+Standing at the end
+Of the final masquerade
+
+The light on the horizon
+Was brighter yesterday
+With shadows floating over
+The scars begin to fade
+We said it was forever
+But then it slipped away
+Standing at the end
+Of the final masquerade
+
+Oh, oh, oh
+Oh, oh, oh
+Standing at the end
+Of the final masquerade
+
+Oh, oh, oh
+Oh, oh, oh
+Standing at the end
+Of the final masquerade
+The final masquerade
+
+Oh, oh, oh"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "The Hunting Party"),
+            "A Line in the Sand","00:06:35","Today, we stood on the wall
+We laughed at the sun, we laughed at the guns
+We laughed at it all
+And when they, they told us to go
+We paid them no mind, like any other time
+But little did we know
+
+Today, I look for a sign
+With flames in my hands
+A line in the sand
+Between yours and mine
+And it came, like fire from below
+Your greed led the call
+My flag had to fall
+But little did you know
+
+Another day, your truth will come
+You're gonna pay for what you
+Pay for what you've done
+You'll get what's yours
+And face your crime
+You'll tell them: Give me back what's mine
+Give me back what's mine!
+
+I ain't never been a coward
+I ain't never seen blood
+You had sold me an ocean
+And I was lost in the flood
+We were counting on a leader
+We were driven by need
+Couldn't take temptation
+And we were blinded by greed
+You were steady as a sniper
+We were waiting on a wire
+So we never saw it coming
+When you ran from the fire
+You can try intimidation
+Or you can try to roar
+But when the time comes calling
+
+Yeah! You are gonna get yours!
+
+Another day your truth will come
+You're gonna pay for what you
+Pay for what you've done
+You'll get what's yours
+And face your crime
+You'll tell them: Give me back what's mine
+Give me back what's mine!
+
+And so today your truth has come
+You're gonna pay for what you
+Pay for what you've done
+You'll get what's yours
+You're out of time
+And you will give me back what's mine
+Give me, back what's mine!
+
+Give me, give me back what's mine!
+Give me, give me back what's mine!
+What's mine, give me, give me back what's mine!
+What's mine!
+What's mine!
+Give me back what's mine!
+
+Today, we stood on the wall
+We laughed at the sun, we laughed at the guns
+We laughed at it all
+And when they, they told us to go
+We paid them no mind, like any other time
+But little did we know")
         </sql>
         <rollback>
-
+            DELETE FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "The Hunting Party")
         </rollback>
     </changeSet>
 
     <changeSet id="linkin_park_one_more_light" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
-
+                SELECT COUNT(1) FROM album AS a WHERE a.name = "One More Light"
             </sqlCheck>
         </preConditions>
-        <sql>
-
-        </sql>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Linkin Park')"/>
+            <column name="name" value="One More Light"/>
+            <column name="release_date" valueDate="2019-05-19"/>
+            <column name="cover" valueBlobFile="./images/LinkinParkOneMoreLightCover.webp"/>
+        </insert>
         <rollback>
-            <sql>
-
-            </sql>
+            DELETE FROM album AS a WHERE a.name = "One More Light"
         </rollback>
     </changeSet>
 
     <changeSet id="linkin_park_one_more_light_songs" author="${author}">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
-
+                SELECT COUNT(1) FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "One More Light")
             </sqlCheck>
         </preConditions>
         <sql>
+            INSERT INTO music (album_id, name, duration, lyrics) VALUES
 
+            ((SELECT a.id FROM album AS a WHERE a.name = "One More Light"),
+            "Nobody Can Save Me","00:03:45","I'm dancing with my demons
+I'm hanging off the edge
+Storm clouds gather beneath me
+Waves break above my head
+Head-first hallucination
+
+I wanna fall wide awake now
+You tell me it's alright
+Tell me I'm forgiven, tonight
+
+But nobody can save me now
+I'm holding up a light
+I'm chasing up the darkness inside
+'Cause nobody can save me
+
+Stared into this illusion
+For answers yet to come
+I chose a false solution
+But nobody proved me wrong
+Head-first hallucination
+
+I wanna fall wide awake
+Watch the ground giving way now
+You tell me it's alright
+Tell me I'm forgiven, tonight
+
+But nobody can save me now
+I'm holding up a light
+I'm chasing up the darkness inside
+'Cause nobody can save me
+
+Been searching somewhere out there
+For what's been missing right here
+(I wanna fall wide awake now)
+Been searching somewhere out there
+For what's been missing right here
+
+I wanna fall wide awake now
+So tell me it's alright
+Tell me I'm forgiven, tonight
+
+And only I can save me now
+I'm holding on a light
+Chasing up the darkness inside
+And I don't wanna let you down
+But only I can save me
+
+Been searching somewhere out there
+For what's been missing right here"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "One More Light"),
+            "Goog Goodbye","00:03:31","[Chester Bennington]
+So say goodbye and hit the road
+Pack it up and disappear
+You better have some place to go
+'Cause you can't come back around here
+Good goodbye
+(Don't you come back no more)
+
+[Mike Shinoda]
+Live from the rhythm, it's
+Something wild, venomous
+Enemies trying to read me
+You're all looking highly illiterate
+Blindly forgetting if I'm in the mix
+You won't find an equivalent
+I've been here killing it
+Longer than you've been alive, you idiot
+And it makes you so mad
+Somebody else could be stepping in front of you
+And it makes you so mad that you're not the only one
+There's more than one of you
+And you can't understand the fact
+That it's over and done, hope you had fun
+You've got a lot to discuss on the bus
+Headed back where you're from
+
+[Chester Bennington]
+So say goodbye and hit the road
+Pack it up and disappear
+You better have some place to go
+'Cause you can't come back around here
+Good goodbye
+Good goodbye
+Good goodbye
+Good goodbye
+
+[Pusha T]
+Goodbye, good riddance
+A period is after every sentence
+Did my time with my cellmate
+Maxed out, so now we finished
+Every day was like a hail date
+Every night was like a hailstorm
+Took her back to my tinted windows
+Showin' out, she in rare form
+Wings up, now I'm airborne
+King Push, they got a chair for him
+Make way for the new queen
+The old lineup, where they cheer for 'em
+Consequence when you ain't there for him (you ain't there for him)
+Were you there for him? (Were you there for him?)
+Did you care for him? (Did you care for him?)
+You were dead wrong (dead wrong)
+
+[Chester Bennington]
+(Don't you come back no more)
+So say goodbye and hit the road
+Pack it up and disappear
+You better have some place to go
+'Cause you can't come back around here
+Good goodbye
+Good goodbye
+(Don't you come back no more)
+Good goodbye
+Good goodbye
+(Don't you come back no more)
+
+[Stormzy]
+Yo
+Let me say goodbye to my demons
+Let me say goodbye to my past life
+Let me say goodbye to the darkness
+Tell 'em that I'd rather be here in the starlight
+Tell 'em that I'd rather be here where they love me
+Tell 'em that I'm yours, this is our life
+And I still keep raising the bar like
+Never seen a young black brother in the chart twice
+Goodbye to the stereotypes
+You can't tell my kings we can't
+Mandem we're linking tings in parks
+Now I got a tune with Linkin Park
+Like goodbye to my old hoe's
+Goodbye to the cold roads
+I can't die for my postcode
+Young little Mike from the Gold Coast
+And now I'm inside with my bro bro's
+Gang
+
+[Chester Bennington]
+So say goodbye and hit the road
+Pack it up and disappear
+You better have some place to go
+'Cause you can't come back around here
+Good goodbye
+Good goodbye
+(Don't you come back no more)
+Good goodbye
+Good goodbye
+(Don't you come back no more)"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "One More Light"),
+            "Talking to Myself","00:03:51","Tell me what I've gotta do
+There's no getting through to you
+The lights are on but nobody's home (nobody's home)
+You say I can't understand
+But you're not giving me a chance
+When you leave me, where do you go? (Where do you go?)
+
+All the walls that you keep building
+All this time that I spent chasing
+All the ways that I keep losing you
+
+The truth is
+You turned into someone else
+You keep running like the sky is falling
+I can whisper, I can yell
+But I know, yeah, I know, yeah, I know
+I'm just talking to myself, oh-oh
+Talking to myself, oh-oh
+Talking to myself, oh-oh
+But I know, yeah, I know, yeah, I know
+I'm just talking to myself
+
+I admit I made mistakes
+But yours might cost you everything
+Can't you hear me calling you home?
+
+Oh, all the walls that you keep building
+All this time that I spent chasing
+All the ways that I keep losing you
+
+The truth is
+You turned into someone else
+You keep running like the sky is falling
+I can whisper, I can yell
+But I know, yeah, I know, yeah, I know
+I'm just talking to myself, oh-oh
+Talking to myself, oh-oh
+Talking to myself, oh-oh
+Yeah, I know, yeah, I know, yeah, I know
+I'm just talking to myself
+
+All the walls that you keep building
+All this time that I spent chasing
+All the ways that I keep losing you
+
+The truth is
+You turned into someone else
+You keep running like the sky is falling
+I can whisper, I can yell
+But I know, yeah, I know, yeah, I know
+I'm just talking to myself (oh-oh)
+Talking to myself (oh-oh)
+Talking to myself (oh-oh)
+Yeah, I know, yeah I know, yeah, I know
+Talking to myself"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "One More Light"),
+            "Battle Symphony","00:03:36","I got a long way to go
+And a long memory
+I've been searching for an answer
+Always just out of reach
+
+Blood on the floor
+Sirens repeat
+I've been searching for the courage
+To face my enemies
+
+When they turn down the lights
+I hear my battle symphony
+All the world in front of me
+If my armor breaks
+I'll fuse it back together
+
+Battle symphony
+Please, just don't give up on me
+And my eyes are wide awake
+
+For my battle symphony
+For my battle symphony
+
+They say that I don't belong
+Say that I should retreat
+That I'm marching to the rhythm
+Of a lonesome defeat
+
+But the sound of your voice
+Puts the pain in reverse
+No surrender, no illusions
+And for better or worse
+
+When they turn down the lights
+I hear my battle symphony
+All the world in front of me
+If my armor breaks
+I'll fuse it back together
+
+Battle symphony
+Please, just don't give up on me
+And my eyes are wide awake
+
+If I fall
+Get knocked down
+Pick myself up off the ground
+
+If I fall
+Get knocked down
+Pick myself up off the ground
+
+When they turn down the lights
+I hear my battle symphony
+All the world in front of me
+If my armor breaks
+I'll fuse it back together
+
+Battle symphony
+Please just don't give up on me
+And my eyes are wide awake
+
+For my battle symphony
+For my battle symphony"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "One More Light"),
+            "Invisible","00:03:34","I've got an aching head
+Echoes and buzzing noises
+I know the words we said
+But wish I could've turned our voices down
+This is not black and white
+Only organized confusion
+I'm just trying to get it right
+And in spite of all I should've done
+
+I was not mad at you
+I was not trying to tear you down
+The words that I could've used
+I was too scared to say out loud
+If I cannot break your fall
+I'll pick you up right off the ground
+If you felt invisible
+I won't let you feel that now
+
+Invisible
+Invisible
+Invisible
+Invisible
+
+You didn't get your way
+And it's an empty feeling
+You've got a lot to say
+And you just want to know you're being heard
+But this is not black and white
+There are no clear solutions
+I'm just trying to get it right
+And in spite of all I should've done
+
+I was not mad at you
+I was not trying to tear you down
+The words that I could've used
+I was too scared to say out loud
+If I cannot break your fall
+I'll pick you up right off the ground
+If you felt invisible
+I won't let you feel that now
+
+Invisible
+Invisible
+Invisible
+Invisible
+
+This is not black and white
+There are no clear solutions
+I'm just trying to get it right
+And in spite of all I should've done
+
+I was not mad at you
+I was not trying to tear you down
+The words that I could've used
+I was too scared to say out loud
+If I cannot break your fall
+I'll pick you up right off the ground
+If you felt invisible
+I won't let you feel that now
+
+Invisible
+Invisible
+Invisible
+Invisible
+Invisible
+Invisible
+Invisible
+Invisible"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "One More Light"),
+            "Heavy","00:02:49","I don't like my mind right now
+Stacking up problems that are so unnecessary
+Wish that I could slow things down
+I wanna let go, but there's comfort in the panic
+And I drive myself crazy
+Thinking everything's about me
+Yeah, I drive myself crazy
+'Cause I can't escape the gravity
+
+I'm holding on
+Why is everything so heavy?
+Holding on
+To so much more than I can carry
+I keep dragging around what's bringing me down
+If I just let go, I'd be set free
+Holding on
+Why is everything so heavy?
+
+You say that I'm paranoid
+But I'm pretty sure the world is out to get me
+It's not like I make the choice
+To let my mind stay so fucking messy
+I know I'm not the center of the universe
+But you keep spinning round me just the same
+I know I'm not the center of the universe
+But you keep spinning round me just the same
+
+I'm holding on
+Why is everything so heavy?
+Holding on
+To so much more than I can carry
+I keep dragging around what's bringing me down
+If I just let go, I'd be set free
+Holding on
+Why is everything so heavy?
+
+I know I'm not the center of the universe
+But you keep spinning round me just the same
+I know I'm not the center of the universe
+But you keep spinning round me just the same
+And I drive myself crazy
+Thinking everything's about me
+
+Holding on
+Why is everything so heavy?
+Holding on
+To so much more than I can carry
+I keep dragging around what's bringing me down
+If I just let go, I'd be set free
+Holding on
+Why is everything so heavy?
+
+Why is everything so heavy?
+Why is everything so heavy?"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "One More Light"),
+            "Sorry for Now","00:03:23","Watching the wings cut through the clouds
+Watching the raindrops blinking red and white
+Thinking of you back on the ground
+There with a fire burning in your eyes
+I only halfway apologized
+
+And I'll be sorry for now
+That I couldn't be around
+Sometimes things refuse
+To go the way we planned
+
+Oh, I'll be sorry for now
+That I couldn't be around
+There will be a day
+That you will understand
+You will understand
+
+After a while you may forget
+But just in case the memories cross your mind
+You couldn't know this when I left
+Under the fire of your angry eyes
+I never wanted to say goodbye
+
+So I'll be sorry for now
+That I couldn't be around
+Sometimes things refuse
+To go the way we planned
+
+Oh, I'll be sorry for now
+That I couldn't be around
+There will be a day
+That you will understand
+You will understand
+
+Yeah, stop telling 'em to pump the bass up
+Tried to call home, but nobody could wake up
+Switch your time zones can't pick the pace up
+I just passed out by the time you wake up
+
+Best things come to those who wait
+And it's time to get pumped on any road you take
+Don't ever have a problem make no mistake
+I can't wait to come back when I'm going away
+
+So I'll be sorry for now
+That I couldn't be around
+There are things we have to do that we can't stand
+Oh, I'll be sorry for now
+That I couldn't be around
+There will be a day that you will understand
+
+Oh, I'll be sorry for now
+That I couldn't be around
+There are things we have to do that we can't stand
+(Things we have to do that we can't stand)
+
+Oh, I'll be sorry for now
+That I couldn't be around
+There will be a day that you will understand
+You will understand
+
+You will understand
+You will understand"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "One More Light"),
+            "Halfway Right","00:03:37","I scream at myself
+When there's nobody else to fight
+I don't lose, I don't win, if I'm wrong
+Then I'm halfway right
+
+Used to get high with the dead end kids
+Abandoned houses where the shadows live
+I never been higher than I was that night
+I woke up driving my car
+I couldn't see then what I see right now
+The road dissolving like an empty vow
+Couldn't remember where I'd been that night
+I knew I took it too far
+
+All you said to do was slow down
+I remember, now I remember
+All you said to do was slow down
+But I was already gone
+
+I scream at myself
+When there's nobody else to fight
+I don't lose, I don't win, if I'm wrong
+Then I'm halfway right
+I know what I want
+But it feels like I'm paralyzed
+I don't lose, I don't win, if I'm wrong
+Then I'm halfway right (halfway right)
+
+Told me: Kid, you're going way to fast
+You burn too bright
+You know you'll never last
+It was bullshit then
+I guess it makes sense now
+I woke up driving my car
+
+Said I'd lose you if I lost control
+I just laughed because what do they know?
+Here I am, standing all alone
+Because I took it too far
+
+All you said to do was slow down
+I remember, now I remember
+All you said to do was slow down
+But I was already gone
+
+I scream at myself
+When there's nobody else to fight
+I don't lose, I don't win, if I'm wrong
+Then I'm halfway right
+I know what I want
+But it feels like I'm paralyzed
+I don't lose, I don't win, if I'm wrong
+Then I'm halfway right (halfway right)
+
+Na na na na na na na na
+Nana nana, na nana nana
+Na na na na na na na na
+But I was already gone
+
+I scream at myself
+When there's nobody else to fight
+I don't lose, I don't win, if I'm wrong
+Then I'm halfway right
+
+Na na na na na na na na
+Nana nana, na nana nana
+Na na na na na na na na
+But I was already gone
+
+I scream at myself
+When there's nobody else to fight
+I don't lose, I don't win, if I'm wrong
+Then I'm halfway right"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "One More Light"),
+            "One More Light","00:04:15","Should've stayed, were there signs I ignored?
+Can I help you not to hurt anymore?
+We saw brilliance when the world was asleep
+There are things that we can have, but can't keep
+
+If they say
+Who cares if one more light goes out?
+In the sky of a million stars
+It flickers, flickers
+Who cares when someone's time runs out?
+If a moment is all we are
+Or quicker, quicker
+Who cares if one more light goes out?
+Well, I do
+
+The reminders pull the floor from your feet
+In the kitchen, one more chair than you need, oh
+And you're angry, and you should be, it's not fair
+Just 'cause you can't see it doesn't mean it isn't there
+
+If they say
+Who cares if one more light goes out?
+In the sky of a million stars
+It flickers, flickers
+Who cares when someone's time runs out?
+If a moment is all we are
+Or quicker, quicker
+Who cares if one more light goes out?
+Well, I do
+
+Who cares if one more light goes out?
+In the sky of a million stars
+It flickers, flickers
+Who cares when someone's time runs out?
+If a moment is all we are
+Or quicker, quicker
+Who cares if one more light goes out?
+Well, I do
+
+Well, I do"),
+            ((SELECT a.id FROM album AS a WHERE a.name = "One More Light"),
+            "Sharp Edges","00:02:58","Mama always told me: Don't you run
+Don't you run with scissors, son
+You're gonna hurt someone
+Mama told me: Look before you leap
+Always think before you speak
+And watch the friends you keep
+
+Stay along the beaten path
+Never listened when she said
+
+Sharp edges have consequences, I
+Guess that I had to find out for myself
+Sharp edges have consequences, now
+Every scar is a story I can tell
+
+Should've played it safer from the start
+Loved you like a house of cards
+Let it fall apart
+But all the things I couldn't understand
+Never could've planned
+They made me who I am
+Put your nose on paperbacks
+Instead of smoking cigarettes
+These are years you're never getting back
+
+Stay along the beaten path
+Never listened when she said
+
+Sharp edges have consequences, I
+Guess that I had to find out for myself
+Sharp edges have consequences, now
+Every scar is a story I can tell
+
+We all fall down
+We live somehow
+We learn what doesn't kill us makes us stronger
+Ooh ooh ooh, ooh ooh ooh, ooh ooh ooh
+
+Stay along the beaten path
+Never listened when she said
+
+Sharp edges have consequences, I
+Guess that I had to find out for myself
+Sharp edges have consequences, now
+Every scar is a story I can tell
+
+We all fall down
+We live somehow
+We learn what doesn't kill us makes us stronger
+Ooh ooh ooh, ooh ooh ooh, ooh ooh ooh")
         </sql>
         <rollback>
-
+            DELETE FROM music AS m WHERE m.album_id = (SELECT id FROM album WHERE name = "One More Light")
         </rollback>
     </changeSet>
 
-</changelog>
+</databaseChangeLog>
