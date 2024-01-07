@@ -31,4 +31,23 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="genres_rock" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1)
+                FROM genre AS g
+                WHERE g.name IN ("Doom Metal", "Arena Rock", "Progressive Rock")
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO genre (name) VALUES ("Doom Metal"), ("Arena Rock"), ("Progressive Rock");
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM genre AS g
+                WHERE g.name IN ("Doom Metal", "Arena Rock", "Progressive Rock")
+            </sql>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>
