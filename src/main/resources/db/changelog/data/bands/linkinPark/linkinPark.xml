@@ -13,7 +13,7 @@
         <insert tableName="band">
             <column name="name" value="Linkin Park"/>
             <column name="creation" valueDate="1996-01-01"/>
-            <column name="logo" valueBlobFile="../images/LinkinParkLogo.svg"/>
+            <column name="logo" valueBlobFile="./images/LinkinParkLogo.png"/>
         </insert>
         <rollback>DELETE FROM band AS b WHERE b.name = "Linkin Park"</rollback>
     </changeSet>
@@ -53,7 +53,7 @@
             ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = "Michael Kenji Shinoda"),"1996-01-01",null),
             ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = "Chester Charles Bennington"),"1999-03-01","2017-07-20"),
             ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = "Robert Gregory Bourdon"),"1996-01-01",null),
-            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = "Brad Delson"),"1996-01-01",null),
+            ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = "Bradford Phillip Kaplan Delson"),"1996-01-01",null),
             ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = "David Michael Farrell"),"1996-01-01",null),
             ((SELECT id FROM band WHERE name = "Linkin Park"),(SELECT id FROM person WHERE name = "Joseph Hahn"),"1996-01-01",null)
         </sql>
@@ -2333,7 +2333,7 @@ The sins of our tongue
 The sins of our father
 The sins of our young"),
             ((SELECT a.id FROM album AS a WHERE a.name = "A Thousand Suns"),
-            "The Radiance","00:00:57",""We knew the world would not be the same. A few people laughed, a few people cried, most people were silent. I remembered the line from the Hindu scripture, the Bhagavad-Gita. Vishnu is trying to persuade the Prince that he should do his duty, and to impress him, takes on his multi-armed form, and says, 'Now I am become Death, the destroyer of worlds.' I suppose we all thought that, one way or another."
+            "The Radiance","00:00:57","""We knew the world would not be the same. A few people laughed, a few people cried, most people were silent. I remembered the line from the Hindu scripture, the Bhagavad-Gita. Vishnu is trying to persuade the Prince that he should do his duty, and to impress him, takes on his multi-armed form, and says, 'Now I am become Death, the destroyer of worlds.' I suppose we all thought that, one way or another.""
 -Robert Oppenheimer"),
             ((SELECT a.id FROM album AS a WHERE a.name = "A Thousand Suns"),
             "Burning in the Skies","00:04:13","I used the deadwood to make the fire rise
@@ -2413,7 +2413,7 @@ Aaaaaah
 
 Lauryn said money change a situation
 Big said it increase the complication
-Kane said "don't step, I ain't the one"
+Kane said ""don't step, I ain't the one""
 Chuck said that uzi weigh a motherfuckin' ton
 
 And I'm just a student of the game that they taught me
@@ -3355,10 +3355,10 @@ Like that
 Give me the strength of the rising sun
 Give me the truth of the words unsung
 And when the large bells ring, the poor men sing
-"Bring me to kingdom come"
+""Bring me to kingdom come""
 
 This is something for your people on the block to black out and rock to
-Give you whatcha need like: "papa, who shot ya?"
+Give you whatcha need like: ""papa, who shot ya?""
 Separate the weak from the obsolete, you're meek, I creep hard on imposters
 And switch styles on the dime/quick witted ya'll/quit tripping
 I don't have time for your crying
