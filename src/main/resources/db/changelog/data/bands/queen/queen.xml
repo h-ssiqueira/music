@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        logicalFilePath="../db/changelog/data/bands/queen/queen.xml">
+
+    <changeSet id="band_queen" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM band AS b WHERE b.name = "Queen"</sqlCheck>
+        </preConditions>
+        <insert tableName="band">
+            <column name="name" value="Queen"/>
+            <column name="creation" valueDate="1970-01-01"/>
+            <column name="logo" valueBlobFile="./images/QueenLogo.svg"/>
+        </insert>
+        <rollback>DELETE FROM band AS b WHERE b.name = "Queen"</rollback>
+    </changeSet>
+
+    <changeSet id="queen_genres" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM band_genre AS bg
+                WHERE bg.band_id = (SELECT b.id FROM band AS b WHERE b.name = "Queen")
+                AND bg.genre_id IN (SELECT g.id FROM genre AS g WHERE g.name in ("Pop Rock","Progressive Rock","Hard Rock"))
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="band_genre">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Queen')"/>
+            <column name="genre_id" valueComputed="(SELECT g.id FROM genre AS g WHERE g.name = 'Pop Rock')"/>
+        </insert>
+        <insert tableName="band_genre">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Queen')"/>
+            <column name="genre_id" valueComputed="(SELECT g.id FROM genre AS g WHERE g.name = 'Progressive Rock')"/>
+        </insert>
+        <insert tableName="band_genre">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Queen')"/>
+            <column name="genre_id" valueComputed="(SELECT g.id FROM genre AS g WHERE g.name = 'Hard Rock')"/>
+        </insert>
+        <rollback>
+            DELETE FROM band_genre AS bg
+            WHERE bg.band_id = (SELECT b.id FROM band AS b WHERE b.name = "Queen")
+            AND bg.genre_id IN (SELECT g.id FROM genre AS g WHERE g.name IN ("Pop Rock","Progressive Rock","Hard Rock"))
+        </rollback>
+    </changeSet>
+
+    <changeSet id="queen_members" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM member WHERE band_id = (SELECT id FROM band WHERE name = "Queen")
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO member (band_id, person_id, join_date, disjoint_date) VALUES
+            ((SELECT id FROM band WHERE name = "Queen"),(SELECT id FROM person WHERE name = "Freddie Mercury"),"1970-01-01","1991-11-24"),
+            ((SELECT id FROM band WHERE name = "Queen"),(SELECT id FROM person WHERE name = "John Richard Deacon"),"197-10-28","1997-02-01"),
+            ((SELECT id FROM band WHERE name = "Queen"),(SELECT id FROM person WHERE name = "Brian Herold May"),"1970-01-01",null),
+            ((SELECT id FROM band WHERE name = "Queen"),(SELECT id FROM person WHERE name = "Roger Meddows-Taylor"),"1970-01-01",null)
+        </sql>
+        <rollback>
+            DELETE FROM member WHERE band_id = (SELECT id FROM band WHERE name = "Queen")
+        </rollback>
+    </changeSet>
+
+    <changeSet id="queen_albums_and_songs" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM album AS a WHERE a.band_id = (SELECT id FROM band WHERE name = "Queen")
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM music AS m WHERE m.album_id in (SELECT a.id FROM album AS a WHERE a.band_id = (SELECT id FROM band WHERE name = "Queen"))
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sqlfile encoding="UTF-8" path="./queen.sql" relativeToChangelogFile="true" splitStatements="true"/>
+        <rollback>
+            DELETE FROM music AS m WHERE m.album_id in (SELECT a.id FROM album AS a WHERE a.band_id = (SELECT id FROM band WHERE name = "Queen"))
+            DELETE FROM album AS a WHERE a.band_id = (SELECT id FROM band WHERE name = "Queen")
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
