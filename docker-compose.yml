@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.3
+    container_name: music-db
+    hostname: db
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=admin123
+      - MYSQL_DATABASE=music
+    ports:
+      - "3306:3306"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "256MB"
+
+  music1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: api1
+    environment:
+      - MYSQL_HOST=music-db
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=root
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "256MB"
