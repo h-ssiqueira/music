@@ -67,7 +67,7 @@
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Ghost')"/>
             <column name="name" value="Opus Eponymous"/>
             <column name="release_date" valueDate="2010-10-10"/>
-            <column name="cover" valueBlobFile="./images/GhostOpusEponymousCover.jpg"/>
+            <column name="cover" valueBlobFile="./images/GhostOpusEponymousCover.png"/>
         </insert>
         <rollback>
             DELETE FROM album AS a WHERE a.name = "Opus Eponymous"
@@ -320,7 +320,7 @@ With child of her grave"),
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Ghost')"/>
             <column name="name" value="Infestissumam"/>
             <column name="release_date" valueDate="2013-04-10"/>
-            <column name="cover" valueBlobFile="./images/GhostInfestissumamCover.jpg"/>
+            <column name="cover" valueBlobFile="./images/GhostInfestissumamCover.png"/>
         </insert>
         <rollback>
             DELETE FROM album AS a WHERE a.name = "Infestissumam"
@@ -743,7 +743,7 @@ Come together (come together), forever as one (forever as one)")
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Ghost')"/>
             <column name="name" value="Meliora"/>
             <column name="release_date" valueDate="2015-08-21"/>
-            <column name="cover" valueBlobFile="./images/GhostMelioraCover.jpg"/>
+            <column name="cover" valueBlobFile="./images/GhostMelioraCover.png"/>
         </insert>
         <rollback>
             DELETE FROM album AS a WHERE a.name = "Meliora"
@@ -1086,7 +1086,7 @@ And we are here to revel forever more")
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Ghost')"/>
             <column name="name" value="Praquelle"/>
             <column name="release_date" valueDate="2018-07-01"/>
-            <column name="cover" valueBlobFile="./images/GhostPrequelleCover.jpg"/>
+            <column name="cover" valueBlobFile="./images/GhostPrequelleCover.png"/>
         </insert>
         <rollback>
             DELETE FROM album AS a WHERE a.name = "Praquelle"
@@ -1443,7 +1443,7 @@ If you had life eternal")
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Ghost')"/>
             <column name="name" value="Impera"/>
             <column name="release_date" valueDate="2022-03-11"/>
-            <column name="cover" valueBlobFile="./images/GhostImperaCover.jpg"/>
+            <column name="cover" valueBlobFile="./images/GhostImperaCover.png"/>
         </insert>
         <rollback>
             DELETE FROM album AS a WHERE a.name = "Impera"

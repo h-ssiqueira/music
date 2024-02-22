@@ -13,6 +13,7 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<maven.assembly.plugin.version>3.6.0</maven.assembly.plugin.version>
+		<maven.resources.plugin.version>3.3.1</maven.resources.plugin.version>
 		<spring.boot.version>3.2.0</spring.boot.version>
 		<jackson.version>2.16.1</jackson.version>
 		<liquibase.version>4.25.0</liquibase.version>
@@ -152,7 +153,7 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>${maven.assembly.plugin.version}</version>
 				<configuration>
-					<finalName>RinhaBackend2024Q1Application</finalName>
+					<finalName>MusicApplication</finalName>
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
@@ -173,6 +174,14 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven.resources.plugin.version}</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
 			</plugin>
 		</plugins>
 		<resources>
