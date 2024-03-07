@@ -13,7 +13,7 @@
         <insert tableName="band">
             <column name="name" value="Queen"/>
             <column name="creation" valueDate="1970-01-01"/>
-            <column name="logo" valueBlobFile="./images/QueenLogo.svg"/>
+            <column name="logo" valueBlobFile="./images/QueenLogo.png"/>
         </insert>
         <rollback>DELETE FROM band AS b WHERE b.name = "Queen"</rollback>
     </changeSet>
