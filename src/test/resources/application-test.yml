@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    jdbc-url: jdbc:h2:mem:rinha
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    show-sql: true
+  liquibase:
+    change-log: classpath:db/changelog/changelog.xml
+    rollback-file: /home/henrique/logs/music/rollbackFile.sql
+    enabled: false
