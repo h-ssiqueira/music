@@ -43,6 +43,7 @@ public class DatabaseConfig {
         config.setChangeLog(liquibaseProperties.getChangeLog());
         config.setDataSource(dataSource);
         config.setRollbackFile(new File(filename));
+        config.setShouldRun(liquibaseProperties.isEnabled());
         config.setTestRollbackOnUpdate(false);
         return config;
     }

@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.3
+    container_name: music-db
+    hostname: db
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=admin123
+      - MYSQL_DATABASE=music
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: [ "CMD-SHELL", "mysql --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD --execute='SELECT 1;' || exit 1" ]
+      interval: 30s
+      timeout: 3s
+      retries: 10
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "256MB"
+
+  music1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: api1
+    environment:
+      - MYSQL_HOST=music-db
+      - MYSQL_USERNAME=user
+      - MYSQL_PASSWORD=admin123
+    volumes:
+      - /home/henrique/logs/music/rollbackFile.sql:/home/henrique/logs/music/rollbackFile.sql
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "256MB"
