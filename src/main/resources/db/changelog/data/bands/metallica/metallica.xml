@@ -13,7 +13,7 @@
         <insert tableName="band">
             <column name="name" value="Metallica"/>
             <column name="creation" valueDate="1981-10-28"/>
-            <column name="logo" valueBlobFile="./images/MetallicaLogo.svg"/>
+            <column name="logo" valueBlobFile="./images/MetallicaLogo.png"/>
         </insert>
         <rollback>DELETE FROM band AS b WHERE b.name = "Metallica"</rollback>
     </changeSet>
@@ -79,7 +79,7 @@
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Metallica')"/>
             <column name="name" value="Kill 'Em All"/>
             <column name="release_date" valueDate="1983-07-25"/>
-            <column name="cover" valueBlobFile="./images/MetallicaKillEmAllCover.webp"/>
+            <column name="cover" valueBlobFile="./images/MetallicaKillEmAllCover.png"/>
         </insert>
         <rollback>DELETE FROM album AS a WHERE a.name = "Kill 'Em All"</rollback>
     </changeSet>
@@ -632,7 +632,7 @@ Metal Militia</column>
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Metallica')"/>
             <column name="name" value="Ride the Lightning"/>
             <column name="release_date" valueDate="1984-07-27"/>
-            <column name="cover" valueBlobFile="./images/MetallicaRideTheLightningCover.webp"/>
+            <column name="cover" valueBlobFile="./images/MetallicaRideTheLightningCover.png"/>
         </insert>
         <rollback>DELETE FROM album AS a WHERE a.name = "Ride the Lightning"</rollback>
     </changeSet>
@@ -959,7 +959,7 @@ Life is for my own to live my own way..."),
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Metallica')"/>
             <column name="name" value="Master of Puppets"/>
             <column name="release_date" valueDate="1986-03-03"/>
-            <column name="cover" valueBlobFile="./images/MetallicaMasterOfPuppetsCover.webp"/>
+            <column name="cover" valueBlobFile="./images/MetallicaMasterOfPuppetsCover.png"/>
         </insert>
         <rollback>DELETE FROM album AS a WHERE a.name = "Master of Puppets"</rollback>
     </changeSet>
@@ -1409,7 +1409,7 @@ Damage Incorporated")
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Metallica')"/>
             <column name="name" value="...And Justice for All"/>
             <column name="release_date" valueDate="1988-08-25"/>
-            <column name="cover" valueBlobFile="./images/MetallicaAndJusticeForAllCover.webp"/>
+            <column name="cover" valueBlobFile="./images/MetallicaAndJusticeForAllCover.png"/>
         </insert>
         <rollback>DELETE FROM album AS a WHERE a.name = "...And Justice for All"</rollback>
     </changeSet>
@@ -1965,7 +1965,7 @@ Living out this hell you always knew")
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Metallica')"/>
             <column name="name" value="Metallica"/>
             <column name="release_date" valueDate="1991-08-12"/>
-            <column name="cover" valueBlobFile="./images/MetallicaBlackAlbumCover.webp"/>
+            <column name="cover" valueBlobFile="./images/MetallicaBlackAlbumCover.png"/>
         </insert>
         <rollback>DELETE FROM album AS a WHERE a.name = "Metallica"</rollback>
     </changeSet>
@@ -2676,7 +2676,7 @@ Struggle within, struggling within")
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Metallica')"/>
             <column name="name" value="Load"/>
             <column name="release_date" valueDate="1996-06-04"/>
-            <column name="cover" valueBlobFile="./images/MetallicaLoadCover.webp"/>
+            <column name="cover" valueBlobFile="./images/MetallicaLoadCover.png"/>
         </insert>
         <rollback>DELETE FROM album AS a WHERE a.name = "Load"</rollback>
     </changeSet>
@@ -3577,7 +3577,7 @@ Remind me of what left this outlaw torn")
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Metallica')"/>
             <column name="name" value="Reload"/>
             <column name="release_date" valueDate="1997-11-18"/>
-            <column name="cover" valueBlobFile="./images/MetallicaReloadCover.webp"/>
+            <column name="cover" valueBlobFile="./images/MetallicaReloadCover.png"/>
         </insert>
         <rollback>DELETE FROM album AS a WHERE a.name = "Reload"</rollback>
     </changeSet>
@@ -4609,7 +4609,7 @@ No, no, no")
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Metallica')"/>
             <column name="name" value="St. Anger"/>
             <column name="release_date" valueDate="2003-06-05"/>
-            <column name="cover" valueBlobFile="./images/MetallicaStAngerCover.webp"/>
+            <column name="cover" valueBlobFile="./images/MetallicaStAngerCover.png"/>
         </insert>
         <rollback>DELETE FROM album AS a WHERE a.name = "St. Anger"</rollback>
     </changeSet>
@@ -5398,7 +5398,7 @@ Then we'll see if I let you love me")
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Metallica')"/>
             <column name="name" value="Death Magnetic"/>
             <column name="release_date" valueDate="2008-09-12"/>
-            <column name="cover" valueBlobFile="./images/MetallicaDeathMagneticCover.webp"/>
+            <column name="cover" valueBlobFile="./images/MetallicaDeathMagneticCover.png"/>
         </insert>
         <rollback>DELETE FROM album AS a WHERE a.name = "Death Magnetic"</rollback>
     </changeSet>
@@ -6076,7 +6076,7 @@ Suffer forever my apocalypse.")
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Metallica')"/>
             <column name="name" value="Hardwired... to Self-Destruct"/>
             <column name="release_date" valueDate="2016-11-18"/>
-            <column name="cover" valueBlobFile="./images/MetallicaHardwiredToSelfDestructCover.webp"/>
+            <column name="cover" valueBlobFile="./images/MetallicaHardwiredToSelfDestructCover.png"/>
         </insert>
         <rollback>DELETE FROM album AS a WHERE a.name = "Hardwired... to Self-Destruct"</rollback>
     </changeSet>
@@ -6880,7 +6880,7 @@ The Lords of Summer have returned")
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Metallica')"/>
             <column name="name" value="72 Seasons"/>
             <column name="release_date" valueDate="2023-04-14"/>
-            <column name="cover" valueBlobFile="./images/Metallica72SeasonsCover.webp"/>
+            <column name="cover" valueBlobFile="./images/Metallica72SeasonsCover.png"/>
         </insert>
         <rollback>DELETE FROM album AS a WHERE a.name = "72 Seasons"</rollback>
     </changeSet>

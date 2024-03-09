@@ -72,7 +72,7 @@
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Linkin Park')"/>
             <column name="name" value="Hybrid Theory"/>
             <column name="release_date" valueDate="2000-10-24"/>
-            <column name="cover" valueBlobFile="./images/LinkinParkHybridTheoryCover.webp"/>
+            <column name="cover" valueBlobFile="./images/LinkinParkHybridTheoryCover.png"/>
         </insert>
         <rollback>
             DELETE FROM album AS a WHERE a.name = "Hybrid Theory"
@@ -888,7 +888,7 @@ Pushes me away")
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Linkin Park')"/>
             <column name="name" value="Meteora"/>
             <column name="release_date" valueDate="2003-03-25"/>
-            <column name="cover" valueBlobFile="./images/LinkinParkMeteoraCover.webp"/>
+            <column name="cover" valueBlobFile="./images/LinkinParkMeteoraCover.png"/>
         </insert>
         <rollback>
             DELETE FROM album AS a WHERE a.name = "Meteora"
@@ -1690,7 +1690,7 @@ I've become so numb, I can't feel you there
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Linkin Park')"/>
             <column name="name" value="Minutes To Midnight"/>
             <column name="release_date" valueDate="2007-05-14"/>
-            <column name="cover" valueBlobFile="./images/LinkinParkMinutesToMidnightCover.webp"/>
+            <column name="cover" valueBlobFile="./images/LinkinParkMinutesToMidnightCover.png"/>
         </insert>
         <rollback>
             DELETE FROM album AS a WHERE a.name = "Minutes To Midnight"
@@ -2309,7 +2309,7 @@ Was someone to truly look up to you (the little things give you away)")
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Linkin Park')"/>
             <column name="name" value="A Thousand Suns"/>
             <column name="release_date" valueDate="2010-09-14"/>
-            <column name="cover" valueBlobFile="./images/LinkinParkAThousandSunsCover.webp"/>
+            <column name="cover" valueBlobFile="./images/LinkinParkAThousandSunsCover.png"/>
         </insert>
         <rollback>
             DELETE FROM album AS a WHERE a.name = "A Thousand Suns"
@@ -2936,7 +2936,7 @@ Oh, oh, oh, oh")
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Linkin Park')"/>
             <column name="name" value="Living Things"/>
             <column name="release_date" valueDate="2012-06-26"/>
-            <column name="cover" valueBlobFile="./images/LinkinParkLivingThingsCover.webp"/>
+            <column name="cover" valueBlobFile="./images/LinkinParkLivingThingsCover.png"/>
         </insert>
         <rollback>
             DELETE FROM album AS a WHERE a.name = "Living Things"
@@ -3434,7 +3434,7 @@ Powerless")
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Linkin Park')"/>
             <column name="name" value="The Hunting Party"/>
             <column name="release_date" valueDate="2014-06-13"/>
-            <column name="cover" valueBlobFile="./images/LinkinParkTheHuntingPartyCover.webp"/>
+            <column name="cover" valueBlobFile="./images/LinkinParkTheHuntingPartyCover.png"/>
         </insert>
         <rollback>
             DELETE FROM album AS a WHERE a.name = "The Hunting Party"
@@ -4050,7 +4050,7 @@ But little did we know")
             <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Linkin Park')"/>
             <column name="name" value="One More Light"/>
             <column name="release_date" valueDate="2019-05-19"/>
-            <column name="cover" valueBlobFile="./images/LinkinParkOneMoreLightCover.webp"/>
+            <column name="cover" valueBlobFile="./images/LinkinParkOneMoreLightCover.png"/>
         </insert>
         <rollback>
             DELETE FROM album AS a WHERE a.name = "One More Light"
