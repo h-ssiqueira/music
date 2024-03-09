@@ -38,4 +38,20 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="roles_classic" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM role AS r WHERE r.name IN ("Piano")
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO role (name) VALUES ("Piano");
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM role AS r WHERE r.name IN ("Piano")
+            </sql>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>
