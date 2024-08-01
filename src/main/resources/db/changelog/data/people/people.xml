@@ -455,4 +455,236 @@
             DELETE FROM person WHERE name = "Roger Meddows-Taylor";
         </rollback>
     </changeSet>
+
+    <changeSet id="Paul DiAnno" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "Paul Andrews"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Paul Andrews")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("Paul Andrews","1958-05-17","British");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "Paul Andrews"),(SELECT id FROM role WHERE name = "Vocalist"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Paul Andrews");
+            DELETE FROM person WHERE name = "Paul Andrews";
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Bruce Dickinson" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "Paul Bruce Dickinson"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Paul Bruce Dickinson")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("Paul Bruce Dickinson","1958-08-07","British");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "Paul Bruce Dickinson"),(SELECT id FROM role WHERE name = "Vocalist"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Paul Bruce Dickinson");
+            DELETE FROM person WHERE name = "Paul Bruce Dickinson";
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Blaze Bayley" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "Bayley Alexander Cooke"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Bayley Alexander Cooke")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("Bayley Alexander Cooke","1963-05-29","British");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "Bayley Alexander Cooke"),(SELECT id FROM role WHERE name = "Vocalist"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Bayley Alexander Cooke");
+            DELETE FROM person WHERE name = "Bayley Alexander Cooke";
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Dave Murray" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "David Michael Murray"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "David Michael Murray")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("David Michael Murray","1956-12-23","British");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "David Michael Murray"),(SELECT id FROM role WHERE name = "Guitarist"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "David Michael Murray");
+            DELETE FROM person WHERE name = "David Michael Murray";
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Adrian Smith" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "Adrian Frederick Smith"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Adrian Frederick Smith")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("Adrian Frederick Smith","1957-02-27","British");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "Adrian Frederick Smith"),(SELECT id FROM role WHERE name = "Guitarist")),
+            ((SELECT id FROM person WHERE name = "Adrian Frederick Smith"),(SELECT id FROM role WHERE name = "Synthesizer"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Adrian Frederick Smith");
+            DELETE FROM person WHERE name = "Adrian Frederick Smith";
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Janick Gers" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "Janick Robert Gers"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Janick Robert Gers")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("Janick Robert Gers","1957-01-27","British");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "Janick Robert Gers"),(SELECT id FROM role WHERE name = "Guitarist"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Janick Robert Gers");
+            DELETE FROM person WHERE name = "Janick Robert Gers";
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Steve Harris" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "Stephen Percy Harris"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Stephen Percy Harris")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("Stephen Percy Harris","1956-03-12","British");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "Stephen Percy Harris"),(SELECT id FROM role WHERE name = "Synthesizer")),
+            ((SELECT id FROM person WHERE name = "Stephen Percy Harris"),(SELECT id FROM role WHERE name = "Bassist"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Stephen Percy Harris");
+            DELETE FROM person WHERE name = "Stephen Percy Harris";
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Clive Burr" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "Clive Ronald Burr"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Clive Ronald Burr")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("Clive Ronald Burr","1957-03-08","British");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "Clive Ronald Burr"),(SELECT id FROM role WHERE name = "Drummer"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Clive Ronald Burr");
+            DELETE FROM person WHERE name = "Clive Ronald Burr";
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Nicko McBrain" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "Michael Henry McBrain"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Michael Henry McBrain")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("Michael Henry McBrain","1952-06-05","British");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "Michael Henry McBrain"),(SELECT id FROM role WHERE name = "Drummer"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Michael Henry McBrain");
+            DELETE FROM person WHERE name = "Michael Henry McBrain";
+        </rollback>
+    </changeSet>
+
+    <changeSet id="Dennis Stratton" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person WHERE name = "Dennis Stratton"
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Dennis Stratton")
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <sql>
+            INSERT INTO person (name, birth_date, nationality) VALUES
+            ("Dennis Stratton","1952-10-09","British");
+            INSERT INTO person_role (person_id, role_id) VALUES
+            ((SELECT id FROM person WHERE name = "Dennis Stratton"),(SELECT id FROM role WHERE name = "Guitarist"));
+        </sql>
+        <rollback>
+            DELETE FROM person_role WHERE person_id = (SELECT id FROM person WHERE name = "Dennis Stratton");
+            DELETE FROM person WHERE name = "Dennis Stratton";
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

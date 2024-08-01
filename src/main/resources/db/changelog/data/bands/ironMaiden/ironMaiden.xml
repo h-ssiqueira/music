@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        logicalFilePath="../db/changelog/data/bands/ironMaiden/ironMaiden.xml">
+
+    <changeSet id="band_iron_maiden" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(1) FROM band AS b WHERE b.name = "Iron Maiden"</sqlCheck>
+        </preConditions>
+        <insert tableName="band">
+            <column name="name" value="Iron Maiden"/>
+            <column name="creation" valueDate="1975-12-25"/>
+            <column name="logo" valueBlobFile="./images/IronMaidenLogo.jpg"/>
+        </insert>
+        <rollback>DELETE FROM band AS b WHERE b.name = "Iron Maiden"</rollback>
+    </changeSet>
+
+    <changeSet id="iron_maiden_genres" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM band_genre AS bg
+                WHERE bg.band_id = (SELECT b.id FROM band AS b WHERE b.name = "Iron Maiden")
+                AND bg.genre_id IN (SELECT g.id FROM genre AS g WHERE g.name in ("Heavy Metal"))
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="band_genre">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="genre_id" valueComputed="(SELECT g.id FROM genre AS g WHERE g.name = 'Heavy Metal')"/>
+        </insert>
+        <rollback>
+            DELETE FROM band_genre AS bg
+            WHERE bg.band_id = (SELECT b.id FROM band AS b WHERE b.name = "Iron Maiden")
+            AND bg.genre_id IN (SELECT g.id FROM genre AS g WHERE g.name IN ("Heavy Metal"))
+        </rollback>
+    </changeSet>
+
+    <changeSet id="iron_maiden_members" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(1) FROM member WHERE band_id = (SELECT id FROM band WHERE name = "Iron Maiden")
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO member (band_id, person_id, join_date, disjoint_date) VALUES
+            ((SELECT id FROM band WHERE name = "Iron Maiden"),(SELECT id FROM person WHERE name = "Paul Andrews"),"1978-11-01","1981-09-10"),
+            ((SELECT id FROM band WHERE name = "Iron Maiden"),(SELECT id FROM person WHERE name = "Paul Bruce Dickinson"),"1981-09-01",null),
+            ((SELECT id FROM band WHERE name = "Iron Maiden"),(SELECT id FROM person WHERE name = "Bayley Alexander Cooke"),"1994--","1999-01-01"),
+            ((SELECT id FROM band WHERE name = "Iron Maiden"),(SELECT id FROM person WHERE name = "David Michael Murray"),"1976-12-01",null),
+            ((SELECT id FROM band WHERE name = "Iron Maiden"),(SELECT id FROM person WHERE name = "Adrian Frederick Smith"),"1980--",null),
+            ((SELECT id FROM band WHERE name = "Iron Maiden"),(SELECT id FROM person WHERE name = "Janick Robert Gers"),"1990--",null),
+            ((SELECT id FROM band WHERE name = "Iron Maiden"),(SELECT id FROM person WHERE name = "Stephen Percy Harris"),"1975-12-25",null),
+            ((SELECT id FROM band WHERE name = "Iron Maiden"),(SELECT id FROM person WHERE name = "Clive Ronald Burr"),"1979--","1982--"),
+            ((SELECT id FROM band WHERE name = "Iron Maiden"),(SELECT id FROM person WHERE name = "Michael Henry McBrain"),"1982--",null),
+            ((SELECT id FROM band WHERE name = "Iron Maiden"),(SELECT id FROM person WHERE name = "Dennis Stratton"),"1979--","1980--")
+        </sql>
+        <rollback>
+            DELETE FROM member WHERE band_id = (SELECT id FROM band WHERE name = "Iron Maiden")
+        </rollback>
+    </changeSet>
+
+    <changeSet id="iron_maiden_albums_and_songs" author="${author}">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM album AS a WHERE a.band_id = (SELECT id FROM band WHERE name = "Iron Maiden")
+                </sqlCheck>
+                <sqlCheck expectedResult="0">
+                    SELECT COUNT(1) FROM music AS m WHERE m.album_id in (SELECT a.id FROM album AS a WHERE a.band_id = (SELECT id FROM band WHERE name = "Iron Maiden"))
+                </sqlCheck>
+            </and>
+        </preConditions>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="name" value="Iron Maiden"/>
+            <column name="release_date" valueDate="1980-04-14"/>
+            <column name="cover" valueBlobFile="./images/IronMaidenIronMaidenCover.jpg"/>
+        </insert>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="name" value="Killers"/>
+            <column name="release_date" valueDate="1981-02-02"/>
+            <column name="cover" valueBlobFile="./images/IronMaidenkillersCover.jpg"/>
+        </insert>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="name" value="The Number of the Beast"/>
+            <column name="release_date" valueDate="1982-03-22"/>
+            <column name="cover" valueBlobFile="./images/IronMaidenTheNumberOfTheBeastCover.jpg"/>
+        </insert>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="name" value="Piece of Mind"/>
+            <column name="release_date" valueDate="1983-05-16"/>
+            <column name="cover" valueBlobFile="./images/IronMaidenPieceOfMindCover.jpg"/>
+        </insert>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="name" value="Power Slave"/>
+            <column name="release_date" valueDate="1984-09-03"/>
+            <column name="cover" valueBlobFile="./images/IronMaidenPowerSlaveCover.jpg"/>
+        </insert>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="name" value="Somewhere In Time"/>
+            <column name="release_date" valueDate="1986-09-29"/>
+            <column name="cover" valueBlobFile="./images/IronMaidenSomewhereInTimeCover.jpg"/>
+        </insert>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="name" value="Seventh Son of a Seventh Son"/>
+            <column name="release_date" valueDate="1988-04-11"/>
+            <column name="cover" valueBlobFile="./images/IronMaidenSeventhSonOfASeventhSonCover.jpg"/>
+        </insert>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="name" value="No Prayer for the Dying"/>
+            <column name="release_date" valueDate="1990-10-01"/>
+            <column name="cover" valueBlobFile="./images/IronMaidenNoPrayerForTheDyingCover.jpg"/>
+        </insert>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="name" value="Fear of the Dark"/>
+            <column name="release_date" valueDate="1992-05-11"/>
+            <column name="cover" valueBlobFile="./images/IronMaidenFearOfTheDarkCover.jpg"/>
+        </insert>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="name" value="The X Factor"/>
+            <column name="release_date" valueDate="1995-10-02"/>
+            <column name="cover" valueBlobFile="./images/IronMaidenTheXFactorCover.jpg"/>
+        </insert>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="name" value="Virtual XI"/>
+            <column name="release_date" valueDate="1998-03-28"/>
+            <column name="cover" valueBlobFile="./images/IronMaidenVirtualXICover.jpg"/>
+        </insert>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="name" value="Brave New World"/>
+            <column name="release_date" valueDate="2000-03-30"/>
+            <column name="cover" valueBlobFile="./images/IronMaidenBraveNewWorldCover.jpg"/>
+        </insert>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="name" value="Dance of Death"/>
+            <column name="release_date" valueDate="2003-09-08"/>
+            <column name="cover" valueBlobFile="./images/IronMaidenDanceOfDeathCover.jpg"/>
+        </insert>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="name" value="A Matter of Life and Death"/>
+            <column name="release_date" valueDate="2006-08-28"/>
+            <column name="cover" valueBlobFile="./images/IronMaidenAMatterOfLifeAndDeathCover.jpg"/>
+        </insert>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="name" value="The Final Frontier"/>
+            <column name="release_date" valueDate="2010-08-16"/>
+            <column name="cover" valueBlobFile="./images/IronMaidenTheFinalFrontierCover.jpg"/>
+        </insert>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="name" value="The Book of Souls"/>
+            <column name="release_date" valueDate="2015-09-04"/>
+            <column name="cover" valueBlobFile="./images/IronMaidenTheBookOfSoulsCover.jpg"/>
+        </insert>
+        <insert tableName="album">
+            <column name="band_id" valueComputed="(SELECT b.id FROM band AS b WHERE b.name = 'Iron Maiden')"/>
+            <column name="name" value="Senjutsu"/>
+            <column name="release_date" valueDate="2021-09-03"/>
+            <column name="cover" valueBlobFile="./images/IronMaidenSenjutsuCover.jpg"/>
+        </insert>
+        <sqlFile encoding="UTF-8" path="./ironMaiden.sql" relativeToChangelogFile="true"/>
+        <rollback>
+            DELETE FROM music AS m WHERE m.album_id in (SELECT a.id FROM album AS a WHERE a.band_id = (SELECT id FROM band WHERE name = "Iron Maiden"));
+            DELETE FROM album AS a WHERE a.band_id = (SELECT id FROM band WHERE name = "Iron Maiden");
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
