@@ -174,7 +174,18 @@
             <column name="release_date" valueDate="2021-09-03"/>
             <column name="cover" valueBlobFile="./images/IronMaidenSenjutsuCover.jpg"/>
         </insert>
-        <sqlFile encoding="UTF-8" path="./ironMaiden.sql" relativeToChangelogFile="true"/>
+        <loadData file="ironMaiden.csv"
+            encoding="UTF-8"
+            separator=";"
+            relativeToChangelogFile="true"
+            tableName="music"
+            quotchar="`"
+            usePreparedStatements="true">
+            <column name="album_id" type="NUMERIC" index="1"/>
+            <column name="name" type="VARCHAR" index="2"/>
+            <column name="duration" type="VARCHAR" index="3"/>
+            <column name="lyrics" type="VARCHAR" index="4"/>
+        </loadData>
         <rollback>
             DELETE FROM music AS m WHERE m.album_id in (SELECT a.id FROM album AS a WHERE a.band_id = (SELECT id FROM band WHERE name = "Iron Maiden"));
             DELETE FROM album AS a WHERE a.band_id = (SELECT id FROM band WHERE name = "Iron Maiden");
