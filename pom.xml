@@ -19,7 +19,7 @@
 		<liquibase.version>4.25.0</liquibase.version>
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
 		<maven.compiler.plugin.version>3.12.1</maven.compiler.plugin.version>
-		<mysql.connector.version>8.1.0</mysql.connector.version>
+		<mysql.connector.version>8.2.0</mysql.connector.version>
 		<lombok.version>1.18.30</lombok.version>
 		<junit.version>5.10.1</junit.version>
 		<h2.version>2.2.224</h2.version>
